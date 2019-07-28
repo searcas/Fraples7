@@ -5,7 +5,7 @@
 
 
 
-namespace Boost
+namespace Fraples
 {
 	class FPL_API MouseMovedEvent : public Event {
 	public:
@@ -40,7 +40,7 @@ namespace Boost
 		}
 
 		EVENT_CLASS_TYPE(MouseScrolled);
-		EVENT_CLASS_TYPE(EventCategoryMouse | EventCategoryInput );
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput );
 		//Where We Scrolled
 		inline float GetXOffset()const { return _mXOffset; }
 		inline float GetYOffset()const { return _mYOffset; }
@@ -76,6 +76,8 @@ namespace Boost
 	};
 	class FPL_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
+
+	public:
 		MouseButtonReleasedEvent(int msButton) : MouseButtonEvent(msButton) {}
 
 		std::string ToString()const override
@@ -84,7 +86,7 @@ namespace Boost
 			ss << "MouseButtonReleased: " << _mMbutton;
 			return ss.str();
 		}
-		EVENT_CLASS_CATEGORY(MouseButtonReleased);
+		EVENT_CLASS_TYPE(MouseButtonReleased);
 	};
 
 }

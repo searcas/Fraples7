@@ -5,7 +5,7 @@
 #include "Events.h"
 
 
-namespace Boost
+namespace Fraples
 {
 	class FPL_API KeyEvent : public Event
 	{
@@ -45,6 +45,7 @@ namespace Boost
 
 			return ss.str();
 		}
+		EVENT_CLASS_TYPE(KeyReleased);
 	private:
 	};
 }

@@ -1,8 +1,9 @@
 #pragma once
 #include "FplPCH.h"
-
 #include "FraplesSeven/Core.h"
-#include "FraplesSeven/Events/Events.h"
+#include "Events/Events.h"
+
+
 
 namespace Fraples
 {
@@ -13,7 +14,6 @@ namespace Fraples
 		unsigned int _mHeight;
 
 		WindowProperties(const std::string& title = "FrapleSeven Engine", unsigned int width = 1280, unsigned int height = 720) : _mTitle(title), _mWidth(width), _mHeight(height) { }
-	
 	};
 	class FPL_API Window
 	{
