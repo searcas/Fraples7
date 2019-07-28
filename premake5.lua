@@ -1,6 +1,6 @@
 workspace "FraplesSeven"
     architecture "x64"
-	startproject "Sandbox"
+	startproject "SandBox"
 
     configurations
     {
