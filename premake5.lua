@@ -67,13 +67,16 @@ project "FraplesSeven"
 
     filter "configurations:Debug"
         defines"FPL_DEBUG"
+		buildoptions "/MDd"
         symbols "On"
             
     filter "configurations:Release"
         defines"FPL_RELEASE"
+		buildoptions "/MD"
             optimize "On"
     
     filter "configurations:Dist"
+	buildoptions "/MDd"
         defines"FPL_DIST"
             optimize "On"
 
@@ -120,14 +123,17 @@ project "SandBox"
 
     filter "configurations:Debug"
         defines"FPL_DEBUG"
+		buildoptions "/MDd"
         symbols "On"
             
     filter "configurations:Release"
         defines"FPL_RELEASE"
+		buildoptions "/MD"
             optimize "On"
     
     filter "configurations:Dist"
         defines"FPL_DIST"
+		buildoptions "/MD"
             optimize "On"
 			
 		

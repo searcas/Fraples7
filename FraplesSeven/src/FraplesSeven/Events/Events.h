@@ -40,6 +40,7 @@ namespace Fraples
 
 	class FPL_API Event
 	{
+		friend class Application;
 		friend class EventDispatcher;
 	public:
 		virtual EventType GetEventType() const = 0;
@@ -51,6 +52,7 @@ namespace Fraples
 		{
 			return GetCategoryFlags() & category;
 		}
+
 	protected:
 		bool _mHandled = false;
 	};
