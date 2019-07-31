@@ -18,10 +18,14 @@ IncludeDir ["GLFW"] = "FraplesSeven/Vendor/GLFW/include"
 IncludeDir ["GLAD"] = "FraplesSeven/Vendor/GLAD/include"
 IncludeDir ["imGui"] = "FraplesSeven/Vendor/imGui"
 
-include "FraplesSeven/Vendor/GLFW"
-include "FraplesSeven/Vendor/GLAD"
-include "FraplesSeven/Vendor/imGui"
 
+
+group "Dependencies"
+	include "FraplesSeven/vendor/GLFW"
+	include "FraplesSeven/vendor/Glad"
+	include "FraplesSeven/vendor/imgui"
+
+group ""
 
 
 
