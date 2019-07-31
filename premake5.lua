@@ -30,6 +30,7 @@ project "FraplesSeven"
     location "FraplesSeven"
         kind "SharedLib"
             language "C++"
+            staticruntime "off"
                 
                 targetdir("bin/" .. outputdir .. "/%{prj.name}")
                 objdir("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -61,7 +62,6 @@ project "FraplesSeven"
 	}
         filter "system:windows"
             cppdialect "C++17"
-                staticruntime "On"
                 systemversion "latest"
 
     defines
@@ -78,17 +78,17 @@ project "FraplesSeven"
 
     filter "configurations:Debug"
         defines"FPL_DEBUG"
-		buildoptions "/MDd"
+        runtime "Debug"
         symbols "On"
             
     filter "configurations:Release"
         defines"FPL_RELEASE"
-		buildoptions "/MD"
-            optimize "On"
+        runtime "Release"
+        optimize "On"
     
     filter "configurations:Dist"
-	buildoptions "/MDd"
         defines"FPL_DIST"
+        runtime "Release"
             optimize "On"
 
         
@@ -97,6 +97,8 @@ project "SandBox"
     location "SandBox"
         kind "ConsoleApp"
             language "C++"
+            staticruntime "off"
+
                 
                 targetdir("bin/".. outputdir .. "/%{prj.name}")
                 objdir("bin-int/".. outputdir .. "/%{prj.name}")
@@ -121,7 +123,6 @@ project "SandBox"
 
         filter "system:windows"
             cppdialect "C++17"
-                staticruntime "On"
                 systemversion "latest"
     
 
@@ -134,17 +135,17 @@ project "SandBox"
 
     filter "configurations:Debug"
         defines"FPL_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
         symbols "On"
             
     filter "configurations:Release"
         defines"FPL_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
             optimize "On"
     
     filter "configurations:Dist"
         defines"FPL_DIST"
-		buildoptions "/MD"
+		runtime "Release"
             optimize "On"
 			
 		

@@ -14,7 +14,7 @@ namespace Fraples{
 	Application::Application()
 	{
 
-		FPL_CORE_ASSERT(!_sInstance, "Application already Exists");
+		FPL_CORE_ASSERTS(!_sInstance, "Application already Exists");
 		_sInstance = this;
 		_mWindow = std::unique_ptr<Window>(Window::Create());
 		_mWindow->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));

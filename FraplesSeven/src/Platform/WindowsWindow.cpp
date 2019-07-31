@@ -37,14 +37,14 @@ namespace Fraples
 			//TODO:GLFW terminate on system shutdown
 
 			int success = glfwInit();
-			FPL_CORE_ASSERT(success, "Could not initialize GLFW!");
+			FPL_CORE_ASSERTS(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
 			isInitialized = true;
 		}
 		_mWindow = glfwCreateWindow((int)prop._mWidth, (int)_mData._mHeight, _mData._mTitle.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(_mWindow);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		FPL_CORE_ASSERT(status, "Fail to initialize GLAD!");
+		FPL_CORE_ASSERTS(status, "Fail to initialize GLAD!");
 		glfwSetWindowUserPointer(_mWindow, &_mData);
 		SetVSync(true);
 		// Set GLFW callbacks
