@@ -5,7 +5,7 @@
 #include "FraplesSeven/Events/MouseEvent.h"
 #include "FraplesSeven/Events/KeyEvent.h"
 
-
+#include "glad/glad.h"
 
 namespace Fraples
 {
@@ -43,6 +43,8 @@ namespace Fraples
 		}
 		_mWindow = glfwCreateWindow((int)prop._mWidth, (int)_mData._mHeight, _mData._mTitle.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(_mWindow);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		FPL_CORE_ASSERT(status, "Fail to initialize GLAD!");
 		glfwSetWindowUserPointer(_mWindow, &_mData);
 		SetVSync(true);
 		// Set GLFW callbacks

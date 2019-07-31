@@ -10,6 +10,8 @@ extern Fraples::Application* Fraples::CreateApplication();
 
 void main(int argc, char** argv)
 {
+	
+
 	int val = 562958282;
 	Fraples::Log::initialize();
 	FPL_CORE_WARN("[Initalized log!] VAL ={0} ",val);

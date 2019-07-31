@@ -2,6 +2,8 @@
 #include "FraplesSeven/Window.h"
 #include <GLFW/glfw3.h>
 
+
+
 namespace Fraples
 {
 	class WindowsWindow : public Window{

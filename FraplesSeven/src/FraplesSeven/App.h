@@ -21,12 +21,18 @@ namespace Fraples{
 
 	void PushLayer(Layer* layer);
 	void PushOverLay(Layer* layer);
+
+	inline static Application& GetApp() { return *_sInstance; }
+	inline Window& GetWindow()   { return *_mWindow; }
 	private:
 		bool OnWindowsClosed(WindowCloseEvent& winEvent);
 		std::unique_ptr<Window>_mWindow;
 		bool _mRunning = true;
 
 		LayerStack _mLayerStack;
+	private:
+		static Application* _sInstance;
+
 	};
 	//TODO Define in Client;
 	Application* CreateApplication();

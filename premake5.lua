@@ -15,8 +15,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- include Directories relative to root folder (solution Directory)
 IncludeDir = {}
 IncludeDir ["GLFW"] = "FraplesSeven/Vendor/GLFW/include"
+IncludeDir ["GLAD"] = "FraplesSeven/Vendor/GLAD/include"
+IncludeDir ["imGui"] = "FraplesSeven/Vendor/imGui"
 
 include "FraplesSeven/Vendor/GLFW"
+include "FraplesSeven/Vendor/GLAD"
+include "FraplesSeven/Vendor/imGui"
+
 
 
 
@@ -42,11 +47,16 @@ project "FraplesSeven"
     {
 		"%{prj.name}/src",
         "%{prj.name}/Vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.imGui}"
+
     }
 	links
 	{
 		"GLFW",
+		"GLAD",
+		"imGui",
 		"opengl32.lib"
 	}
         filter "system:windows"
@@ -57,7 +67,8 @@ project "FraplesSeven"
     defines
     {
         "FPL_PLATFORM_WINDOWS",
-        "FPL_BUILD_DLL"
+        "FPL_BUILD_DLL",
+		"GLFW_INCLUDE_NONE"
     }
 
     postbuildcommands

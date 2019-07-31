@@ -1,0 +1,3 @@
+[submodule "FraplesSeven/Vendor/IMGUI"]
+	path = FraplesSeven/Vendor/IMGUI
+	url = https://github.com/ocornut/imgui

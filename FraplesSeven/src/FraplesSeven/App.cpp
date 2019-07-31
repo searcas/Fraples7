@@ -3,14 +3,24 @@
 
 
 #include "GLFW/glfw3.h"
+
+#include "glad/glad.h"
 namespace Fraples{
 
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
+	Application* Application::_sInstance = nullptr;
+
 	Application::Application()
 	{
+
+		FPL_CORE_ASSERT(!_sInstance, "Application already Exists");
+		_sInstance = this;
 		_mWindow = std::unique_ptr<Window>(Window::Create());
 		_mWindow->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));
+
+		unsigned int id;
+		glGenVertexArrays(1, &id);
 	}
 	void Application::OnEvent(Event& e)
 	{
@@ -47,9 +57,11 @@ namespace Fraples{
 	void Application::PushLayer(Layer* layer)
 	{
 		_mLayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	void Application::PushOverLay(Layer* overlay)
 	{
 		_mLayerStack.PushOverLay(overlay);
+		overlay->OnAttach();
 	}
 }
