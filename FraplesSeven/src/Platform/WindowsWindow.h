@@ -15,10 +15,13 @@ public:
 
 	inline unsigned int GetWidth() const override { return _mData._mWidth; }
 	inline unsigned int GetHeight() const override { return _mData._mHeight; }
+
 	//Window Attributes
 	inline void SetEventCallBack(const EventCallBackFn& callback) override { _mData._mEventCallbackFn = callback; }
 	void SetVSync(bool enabled) override;
 	bool IsVSync() const override;
+
+	inline virtual void* GetNativeWindow() const { return _mWindow; }
 	private:
 		virtual void Init(const WindowProperties& properties);
 		virtual void ShutDown();

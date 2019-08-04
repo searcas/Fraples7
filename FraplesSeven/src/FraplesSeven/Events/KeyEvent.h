@@ -48,4 +48,20 @@ namespace Fraples
 		EVENT_CLASS_TYPE(KeyReleased);
 	private:
 	};
+	class FPL_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keycode) : KeyEvent(keycode) { }
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyTypedEvent : " << _mKeyCode;
+			return ss.str();
+		}
+		EVENT_CLASS_TYPE(KeyTyped)
+	private:
+		int _mKeyCode;
+
+	};
 }

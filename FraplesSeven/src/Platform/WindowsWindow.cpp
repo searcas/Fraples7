@@ -10,6 +10,7 @@
 namespace Fraples
 {
 	static bool isInitialized = false;
+
 	static void GLFWErrorCallBack(int error, const char* description)
 	{
 		FPL_CORE_ERROR("GLFW Error:({0}) ({1}) ", error, description);
@@ -89,6 +90,12 @@ namespace Fraples
 						break;
 					}
 				}
+		});
+		glfwSetCharCallback(_mWindow, [](GLFWwindow* window, unsigned  int c)
+		{
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+				KeyTypedEvent eve(c);
+				data._mEventCallbackFn(eve);
 		});
 		glfwSetMouseButtonCallback(_mWindow, [](GLFWwindow* window, int button,  int action, int mods) {
 			

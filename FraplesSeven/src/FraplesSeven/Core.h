@@ -23,3 +23,5 @@
 
 
 #define BIT(X)	(1 << X)
+
+#define FplBindeventFn(x) std::bind(&x, this, std::placeholders::_1)

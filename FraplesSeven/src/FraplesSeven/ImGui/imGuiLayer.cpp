@@ -3,17 +3,17 @@
 
 #include "imGuiLayer.h"
 #include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
-#include "GLFW/glfw3.h"
 
 #include "FraplesSeven/App.h"
-
+//TEMP
+#include "GLFW/glfw3.h"
+#include "glad/glad.h"	
 
 
 namespace Fraples
 {
-	ImGuiLayer::ImGuiLayer() :Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
 	{
-
 	}
 	ImGuiLayer::~ImGuiLayer()
 	{
@@ -51,6 +51,7 @@ namespace Fraples
 		io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
 		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
 		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 	void ImGuiLayer::OnDetach()
@@ -79,6 +80,79 @@ namespace Fraples
 	}
 	void ImGuiLayer::OnEvent(Event& event)
 	{
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<MouseButtonPressedEvent>(FplBindeventFn(ImGuiLayer::OnMouseButtonPressEvent));
+		dispatcher.Dispatch<MouseButtonReleasedEvent>(FplBindeventFn(ImGuiLayer::OnMouseButtonReleaseEvent));
+		dispatcher.Dispatch<MouseMovedEvent>(FplBindeventFn(ImGuiLayer::OnMouseMoveEvent));
+		dispatcher.Dispatch<MouseScrollEvent>(FplBindeventFn(ImGuiLayer::OnMouseScrollEvent));
+		dispatcher.Dispatch<KeyReleasedEvent>(FplBindeventFn(ImGuiLayer::OnKeyReleasedEvent));
+		dispatcher.Dispatch<KeyTypedEvent>(FplBindeventFn(ImGuiLayer::OnKeyTypedEvent));
+		dispatcher.Dispatch<KeyPressedEvent>(FplBindeventFn(ImGuiLayer::OnKeyPressedEvent));
+		dispatcher.Dispatch<WindowResizeEvent>(FplBindeventFn(ImGuiLayer::OnWindowResizeEvent));
 
 	}
+	bool ImGuiLayer::OnMouseButtonPressEvent(MouseButtonPressedEvent& eve)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[eve.GetMouseButton()] = true;
+		return false;
+	}
+	bool ImGuiLayer::OnMouseButtonReleaseEvent(MouseButtonReleasedEvent& eve)
+	{
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDown[eve.GetMouseButton()] = false;
+		return false;
+	}
+	bool ImGuiLayer::OnMouseMoveEvent(MouseMovedEvent& eve)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MousePos = ImVec2(eve.GetX(),eve.GetY());
+		return false;
+	}
+	bool ImGuiLayer::OnMouseScrollEvent(MouseScrollEvent& eve)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseWheelH += eve.GetXOffset();
+		io.MouseWheel += eve.GetYOffset();
+
+		return false;
+	}
+	bool ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& eve)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[eve.GetKeyCode()] = true;
+		return false;
+	}
+	bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& eve)
+	{
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[eve.GetKeyCode()] = false;
+
+		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+		return false;
+	}
+
+	bool ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& eve)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.DisplaySize = ImVec2(eve.GetWidth(), eve.GetHeight());
+		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+		glViewport(0.0f, 0.0f, eve.GetWidth(), eve.GetHeight());
+		return false;
+	}
+	bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& eve)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		int keycode = eve.GetKeyCode();
+		if (keycode > 0 && keycode < 0x10000)
+			io.AddInputCharacter((unsigned short)keycode);
+		return false;
+	}
+	
+
 }

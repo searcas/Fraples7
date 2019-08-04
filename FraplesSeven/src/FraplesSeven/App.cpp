@@ -3,8 +3,9 @@
 
 
 #include "GLFW/glfw3.h"
-
 #include "glad/glad.h"
+
+#include "Input.h"
 namespace Fraples{
 
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
@@ -26,9 +27,8 @@ namespace Fraples{
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowsClosed));
-		FPL_CORE_TRACE("{0}", e);
 
-		for (auto it = _mLayerStack.end(); it < _mLayerStack.begin(); it++)
+		for (auto it = _mLayerStack.end(); it != _mLayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
 			if (e._mHandled)
@@ -46,7 +46,8 @@ namespace Fraples{
 		{
 			for (Layer* layer : _mLayerStack)
 				layer->OnUpdate();
-
+			//auto[x, y] = Input::GetMousePosition();
+			//FPL_CLIENT_TRACE("{0},{1}", x, y);
 			_mWindow->OnUpdate();
 		}
 

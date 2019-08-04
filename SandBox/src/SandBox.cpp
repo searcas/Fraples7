@@ -9,11 +9,17 @@ public:
 	}
 	void OnUpdate()override
 	{
-		FPL_CLIENT_INFO("ExampleLayer::Update");
+
+
 	}
 	void OnEvent(Fraples::Event& e)override
 	{
-		FPL_CLIENT_TRACE("{0}", e);
+		if (e.GetEventType() == Fraples::EventType::KeyPressed)
+		{
+			Fraples::KeyPressedEvent& event = (Fraples::KeyPressedEvent&)e;
+			FPL_CLIENT_INFO("{0}",(char)event.GetKeyCode())
+
+		}
 	}
 
 private:
