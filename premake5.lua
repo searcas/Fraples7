@@ -17,6 +17,8 @@ IncludeDir = {}
 IncludeDir ["GLFW"] = "FraplesSeven/Vendor/GLFW/include"
 IncludeDir ["GLAD"] = "FraplesSeven/Vendor/GLAD/include"
 IncludeDir ["imGui"] = "FraplesSeven/Vendor/imGui"
+IncludeDir ["glm"] = "FraplesSeven/Vendor/glm"
+
 
 
 
@@ -45,7 +47,9 @@ project "FraplesSeven"
     files
     {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/Vendor/glm/glm/**.hpp",
+        "%{prj.name}/Vendor/glm/glm/**.inl",
     }
 
     includedirs
@@ -54,7 +58,9 @@ project "FraplesSeven"
         "%{prj.name}/Vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.imGui}"
+        "%{IncludeDir.imGui}",
+		"%{IncludeDir.glm}"
+        
 
     }
 	links
@@ -115,7 +121,9 @@ project "SandBox"
     includedirs
     {
 	    "FraplesSeven/Vendor/spdlog/include",
-		"FraplesSeven/src"
+        "FraplesSeven/src",
+		"%{IncludeDir.glm}"
+        
     }
 	
 	links

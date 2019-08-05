@@ -1,11 +1,12 @@
 #include<Fraples.h>
 
+
 class ExampleLayer : public Fraples::Layer
 {
 public:
 	ExampleLayer() : Fraples::Layer("Example")
 	{
-
+		
 	}
 	void OnUpdate()override
 	{
