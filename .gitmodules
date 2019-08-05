@@ -1,6 +1,0 @@
-[submodule "FraplesSeven/Vendor/IMGUI"]
-	path = FraplesSeven/Vendor/IMGUI
-	url = https://github.com/ocornut/imgui
-[submodule "FraplesSeven/Vendor/glm"]
-	path = FraplesSeven/Vendor/glm
-	url = https://github.com/g-truc/glm
