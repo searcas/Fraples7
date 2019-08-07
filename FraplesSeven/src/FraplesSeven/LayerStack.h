@@ -26,6 +26,6 @@ namespace Fraples
 
 	private:
 		std::vector<Layer*> _mLayers;
-		std::vector<Layer*>::iterator _mLayerInsert;
+		unsigned int _mLayerInsertIndex = 0;
 	};
 }

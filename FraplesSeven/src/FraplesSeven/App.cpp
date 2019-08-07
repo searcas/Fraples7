@@ -17,11 +17,12 @@ namespace Fraples{
 
 		FPL_CORE_ASSERTS(!_sInstance, "Application already Exists");
 		_sInstance = this;
+		
 		_mWindow = std::unique_ptr<Window>(Window::Create());
 		_mWindow->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));
 
-		unsigned int id;
-		glGenVertexArrays(1, &id);
+		_mImguiLayer = new ImGuiLayer();
+		PushOverLay(_mImguiLayer);
 	}
 	void Application::OnEvent(Event& e)
 	{
@@ -44,10 +45,17 @@ namespace Fraples{
 	{
 		while (_mRunning)
 		{
+			glClearColor(0, 0, 0, 1);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			for (Layer* layer : _mLayerStack)
 				layer->OnUpdate();
 			//auto[x, y] = Input::GetMousePosition();
 			//FPL_CLIENT_TRACE("{0},{1}", x, y);
+			_mImguiLayer->Begin();
+			for (Layer* layer : _mLayerStack)
+				layer->OnImGuiRender();
+			_mImguiLayer->End();
+
 			_mWindow->OnUpdate();
 		}
 

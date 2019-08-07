@@ -12,19 +12,12 @@ namespace Fraples
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void OnAttach()override;
-		void OnDetach()override;
-		void OnUpdate()override;
-		void OnEvent(Event& e)override;
-	private:
-		bool OnMouseButtonPressEvent(MouseButtonPressedEvent& eve);
-		bool OnMouseButtonReleaseEvent(MouseButtonReleasedEvent& eve);
-		bool OnMouseMoveEvent(MouseMovedEvent& eve);
-		bool OnMouseScrollEvent(MouseScrollEvent& eve);
-		bool OnKeyReleasedEvent(KeyReleasedEvent& eve);
-		bool OnKeyPressedEvent(KeyPressedEvent& eve);
-		bool OnKeyTypedEvent(KeyTypedEvent& eve);
-		bool OnWindowResizeEvent(WindowResizeEvent& eve);
+		virtual void OnAttach()	override;
+		virtual void OnDetach()	override;
+		virtual void OnImGuiRender() override;
+
+		void Begin();
+		void End();
 
 	private:
 		float _mTime = 0.0f;

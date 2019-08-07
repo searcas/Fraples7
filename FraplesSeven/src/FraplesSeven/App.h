@@ -6,7 +6,7 @@
 #include "LayerStack.h"
 #include "Events/Events.h"
 #include "FraplesSeven/Events/AppEvent.h"
-
+#include "FraplesSeven/ImGui/imGuiLayer.h"
 namespace Fraples{
 		
 	class FPL_API Application
@@ -27,8 +27,9 @@ namespace Fraples{
 	private:
 		bool OnWindowsClosed(WindowCloseEvent& winEvent);
 		std::unique_ptr<Window>_mWindow;
-		bool _mRunning = true;
 
+		ImGuiLayer* _mImguiLayer;
+		bool _mRunning = true;
 		LayerStack _mLayerStack;
 	private:
 		static Application* _sInstance;

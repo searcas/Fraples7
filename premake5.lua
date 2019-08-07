@@ -122,6 +122,7 @@ project "SandBox"
     {
 	    "FraplesSeven/Vendor/spdlog/include",
         "FraplesSeven/src",
+		"FraplesSeven/Vendor/",
 		"%{IncludeDir.glm}"
         
     }

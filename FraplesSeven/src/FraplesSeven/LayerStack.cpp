@@ -6,7 +6,7 @@ namespace Fraples
 {
 	LayerStack::LayerStack()
 	{
-		_mLayerInsert = _mLayers.begin();
+		
 	}
 	LayerStack::~LayerStack()
 	{
@@ -15,7 +15,8 @@ namespace Fraples
 	}
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		_mLayerInsert = _mLayers.emplace(_mLayerInsert, layer);
+		_mLayers.emplace(_mLayers.begin() + _mLayerInsertIndex, layer);
+		_mLayerInsertIndex++;
 	}
 	void LayerStack::PushOverLay(Layer* overlay)
 	{
@@ -28,7 +29,7 @@ namespace Fraples
 		if (it !=_mLayers.end())
 		{
 			_mLayers.erase(it);
-			_mLayerInsert--;
+			_mLayerInsertIndex--;
 		}
 	}
 	void LayerStack::PopOverlay(Layer* overlay)

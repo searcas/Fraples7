@@ -153,5 +153,6 @@ namespace Fraples
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(_mWindow);
+
 	}
 }
