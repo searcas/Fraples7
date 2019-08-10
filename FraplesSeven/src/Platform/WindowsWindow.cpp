@@ -5,7 +5,8 @@
 #include "FraplesSeven/Events/MouseEvent.h"
 #include "FraplesSeven/Events/KeyEvent.h"
 
-#include "glad/glad.h"
+#include "OpenGL/OpenGLContext.h"
+
 
 namespace Fraples
 {
@@ -43,9 +44,10 @@ namespace Fraples
 			isInitialized = true;
 		}
 		_mWindow = glfwCreateWindow((int)prop._mWidth, (int)_mData._mHeight, _mData._mTitle.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(_mWindow);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		FPL_CORE_ASSERTS(status, "Fail to initialize GLAD!");
+
+		_mContext = new OpenGLContext(_mWindow);
+		_mContext->Init();
+		//
 		glfwSetWindowUserPointer(_mWindow, &_mData);
 		SetVSync(true);
 		// Set GLFW callbacks
@@ -152,7 +154,6 @@ namespace Fraples
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(_mWindow);
-
+		_mContext->SwapBuffers();
 	}
 }

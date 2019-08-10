@@ -1,7 +1,7 @@
 #pragma once
 #include "FraplesSeven/Window.h"
+#include "FraplesSeven/Renderer/Context/GraphicsContext.h"
 #include <GLFW/glfw3.h>
-
 
 
 namespace Fraples
@@ -27,7 +27,7 @@ public:
 		virtual void ShutDown();
 	private:
 		GLFWwindow* _mWindow;
-
+		GraphicsContext* _mContext;
 		struct WindowData
 		{
 			std::string _mTitle;
