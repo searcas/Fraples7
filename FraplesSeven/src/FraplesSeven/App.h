@@ -7,6 +7,9 @@
 #include "Events/Events.h"
 #include "FraplesSeven/Events/AppEvent.h"
 #include "FraplesSeven/ImGui/imGuiLayer.h"
+
+#include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 namespace Fraples{
 		
 	class FPL_API Application
@@ -33,6 +36,11 @@ namespace Fraples{
 		LayerStack _mLayerStack;
 	private:
 		static Application* _sInstance;
+		unsigned int _mVertexArray;
+
+		std::unique_ptr<Shader> _mShader;
+		std::unique_ptr<VertexBuffer> _mVertexBuffer;
+		std::unique_ptr<IndexBuffer> _mIndexBuffer;
 
 	};
 	//TODO Define in Client;
