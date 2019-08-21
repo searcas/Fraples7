@@ -1,9 +1,8 @@
 #include "FplPCH.h"	
 #include "Buffer.h"
 
-#include "Renderer.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
-
+#include "Renderer.h"
 namespace Fraples
 {
 	VertexBuffer::~VertexBuffer()
@@ -22,6 +21,7 @@ namespace Fraples
 		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
 		return nullptr;
 	}
+	
 
 	IndexBuffer::~IndexBuffer()
 	{

@@ -11,84 +11,64 @@ namespace Fraples{
 
 	Application* Application::_sInstance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Fraples::ShaderDataType::Float:
-			return GL_FLOAT;
-		case Fraples::ShaderDataType::Float2:
-			return GL_FLOAT;
-		case Fraples::ShaderDataType::Float3:
-			return GL_FLOAT;
-		case Fraples::ShaderDataType::Float4:
-			return GL_FLOAT;
-		case Fraples::ShaderDataType::Mat3:
-			return GL_FLOAT;
-		case Fraples::ShaderDataType::Mat4:
-			return GL_FLOAT;
-		case Fraples::ShaderDataType::Int:
-			return GL_INT;
-		case Fraples::ShaderDataType::Int2:
-			return GL_INT;
-		case Fraples::ShaderDataType::Int3:
-			return GL_INT;
-		case Fraples::ShaderDataType::Int4:
-			return GL_INT;
-		case Fraples::ShaderDataType::Boolean:
-			return GL_BOOL;
-		default:
-			break;
-		}
-		FPL_CORE_ASSERTS(false, "Unkonwn Shader Type.");
-
-		return 0;
-	}
+	
 
 	Application::Application()
 	{
 
 		FPL_CORE_ASSERTS(!_sInstance, "Application already Exists");
 		_sInstance = this;
-		
+
 		_mWindow = std::unique_ptr<Window>(Window::Create());
 		_mWindow->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));
 
 		_mImguiLayer = new ImGuiLayer();
 		PushOverLay(_mImguiLayer);
 
-		glGenVertexArrays(1, &_mVertexArray);
-		glBindVertexArray(_mVertexArray);
-
+		_mVertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.3f, 5.0f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 0.1f, 0.6f, 0.6f, 1.0f,
 			 0.0f,	0.5f, 0.0f, 0.8f, 0.3f, 0.6f, 1.0f
+		};
+		std::shared_ptr<VertexBuffer>vertexBuffer;
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
+		BufferLayout layout = { {ShaderDataType::Float3,"_aPosition"}, {ShaderDataType::Float4,"_aColor"} };
+
+		vertexBuffer->SetLayout(layout);
+		_mVertexArray->AddVertexBuffer(vertexBuffer);
+
+		uint32_t indices[3] = { 0, 1, 2 };
+		std::shared_ptr<IndexBuffer>indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		_mVertexArray->SetIndexBuffer(indexBuffer);
+
+
+		_mSquareVArray.reset(VertexArray::Create());
+
+		float squareVertices[3 * 4] =
+		{
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,	0.5f, 0.0f,
+			-0.5f,	0.5f, 0.0f
 		};
 
-		{
-		_mVertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		BufferLayout layout = { {ShaderDataType::Float3,"_aPosition"}, {ShaderDataType::Float4,"_aColor"}};
-		_mVertexBuffer->SetLayout(layout);
-		}
+		std::shared_ptr<VertexBuffer>squareVBuffer;  
+		squareVBuffer.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
-		uint32_t index = 0;
-		const auto& layout = _mVertexBuffer->GetLayout();
-		for (const auto& elements : layout)
-		{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, elements.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(elements.SDataType), elements.Normalized ? GL_TRUE : GL_FALSE, _mVertexBuffer->GetLayout().GetStride() , (const void*)elements.Offset);
-		index++;
-		}
-
+		squareVBuffer->SetLayout({ {ShaderDataType::Float3, "_aPosition"} });
+		_mSquareVArray->AddVertexBuffer(squareVBuffer);
 
 		
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0};
+		std::shared_ptr<IndexBuffer>squareIBuffer; 
+		squareIBuffer.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		_mSquareVArray->SetIndexBuffer(squareIBuffer);
 
-		_mIndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		std::string vertexSrc = R"(
 			#version 330 core
 			
@@ -105,7 +85,7 @@ namespace Fraples{
 				gl_Position = vec4(_aPosition, 1.0);
 			}
 
-	)";
+			)";
 		std::string fragmentSrc = R"(
 			#version 330 core
 			
@@ -120,7 +100,35 @@ namespace Fraples{
 				 color=_vColor;
 			}
 	)";
-		_mShader.reset(new Shader(vertexSrc,fragmentSrc));
+		_mShader.reset(new Shader(vertexSrc, fragmentSrc));
+
+		std::string vertexSrc2 = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 _aPosition;
+			
+			out vec3 _vPosition;
+
+			void main()
+			{
+				_vPosition = _aPosition;
+				gl_Position = vec4(_aPosition, 1.0);
+			}
+
+			)";
+		std::string fragmentSrc2 = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec3 _vPosition;
+			
+			void main()
+			{	
+				
+				 color = vec4(0.2,0.3,0.7,1.0);
+			}
+	)";
+		_mShader2.reset(new Shader(vertexSrc2, fragmentSrc2));
 	}
 	void Application::OnEvent(Event& e)
 	{
@@ -146,9 +154,13 @@ namespace Fraples{
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			_mShader2->Bind();
+			_mSquareVArray->Bind();
+			glDrawElements(GL_TRIANGLES, _mSquareVArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			_mShader->Bind();
-			glBindVertexArray(_mVertexArray);
-			glDrawElements(GL_TRIANGLES, _mIndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			_mVertexArray->Bind();
+			glDrawElements(GL_TRIANGLES,_mVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : _mLayerStack)
 				layer->OnUpdate();

@@ -10,6 +10,8 @@
 
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
+
 namespace Fraples{
 		
 	class FPL_API Application
@@ -36,11 +38,12 @@ namespace Fraples{
 		LayerStack _mLayerStack;
 	private:
 		static Application* _sInstance;
-		unsigned int _mVertexArray;
 
-		std::unique_ptr<Shader> _mShader;
-		std::unique_ptr<VertexBuffer> _mVertexBuffer;
-		std::unique_ptr<IndexBuffer> _mIndexBuffer;
+		std::shared_ptr<Shader> _mShader;
+		std::shared_ptr<VertexArray>_mVertexArray; 
+
+		std::shared_ptr<VertexArray>_mSquareVArray;
+		std::shared_ptr<Shader> _mShader2;
 
 	};
 	//TODO Define in Client;

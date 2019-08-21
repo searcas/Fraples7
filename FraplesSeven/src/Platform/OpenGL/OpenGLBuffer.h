@@ -7,7 +7,7 @@ namespace Fraples
 	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
-		OpenGLVertexBuffer();
+		OpenGLVertexBuffer() {}
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
 		virtual ~OpenGLVertexBuffer();
 
