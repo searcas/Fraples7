@@ -1,21 +1,26 @@
  #pragma once
-
-
+#include "RenderCommands.h"
+#include "OrthographicCamera.h"
+#include "Shader.h"
 namespace Fraples
 {
-	enum class RendererAPI
-	{
-		NONE		= 0,
-		OpenGL		= 1,
-		DirectX3D,
-		Vulkan,
-	};
+	
 	class Renderer
 	{
 	public:
-		inline static RendererAPI GetRendererAPI() { return _sRendererAPI; }
+		//TODO
+		static void BeginScene(OrthographicCamera& camera);
+		static void EndScene();
+		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& VA);
+
+		inline static RendererAPI::API GetRendererAPI() { return RendererAPI::getAPI(); }
+
 	private:
-		static RendererAPI _sRendererAPI;
+		struct SceneData
+		{
+			glm::mat4 viewProjectionMatrix;
+		};
+		static SceneData* _sSceneData;
 	};
 	
 }

@@ -12,10 +12,10 @@ namespace Fraples
 	{
 		switch (Renderer::GetRendererAPI())
 		{
-		case RendererAPI::NONE:
+		case RendererAPI::API::NONE:
 			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, size);
 		}
 		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
@@ -31,10 +31,10 @@ namespace Fraples
 	{
 		switch (Renderer::GetRendererAPI())
 		{
-		case RendererAPI::NONE:
+		case RendererAPI::API::NONE:
 			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, size);
 		}
 		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");

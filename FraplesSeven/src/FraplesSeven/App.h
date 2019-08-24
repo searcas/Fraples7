@@ -12,6 +12,9 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 
+#include "Renderer/OrthographicCamera.h"
+
+
 namespace Fraples{
 		
 	class FPL_API Application
@@ -38,7 +41,8 @@ namespace Fraples{
 		LayerStack _mLayerStack;
 	private:
 		static Application* _sInstance;
-
+	private:
+		OrthographicCamera _mCamera;
 		std::shared_ptr<Shader> _mShader;
 		std::shared_ptr<VertexArray>_mVertexArray; 
 

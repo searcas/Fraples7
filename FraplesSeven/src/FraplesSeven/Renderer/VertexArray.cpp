@@ -11,10 +11,10 @@ namespace Fraples
 	{
 		switch (Renderer::GetRendererAPI())
 		{
-		case RendererAPI::NONE:
+		case RendererAPI::API::NONE:
 			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexArray();
 		}
 		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");

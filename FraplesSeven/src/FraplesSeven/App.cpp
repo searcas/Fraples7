@@ -2,9 +2,10 @@
 #include "App.h"
 
 
-#include "glad/glad.h"
-
 #include "Input.h"
+
+#include "Renderer/Renderer.h"
+
 namespace Fraples{
 
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
@@ -13,7 +14,7 @@ namespace Fraples{
 
 	
 
-	Application::Application()
+	Application::Application() : _mCamera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 
 		FPL_CORE_ASSERTS(!_sInstance, "Application already Exists");
@@ -51,10 +52,10 @@ namespace Fraples{
 
 		float squareVertices[3 * 4] =
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,	0.5f, 0.0f,
-			-0.5f,	0.5f, 0.0f
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,	 0.75f, 0.0f,
+			-0.75f,	 0.75f, 0.0f
 		};
 
 		std::shared_ptr<VertexBuffer>squareVBuffer;  
@@ -77,12 +78,14 @@ namespace Fraples{
 			
 			out vec3 _vPosition;
 			out vec4 _vColor;
+			
+			uniform mat4 _uViewProjectionMatrix;			
 
 			void main()
 			{
 				_vPosition = _aPosition;
 				_vColor = _aColor;
-				gl_Position = vec4(_aPosition, 1.0);
+				gl_Position = _uViewProjectionMatrix * vec4(_aPosition, 1.0);
 			}
 
 			)";
@@ -92,7 +95,10 @@ namespace Fraples{
 			layout(location = 0) out vec4 color;
 			in vec3 _vPosition;
 			in vec4 _vColor;
+
+				
 			
+
 			void main()
 			{	
 				
@@ -106,13 +112,15 @@ namespace Fraples{
 			#version 330 core
 			
 			layout(location = 0) in vec3 _aPosition;
-			
+		
+			uniform mat4 _uViewProjectionMatrix;			
+	
 			out vec3 _vPosition;
 
 			void main()
 			{
 				_vPosition = _aPosition;
-				gl_Position = vec4(_aPosition, 1.0);
+				gl_Position = _uViewProjectionMatrix * vec4(_aPosition, 1.0);
 			}
 
 			)";
@@ -151,16 +159,15 @@ namespace Fraples{
 	{
 		while (_mRunning)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			RenderCommands::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			RenderCommands::Clear();
 
-			_mShader2->Bind();
-			_mSquareVArray->Bind();
-			glDrawElements(GL_TRIANGLES, _mSquareVArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-			_mShader->Bind();
-			_mVertexArray->Bind();
-			glDrawElements(GL_TRIANGLES,_mVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			_mCamera.SetPosition({ 0.5,0.5f,0.0f });
+			_mCamera.SetRotation(45.0f);
+			Renderer::BeginScene(_mCamera);
+			Renderer::Submit(_mShader2,_mSquareVArray);
+			Renderer::Submit(_mShader,_mVertexArray);
+			Renderer::EndScene();
 
 			for (Layer* layer : _mLayerStack)
 				layer->OnUpdate();
