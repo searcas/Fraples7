@@ -8,11 +8,8 @@
 #include "FraplesSeven/Events/AppEvent.h"
 #include "FraplesSeven/ImGui/imGuiLayer.h"
 
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
 
-#include "Renderer/OrthographicCamera.h"
+
 
 
 namespace Fraples{
@@ -42,12 +39,7 @@ namespace Fraples{
 	private:
 		static Application* _sInstance;
 	private:
-		OrthographicCamera _mCamera;
-		std::shared_ptr<Shader> _mShader;
-		std::shared_ptr<VertexArray>_mVertexArray; 
 
-		std::shared_ptr<VertexArray>_mSquareVArray;
-		std::shared_ptr<Shader> _mShader2;
 
 	};
 	//TODO Define in Client;
