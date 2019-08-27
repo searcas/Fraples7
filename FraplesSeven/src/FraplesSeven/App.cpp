@@ -6,6 +6,7 @@
 
 #include "Renderer/Renderer.h"
 
+#include "GLFW/glfw3.h"
 namespace Fraples{
 
 #define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
@@ -49,9 +50,11 @@ namespace Fraples{
 	{
 		while (_mRunning)
 		{
-	
+			float time = (float)glfwGetTime();
+			TimeSteps timesteps = time - _mLastTime;
+			_mLastTime = time;
 			for (Layer* layer : _mLayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timesteps);
 			//auto[x, y] = Input::GetMousePosition();
 			//FPL_CLIENT_TRACE("{0},{1}", x, y);
 			_mImguiLayer->Begin();

@@ -3,7 +3,7 @@
 #include "FraplesSeven/Core.h"
 #include "FraplesSeven/Events/Events.h"
 
-
+#include "FraplesSeven/Core/TimeSteps.h" 
 
 namespace Fraples
 {
@@ -16,7 +16,7 @@ namespace Fraples
 
 		virtual void OnAttach() { }
 		virtual void OnDetach() { }
-		virtual void OnUpdate()	{ }
+		virtual void OnUpdate(TimeSteps timesteps)	{ }
 		virtual void OnImGuiRender(){ }
 		virtual void OnEvent(Event& e) {}
 

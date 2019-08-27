@@ -1,6 +1,6 @@
 #include "FplPCH.h"
 #include "Renderer.h"
-
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Fraples
 {
@@ -13,10 +13,11 @@ namespace Fraples
 	void Renderer::EndScene()
 	{
 	}
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& VA)
+	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& VA, const glm::mat4& transform )
 	{
 		shader->Bind();
-		shader->UploadUniformMat4("_uViewProjectionMatrix", _sSceneData->viewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_uViewProjectionMatrix", _sSceneData->viewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_uTransform", transform);
 		VA->Bind();
 		RenderCommands::DrawIndexed(VA);
 	}

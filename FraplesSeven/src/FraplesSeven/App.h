@@ -8,6 +8,7 @@
 #include "FraplesSeven/Events/AppEvent.h"
 #include "FraplesSeven/ImGui/imGuiLayer.h"
 
+#include "FraplesSeven/Core/TimeSteps.h"
 
 
 
@@ -36,6 +37,8 @@ namespace Fraples{
 		ImGuiLayer* _mImguiLayer;
 		bool _mRunning = true;
 		LayerStack _mLayerStack;
+	private:
+		float _mLastTime = 0.0f;
 	private:
 		static Application* _sInstance;
 	private:

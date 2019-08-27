@@ -5,9 +5,7 @@
 #include "Renderer.h"
 namespace Fraples
 {
-	VertexBuffer::~VertexBuffer()
-	{
-	}
+
 	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetRendererAPI())
@@ -23,9 +21,6 @@ namespace Fraples
 	}
 	
 
-	IndexBuffer::~IndexBuffer()
-	{
-	}
 
 	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{

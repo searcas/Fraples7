@@ -1,5 +1,8 @@
 #include<Fraples.h>
 #include "FraplesSeven/Core.h"
+#include "Platform/OpenGL/OpenGLShader.h"
+#include "imGui/imgui.h"
+#include "glm/gtc/type_ptr.hpp"
 class ExampleLayer : public Fraples::Layer
 {
 public:
@@ -31,10 +34,10 @@ public:
 
 		float squareVertices[3 * 4] =
 		{
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,	 0.75f, 0.0f,
-			-0.75f,	 0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,	0.5f, 0.0f,
+			-0.5f,	0.5f, 0.0f
 		};
 
 		std::shared_ptr<Fraples::VertexBuffer>squareVBuffer;
@@ -59,12 +62,13 @@ public:
 			out vec4 _vColor;
 			
 			uniform mat4 _uViewProjectionMatrix;			
+			uniform mat4 _uTransform;			
 
 			void main()
 			{
 				_vPosition = _aPosition;
 				_vColor = _aColor;
-				gl_Position = _uViewProjectionMatrix * vec4(_aPosition, 1.0);
+				gl_Position = _uViewProjectionMatrix * _uTransform * vec4(_aPosition, 1.0);
 			}
 
 			)";
@@ -85,7 +89,7 @@ public:
 				 color=_vColor;
 			}
 	)";
-		_mShader.reset(new Fraples::Shader(vertexSrc, fragmentSrc));
+		_mShader.reset(Fraples::Shader::Create(vertexSrc, fragmentSrc));
 
 		std::string vertexSrc2 = R"(
 			#version 330 core
@@ -93,13 +97,14 @@ public:
 			layout(location = 0) in vec3 _aPosition;
 		
 			uniform mat4 _uViewProjectionMatrix;			
+			uniform mat4 _uTransform;			
 	
 			out vec3 _vPosition;
 
 			void main()
 			{
 				_vPosition = _aPosition;
-				gl_Position = _uViewProjectionMatrix * vec4(_aPosition, 1.0);
+				gl_Position = _uViewProjectionMatrix * _uTransform * vec4(_aPosition, 1.0);
 			}
 
 			)";
@@ -107,30 +112,38 @@ public:
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
+			
 			in vec3 _vPosition;
 			
+			uniform vec3 _uColor;
+
 			void main()
 			{	
-				
-				 color = vec4(0.2,0.3,0.7,1.0);
+				 color = vec4(_uColor,1.0);
 			}
 	)";
-		_mShader2.reset(new Fraples::Shader(vertexSrc2, fragmentSrc2));
+		_mShader2.reset(Fraples::Shader::Create(vertexSrc2, fragmentSrc2));
 	}
-	void OnUpdate() override
+	void OnUpdate(Fraples::TimeSteps ts) override
 	{
+		FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts,ts.GetMilliSeconds());
 		if (Fraples::Input::IsKeyPressed(FPL_KEY_RIGHT))
-			_mCameraPosition.x += _mCameraMoveSpeed;
+			_mCameraPosition.x += _mCameraMoveSpeed * ts;
 		else if (Fraples::Input::IsKeyPressed(FPL_KEY_LEFT))
-			_mCameraPosition.x -= _mCameraMoveSpeed;
+			_mCameraPosition.x -= _mCameraMoveSpeed * ts;
+		
 		if (Fraples::Input::IsKeyPressed(FPL_KEY_UP))
-			_mCameraPosition.y += _mCameraMoveSpeed;
+			_mCameraPosition.y += _mCameraMoveSpeed * ts;
 		else if (Fraples::Input::IsKeyPressed(FPL_KEY_DOWN))
-			_mCameraPosition.y -= _mCameraMoveSpeed;
+			_mCameraPosition.y -= _mCameraMoveSpeed * ts;
+		
 		if (Fraples::Input::IsKeyPressed(FPL_KEY_R))
-			_mCameraRotation += _mCameraRotationSpeed;
+			_mCameraRotation += _mCameraRotationSpeed * ts;
 		else if (Fraples::Input::IsKeyPressed(FPL_KEY_Q))
-			_mCameraRotation -= _mCameraRotationSpeed;
+			_mCameraRotation -= _mCameraRotationSpeed * ts;
+
+
+
 
 		Fraples::RenderCommands::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Fraples::RenderCommands::Clear();
@@ -139,11 +152,32 @@ public:
 		_mCamera.SetRotation(_mCameraRotation);
 
 		Fraples::Renderer::BeginScene(_mCamera);
-		Fraples::Renderer::Submit(_mShader2, _mSquareVArray);
+		
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+
+		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mShader2)->Bind();
+		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mShader2)->UploadUniformFloat3("_uColor",_mSquareColor);
+
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Fraples::Renderer::Submit(_mShader2, _mSquareVArray, transform);
+			}
+		}
 		Fraples::Renderer::Submit(_mShader, _mVertexArray);
 		Fraples::Renderer::EndScene();
 
 
+	}
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square Color",glm::value_ptr(_mSquareColor));
+		ImGui::End();
 	}
 	void OnEvent(Fraples::Event& e)override
 	{
@@ -158,9 +192,12 @@ private:
 	std::shared_ptr<Fraples::Shader> _mShader2;
 	glm::vec3 _mCameraPosition;
 
-	float _mCameraMoveSpeed = 0.1f;
-	float _mCameraRotationSpeed = 1.5f;
+	float _mCameraMoveSpeed = 5.0f;
+	float _mCameraRotationSpeed = 180.5f;
 	float _mCameraRotation = 0.0f;
+
+	glm::vec3 _mSquareColor = { 0.2f, 0.3f, 0.8f };
+
 };
 
 
