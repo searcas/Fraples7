@@ -6,6 +6,10 @@ namespace Fraples
 {
 	class RenderCommands {
 	public:
+		inline static void Init()
+		{
+			_sRendererAPI->Init();
+		}
 		inline static void SetClearColor(const glm::vec4& color) 
 		{
 			_sRendererAPI->SetClearColor(color);

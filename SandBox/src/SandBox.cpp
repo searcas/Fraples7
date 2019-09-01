@@ -32,18 +32,18 @@ public:
 
 		_mSquareVArray.reset(Fraples::VertexArray::Create());
 
-		float squareVertices[3 * 4] =
+		float squareVertices[5 * 4] =
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,	0.5f, 0.0f,
-			-0.5f,	0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,	0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,	0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		std::shared_ptr<Fraples::VertexBuffer>squareVBuffer;
 		squareVBuffer.reset(Fraples::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
-		squareVBuffer->SetLayout({ {Fraples::ShaderDataType::Float3, "_aPosition"} });
+		squareVBuffer->SetLayout({ {Fraples::ShaderDataType::Float3, "_aPosition"},{Fraples::ShaderDataType::Float2, "_aTexCoord"} });
 		_mSquareVArray->AddVertexBuffer(squareVBuffer);
 
 
@@ -91,15 +91,17 @@ public:
 	)";
 		_mShader.reset(Fraples::Shader::Create(vertexSrc, fragmentSrc));
 
-		std::string vertexSrc2 = R"(
+		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 _aPosition;
+
 		
 			uniform mat4 _uViewProjectionMatrix;			
-			uniform mat4 _uTransform;			
-	
-			out vec3 _vPosition;
+			uniform mat4 _uTransform;	
+
+			out vec3 _vPosition;		
+			
 
 			void main()
 			{
@@ -108,21 +110,28 @@ public:
 			}
 
 			)";
-		std::string fragmentSrc2 = R"(
+		std::string flatColorShaderFragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
-			
+
 			in vec3 _vPosition;
 			
 			uniform vec3 _uColor;
 
 			void main()
 			{	
-				 color = vec4(_uColor,1.0);
+				 color = vec4(_uColor, 1.0);
 			}
 	)";
-		_mShader2.reset(Fraples::Shader::Create(vertexSrc2, fragmentSrc2));
+		_mShader2.reset(Fraples::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+		_mTextureShader.reset(Fraples::Shader::Create("assets/Shaders/Texture.glsl"));
+
+		_mTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
+
+		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mTextureShader)->Bind();
+		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mTextureShader)->UploadUniformInt("_uTexture", 0);
 	}
 	void OnUpdate(Fraples::TimeSteps ts) override
 	{
@@ -168,7 +177,11 @@ public:
 				Fraples::Renderer::Submit(_mShader2, _mSquareVArray, transform);
 			}
 		}
-		Fraples::Renderer::Submit(_mShader, _mVertexArray);
+		_mTexture->Bind();
+		Fraples::Renderer::Submit(_mTextureShader, _mSquareVArray, glm::scale(glm::mat4(1.0f),glm::vec3(1.5f)));
+
+		//Triangle
+		//Fraples::Renderer::Submit(_mShader, _mVertexArray);
 		Fraples::Renderer::EndScene();
 
 
@@ -188,8 +201,10 @@ private:
 	std::shared_ptr<Fraples::Shader> _mShader;
 	std::shared_ptr<Fraples::VertexArray>_mVertexArray;
 
+	std::shared_ptr<Fraples::Texture2D>_mTexture;
+
 	std::shared_ptr<Fraples::VertexArray>_mSquareVArray;
-	std::shared_ptr<Fraples::Shader> _mShader2;
+	std::shared_ptr<Fraples::Shader> _mShader2, _mTextureShader;
 	glm::vec3 _mCameraPosition;
 
 	float _mCameraMoveSpeed = 5.0f;

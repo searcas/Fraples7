@@ -24,6 +24,8 @@ namespace Fraples{
 		_mWindow = std::unique_ptr<Window>(Window::Create());
 		_mWindow->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));
 
+		Renderer::Init();
+
 		_mImguiLayer = new ImGuiLayer();
 		PushOverLay(_mImguiLayer);
 

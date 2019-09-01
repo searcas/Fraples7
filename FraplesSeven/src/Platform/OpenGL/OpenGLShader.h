@@ -2,13 +2,14 @@
 #include "FraplesSeven/Renderer/Shader.h"
 #include "glm/glm.hpp"
 
-
-
+//TODO:REMOVE!
 namespace Fraples
 {
+	typedef unsigned int GLenum;
 	class OpenGLShader : public Shader
 	{
 	public:
+		OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
@@ -23,6 +24,10 @@ namespace Fraples
 
 		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+	private:
+		std::string ReadFile(const std::string& readfile);
+		std::unordered_map<GLenum,std::string>PreProcess(const std::string& shaderSrcCode);
+		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t _mRendererID;
 	};

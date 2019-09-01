@@ -6,6 +6,11 @@ namespace Fraples
 {
 	Renderer::SceneData* Renderer::_sSceneData = new Renderer::SceneData();
 	 
+	void Renderer::Init()
+	{
+		RenderCommands::Init();
+	}
+
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		_sSceneData->viewProjectionMatrix = camera.GetViewProjectionMatrix();

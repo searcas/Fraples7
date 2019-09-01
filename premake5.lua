@@ -18,6 +18,8 @@ IncludeDir ["GLFW"] = "FraplesSeven/Vendor/GLFW/include"
 IncludeDir ["GLAD"] = "FraplesSeven/Vendor/GLAD/include"
 IncludeDir ["imGui"] = "FraplesSeven/Vendor/imGui"
 IncludeDir ["glm"] = "FraplesSeven/Vendor/glm"
+IncludeDir ["stb_image"] = "FraplesSeven/Vendor/stb_image"
+
 
 
 
@@ -50,6 +52,8 @@ project "FraplesSeven"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/Vendor/stb_image/**.cpp",
+        "%{prj.name}/Vendor/stb_image/**.h",
         "%{prj.name}/Vendor/glm/glm/**.hpp",
         "%{prj.name}/Vendor/glm/glm/**.inl",
     }
@@ -65,7 +69,9 @@ project "FraplesSeven"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.imGui}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}"
+
     }
 
     links
