@@ -22,8 +22,16 @@ namespace Fraples
 		std::string shaderSrc = ReadFile(filepath);
 		auto shaderSources = PreProcess(shaderSrc);
 		Compile(shaderSources);
+
+		// Extract name from filepath\\
+		// assests/Shaders/Texture.glsl
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		_mName = filepath.substr(lastSlash,count);
 	}
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) :_mName(name)
 	{
 
 		std::unordered_map<GLenum, std::string>sources;
@@ -34,7 +42,7 @@ namespace Fraples
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
 		if (in)
 		{
@@ -124,7 +132,9 @@ namespace Fraples
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		FPL_CORE_ASSERTS(shaderSources.size() <= 2, "Shader must be less than 3 atm.");
+		std::array<GLenum, 2> glShaderIDs;
+		int glShaderIDIndex = 0;
 		for (auto& keyValue : shaderSources)
 		{
 			GLenum shaderType = keyValue.first;
@@ -154,7 +164,7 @@ namespace Fraples
 				break;
 			}
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 
 		}
 		

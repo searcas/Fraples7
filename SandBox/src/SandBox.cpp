@@ -1,8 +1,9 @@
-#include<Fraples.h>
+#include <Fraples.h>
 #include "FraplesSeven/Core.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
+
 class ExampleLayer : public Fraples::Layer
 {
 public:
@@ -89,7 +90,7 @@ public:
 				 color=_vColor;
 			}
 	)";
-		_mShader.reset(Fraples::Shader::Create(vertexSrc, fragmentSrc));
+		_mShader = Fraples::Shader::Create("VertexColorTriangle",vertexSrc, fragmentSrc);
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -124,14 +125,14 @@ public:
 				 color = vec4(_uColor, 1.0);
 			}
 	)";
-		_mShader2.reset(Fraples::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+		_mShader2 = Fraples::Shader::Create("FlatColor",flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-		_mTextureShader.reset(Fraples::Shader::Create("assets/Shaders/Texture.glsl"));
+		auto textureShader = _mShaderLibrary.Load("assets/Shaders/Texture.glsl");
 
 		_mTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
 
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mTextureShader)->Bind();
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mTextureShader)->UploadUniformInt("_uTexture", 0);
+		std::dynamic_pointer_cast<Fraples::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Fraples::OpenGLShader>(textureShader)->UploadUniformInt("_uTexture", 0);
 	}
 	void OnUpdate(Fraples::TimeSteps ts) override
 	{
@@ -177,8 +178,9 @@ public:
 				Fraples::Renderer::Submit(_mShader2, _mSquareVArray, transform);
 			}
 		}
+		auto textureShader = _mShaderLibrary.GetShader("Texture");
 		_mTexture->Bind();
-		Fraples::Renderer::Submit(_mTextureShader, _mSquareVArray, glm::scale(glm::mat4(1.0f),glm::vec3(1.5f)));
+		Fraples::Renderer::Submit(textureShader, _mSquareVArray, glm::scale(glm::mat4(1.0f),glm::vec3(1.5f)));
 
 		//Triangle
 		//Fraples::Renderer::Submit(_mShader, _mVertexArray);
@@ -197,6 +199,7 @@ public:
 	}
 
 private:
+	Fraples::ShaderLibrary _mShaderLibrary;
 	Fraples::OrthographicCamera _mCamera;
 	std::shared_ptr<Fraples::Shader> _mShader;
 	std::shared_ptr<Fraples::VertexArray>_mVertexArray;
@@ -204,7 +207,7 @@ private:
 	std::shared_ptr<Fraples::Texture2D>_mTexture;
 
 	std::shared_ptr<Fraples::VertexArray>_mSquareVArray;
-	std::shared_ptr<Fraples::Shader> _mShader2, _mTextureShader;
+	std::shared_ptr<Fraples::Shader> _mShader2;
 	glm::vec3 _mCameraPosition;
 
 	float _mCameraMoveSpeed = 5.0f;

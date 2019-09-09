@@ -10,12 +10,15 @@ namespace Fraples
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
 		void Bind() const override;
 		//for debug purpose
 		void Unbind() const override;
+		const std::string& GetName() const override { return _mName; }
+
+
 		void UploadUniformInt(const std::string& name, int value);
 		void UploadUniformFloat(const std::string& name, float value);
 		void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
@@ -30,5 +33,6 @@ namespace Fraples
 		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t _mRendererID;
+		std::string _mName;
 	};
 }
