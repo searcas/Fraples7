@@ -18,6 +18,7 @@
 #include "FraplesSeven/Renderer/Texture.h"
 #include "FraplesSeven/Renderer/VertexArray.h"
 #include "FraplesSeven/Renderer/OrthographicCamera.h"
+#include "FraplesSeven/OrthographicCameraController.h"
 
 //------------Entry Point---------------//
 #include "FraplesSeven/EntryPoint.h"

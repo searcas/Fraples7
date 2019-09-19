@@ -10,12 +10,16 @@ namespace Fraples
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
-		OrthographicCamera() {}
+
+		void SetProjection(float left, float right, float bottom, float top);
+
+
 		inline const glm::vec3& GetPosition() const { return _mPosition; };
 		inline void SetPosition(const glm::vec3& position) { _mPosition = position; RecalculateViewMatrix(); }
 		
 		inline float GetRotation() const { return _mRotation; };
 		inline void SetRotation(const float& rotation) { _mRotation = rotation; RecalculateViewMatrix(); }
+
 
 		inline const glm::mat4& GetProjectionMatrix() const { return _mProjectionMatrix; }
 		inline const glm::mat4& GetViewMatrix() const { return _mViewMatrix; }

@@ -3,11 +3,10 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
-
 class ExampleLayer : public Fraples::Layer
 {
 public:
-	ExampleLayer() : Fraples::Layer("Example"), _mCamera(-1.6f, 1.6f, -0.9f, 0.9f), _mCameraPosition(0.0f)
+	ExampleLayer() : Fraples::Layer("Example"), _mCameraCtrl(1280.0f / 720.0f, true)
 	{
 		_mVertexArray.reset(Fraples::VertexArray::Create());
 
@@ -136,32 +135,12 @@ public:
 	}
 	void OnUpdate(Fraples::TimeSteps ts) override
 	{
-		FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts,ts.GetMilliSeconds());
-		if (Fraples::Input::IsKeyPressed(FPL_KEY_RIGHT))
-			_mCameraPosition.x += _mCameraMoveSpeed * ts;
-		else if (Fraples::Input::IsKeyPressed(FPL_KEY_LEFT))
-			_mCameraPosition.x -= _mCameraMoveSpeed * ts;
-		
-		if (Fraples::Input::IsKeyPressed(FPL_KEY_UP))
-			_mCameraPosition.y += _mCameraMoveSpeed * ts;
-		else if (Fraples::Input::IsKeyPressed(FPL_KEY_DOWN))
-			_mCameraPosition.y -= _mCameraMoveSpeed * ts;
-		
-		if (Fraples::Input::IsKeyPressed(FPL_KEY_R))
-			_mCameraRotation += _mCameraRotationSpeed * ts;
-		else if (Fraples::Input::IsKeyPressed(FPL_KEY_Q))
-			_mCameraRotation -= _mCameraRotationSpeed * ts;
-
-
-
+		_mCameraCtrl.OnUpdate(ts);
 
 		Fraples::RenderCommands::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Fraples::RenderCommands::Clear();
 
-		_mCamera.SetPosition(_mCameraPosition);
-		_mCamera.SetRotation(_mCameraRotation);
-
-		Fraples::Renderer::BeginScene(_mCamera);
+		Fraples::Renderer::BeginScene(_mCameraCtrl.GetCamera());
 		
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -196,11 +175,11 @@ public:
 	}
 	void OnEvent(Fraples::Event& e)override
 	{
+		_mCameraCtrl.OnEvent(e);
 	}
 
 private:
 	Fraples::ShaderLibrary _mShaderLibrary;
-	Fraples::OrthographicCamera _mCamera;
 	std::shared_ptr<Fraples::Shader> _mShader;
 	std::shared_ptr<Fraples::VertexArray>_mVertexArray;
 
@@ -208,12 +187,9 @@ private:
 
 	std::shared_ptr<Fraples::VertexArray>_mSquareVArray;
 	std::shared_ptr<Fraples::Shader> _mShader2;
-	glm::vec3 _mCameraPosition;
 
-	float _mCameraMoveSpeed = 5.0f;
-	float _mCameraRotationSpeed = 180.5f;
-	float _mCameraRotation = 0.0f;
 
+	Fraples::OrthographicCameraController _mCameraCtrl;
 	glm::vec3 _mSquareColor = { 0.2f, 0.3f, 0.8f };
 
 };
