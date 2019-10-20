@@ -4,6 +4,4 @@
 [submodule "FraplesSeven/Vendor/imgui"]
 	path = FraplesSeven/Vendor/imgui
 	url = https://github.com/searcas/imgui
-[submodule "imgui"]
-	path = imgui
-	url = https://github.com/searcas/imgui
+
