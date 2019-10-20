@@ -9,4 +9,4 @@ git clone --recursive https://github.com/searcas/Fraples7
 
 Make sure that you do a --recursive clone to fetch all of the submodules!
 # Installation:
-Go to script folder and run "Generate Project"
+1) Go to script folder and run "Generate Project"
