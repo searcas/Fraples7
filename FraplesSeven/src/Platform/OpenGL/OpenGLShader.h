@@ -1,7 +1,6 @@
 #pragma once
 #include "FraplesSeven/Renderer/Shader.h"
-#include "glm.hpp"
-
+#include "glm/glm.hpp"
 //TODO:REMOVE!
 namespace Fraples
 {

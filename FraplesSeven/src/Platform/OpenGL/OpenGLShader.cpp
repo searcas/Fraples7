@@ -1,8 +1,7 @@
 #include "FplPCH.h"
 #include <fstream>
 #include "OpenGLShader.h"
-#include "gtc/type_ptr.hpp"
-
+#include "glm/gtc/type_ptr.hpp"
 #include "glad/glad.h"
 
 namespace Fraples
