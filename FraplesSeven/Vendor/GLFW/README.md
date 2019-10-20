@@ -121,10 +121,14 @@ information on what to include when reporting a bug.
  - Disabled tests and examples by default when built as a CMake subdirectory
  - Bugfix: The CMake config-file package used an absolute path and was not
    relocatable (#1470)
+ - Bugfix: Video modes with a duplicate screen area were discarded (#1555,#1556)
  - [Win32] Bugfix: `GLFW_INCLUDE_VULKAN` plus `VK_USE_PLATFORM_WIN32_KHR` caused
    symbol redefinition (#1524)
  - [Win32] Bugfix: The cursor position event was emitted before its cursor enter
    event (#1490)
+ - [Win32] Bugfix: The window hint `GLFW_MAXIMIZED` did not move or resize the
+   window (#1499)
+ - [Cocoa] Bugfix: `glfwSetWindowSize` used a bottom-left anchor point (#1553)
  - [X11] Bugfix: The CMake files did not check for the XInput headers (#1480)
  - [X11] Bugfix: Key names were not updated when the keyboard layout changed
    (#1462,#1528)
@@ -137,7 +141,7 @@ On [glfw.org](http://www.glfw.org/) you can find the latest version of GLFW, as
 well as news, documentation and other information about the project.
 
 If you have questions related to the use of GLFW, we have a
-[forum](http://discourse.glfw.org/), and the `#glfw` IRC channel on
+[forum](https://discourse.glfw.org/), and the `#glfw` IRC channel on
 [Freenode](http://freenode.net/).
 
 If you have a bug to report, a patch to submit or a feature you'd like to
@@ -167,6 +171,7 @@ skills.
  - blanco
  - Kyle Brenneman
  - Rok Breulj
+ - Kai Burjack
  - Martin Capitanio
  - David Carlier
  - Arturo Castro
@@ -224,6 +229,7 @@ skills.
  - Peter Knut
  - Christoph Kubisch
  - Yuri Kunde Schlesner
+ - Rokas Kupstys
  - Konstantin Käfer
  - Eric Larson
  - Robin Leffmann
@@ -278,6 +284,7 @@ skills.
  - Nathan Poirier
  - Alexandre Pretyman
  - przemekmirek
+ - Guillaume Racicot
  - Philip Rideout
  - Eddie Ringle
  - Max Risuhin

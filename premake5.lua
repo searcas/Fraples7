@@ -14,8 +14,8 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- include Directories relative to root folder (solution Directory)
 IncludeDir = {}
-IncludeDir ["GLFW"] = "FraplesSeven/Vendor/GLFW/include"
-IncludeDir ["GLAD"] = "FraplesSeven/Vendor/GLAD/include"
+IncludeDir ["GLFW"] = "FraplesSeven/Vendor/glfw/include"
+IncludeDir ["GLAD"] = "FraplesSeven/Vendor/glad/include"
 IncludeDir ["imGui"] = "FraplesSeven/Vendor/imGui"
 IncludeDir ["glm"] = "FraplesSeven/Vendor/glm"
 IncludeDir ["stb_image"] = "FraplesSeven/Vendor/stb_image"
@@ -23,13 +23,12 @@ IncludeDir ["stb_image"] = "FraplesSeven/Vendor/stb_image"
 
 
 
+	include "FraplesSeven/Vendor/glfw"
+	include "FraplesSeven/Vendor/glad"
+	include "FraplesSeven/Vendor/imgui"
 
-group "Dependencies"
-    include "FraplesSeven/vendor/GLFW"
-    include "FraplesSeven/vendor/Glad"
-    include "FraplesSeven/vendor/imgui"
 
-group ""
+
 
 
 

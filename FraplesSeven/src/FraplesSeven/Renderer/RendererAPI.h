@@ -1,7 +1,6 @@
 #pragma once
-#include "glm/glm.hpp"
 #include "VertexArray.h"
-
+#include "glm.hpp"
 namespace Fraples
 {
 	class RendererAPI
