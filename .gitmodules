@@ -1,6 +1,6 @@
 [submodule "FraplesSeven/Vendor/glfw"]
 	path = FraplesSeven/Vendor/glfw
-	url = https://github.com/glfw/glfw
+	url = https://github.com/searcas/glfw
 [submodule "FraplesSeven/Vendor/imgui"]
 	path = FraplesSeven/Vendor/imgui
-	url = https://github.com/ocornut/imgui
+	url = https://github.com/searcas/imgui
