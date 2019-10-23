@@ -2,7 +2,7 @@
 #include "Platform/WindowsInput.h"
 
 #include"GLFW/glfw3.h"
-#include "FraplesSeven/App.h"
+#include "FraplesSeven/Core/App.h"
 
 
 namespace Fraples

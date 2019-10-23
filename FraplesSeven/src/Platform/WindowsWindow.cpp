@@ -59,7 +59,9 @@ namespace Fraples
 				data._mHeight = height;
 				
 				WindowResizeEvent event(width, height);
+				FPL_CORE_WARN("{0}, {1}", width, height);
 				data._mEventCallbackFn(event);
+
 		});
 		glfwSetWindowCloseCallback(_mWindow,[](GLFWwindow* window)
 		{

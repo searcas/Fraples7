@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FraplesSeven/Input.h"
+#include "FraplesSeven/Core/Input.h"
 
 
 

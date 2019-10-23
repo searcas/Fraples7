@@ -4,7 +4,7 @@
 
 #include "Input.h"
 
-#include "Renderer/Renderer.h"
+#include "FraplesSeven/Renderer/Renderer.h"
 
 #include "GLFW/glfw3.h"
 namespace Fraples{
@@ -35,6 +35,7 @@ namespace Fraples{
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowsClosed));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
 		for (auto it = _mLayerStack.end(); it != _mLayerStack.begin();)
 		{
@@ -48,6 +49,17 @@ namespace Fraples{
 		_mRunning = false;
 		return true;
 	}
+	bool Application::OnWindowResize(WindowResizeEvent& winEvent)
+	{
+		if (winEvent.GetWidth() == 0 || winEvent.GetHeight() == 0)
+		{
+			_mMinimized = true;
+			return false;
+		}
+		_mMinimized = false;
+		Renderer::OnWindowResize(winEvent.GetWidth(), winEvent.GetHeight());
+		return false;
+	}
 	void Application::Run()
 	{
 		while (_mRunning)
@@ -55,14 +67,18 @@ namespace Fraples{
 			float time = (float)glfwGetTime();
 			TimeSteps timesteps = time - _mLastTime;
 			_mLastTime = time;
-			for (Layer* layer : _mLayerStack)
-				layer->OnUpdate(timesteps);
-			//auto[x, y] = Input::GetMousePosition();
-			//FPL_CLIENT_TRACE("{0},{1}", x, y);
+			if (!_mMinimized)
+			{
+				for (Layer* layer : _mLayerStack)
+					layer->OnUpdate(timesteps);
+
+			}
 			_mImguiLayer->Begin();
 			for (Layer* layer : _mLayerStack)
 				layer->OnImGuiRender();
 			_mImguiLayer->End();
+			//auto[x, y] = Input::GetMousePosition();
+			//FPL_CLIENT_TRACE("{0},{1}", x, y);
 
 			_mWindow->OnUpdate();
 		}

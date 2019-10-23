@@ -4,7 +4,7 @@
 
 #include "Window.h"
 #include "LayerStack.h"
-#include "Events/Events.h"
+#include "FraplesSeven/Events/Events.h"
 #include "FraplesSeven/Events/AppEvent.h"
 #include "FraplesSeven/ImGui/imGuiLayer.h"
 
@@ -32,16 +32,19 @@ namespace Fraples{
 	inline Window& GetWindow()   { return *_mWindow; }
 	private:
 		bool OnWindowsClosed(WindowCloseEvent& winEvent);
+		bool OnWindowResize(WindowResizeEvent& winEvent);
+
+	private:
 		std::unique_ptr<Window>_mWindow;
 
 		ImGuiLayer* _mImguiLayer;
 		bool _mRunning = true;
+		bool _mMinimized = false;
 		LayerStack _mLayerStack;
-	private:
+
 		float _mLastTime = 0.0f;
 	private:
 		static Application* _sInstance;
-	private:
 
 
 	};

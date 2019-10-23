@@ -1,9 +1,9 @@
 #pragma once
-#include "Renderer/OrthographicCamera.h"
-#include "Core/TimeSteps.h"
+#include "FraplesSeven/Renderer/OrthographicCamera.h"
+#include "FraplesSeven/Core/TimeSteps.h"
 
-#include "Events/AppEvent.h"
-#include "Events/MouseEvent.h"
+#include "FraplesSeven/Events/AppEvent.h"
+#include "FraplesSeven/Events/MouseEvent.h"
 
 namespace Fraples
 {
@@ -16,6 +16,10 @@ namespace Fraples
 		void OnEvent(Event& ev);
 		inline const OrthographicCamera& GetCamera() const { return _mOrthoCam; }
 		inline OrthographicCamera& GetCamera() { return _mOrthoCam; }
+
+		void SetZoomLevel(float level) { _mZoomLevel = level; }
+		float GetZoomLevel() { return _mZoomLevel; }
+		
 	private:
 		bool OnMouseScrolled(MouseScrollEvent& ev);
 		bool OnWindowResize(WindowResizeEvent& ev);

@@ -1,5 +1,5 @@
 #include <Fraples.h>
-#include "FraplesSeven/Core.h"
+#include "FraplesSeven/Core/Core.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
@@ -202,7 +202,6 @@ class SandBox : public Fraples::Application
 public:
 	SandBox() : Fraples::Application()
 	{
-		
 		PushLayer(new ExampleLayer());
 	}
 	~SandBox()

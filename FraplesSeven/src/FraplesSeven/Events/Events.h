@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FplPCH.h"
-#include "FraplesSeven/Core.h"
+#include "FraplesSeven/Core/Core.h"
 
 namespace Fraples
 {

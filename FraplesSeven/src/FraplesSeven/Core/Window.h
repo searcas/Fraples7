@@ -1,8 +1,7 @@
 #pragma once
 #include "FplPCH.h"
-#include "FraplesSeven/Core.h"
-#include "Events/Events.h"
-
+#include "FraplesSeven/Core/Core.h"
+#include "FraplesSeven/Events/Events.h"
 
 
 namespace Fraples

@@ -1,5 +1,5 @@
 #pragma once
-#include "FraplesSeven/Window.h"
+#include "FraplesSeven/Core/Window.h"
 #include "FraplesSeven/Renderer/Context/GraphicsContext.h"
 #include <GLFW/glfw3.h>
 

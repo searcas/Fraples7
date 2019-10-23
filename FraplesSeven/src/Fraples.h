@@ -1,13 +1,13 @@
 #pragma once
 
 //------------For Sandbox---------------//
-#include "FraplesSeven/App.h"
-#include "FraplesSeven/Layer.h"
-#include "FraplesSeven/Log.h"
+#include "FraplesSeven/Core/App.h"
+#include "FraplesSeven/Core/Layer.h"
+#include "FraplesSeven/Core/Log.h"
 #include "FraplesSeven/ImGui/imGuiLayer.h"
-#include "FraplesSeven/Input.h"
-#include "FraplesSeven/MouseButtonCodes.h"
-#include "FraplesSeven/KeyCode.h"	 
+#include "FraplesSeven/Core/Input.h"
+#include "FraplesSeven/Core/MouseButtonCodes.h"
+#include "FraplesSeven/Core/KeyCode.h"	 
 #include "FraplesSeven/Core/TimeSteps.h"
 #include "glm/gtc/matrix_transform.hpp"
 //------------Renderer---------------//
@@ -18,8 +18,8 @@
 #include "FraplesSeven/Renderer/Texture.h"
 #include "FraplesSeven/Renderer/VertexArray.h"
 #include "FraplesSeven/Renderer/OrthographicCamera.h"
-#include "FraplesSeven/OrthographicCameraController.h"
+#include "FraplesSeven/Renderer/OrthographicCameraController.h"
 
 //------------Entry Point---------------//
-#include "FraplesSeven/EntryPoint.h"
+#include "FraplesSeven/Core/EntryPoint.h"
 //----------------END-------------------//

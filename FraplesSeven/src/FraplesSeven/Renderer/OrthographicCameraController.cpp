@@ -1,8 +1,8 @@
 #include "FplPCH.h"
 #include "OrthographicCameraController.h"
-#include "Input.h"
-#include "KeyCode.h"
-#include "Core.h"
+#include "FraplesSeven/Core/Input.h"
+#include "FraplesSeven/Core/KeyCode.h"
+#include "FraplesSeven/Core/Core.h"
 
 
 namespace Fraples
@@ -14,7 +14,7 @@ namespace Fraples
 	
 	void OrthographicCameraController::OnUpdate(TimeSteps ts)
 	{
-		FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts, ts.GetMilliSeconds());
+		//FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts, ts.GetMilliSeconds());
 		if (Input::IsKeyPressed(FPL_KEY_A))
 			_mCameraPosition.x += _mCameraTranslationSpeed * ts;
 		else if (Input::IsKeyPressed(FPL_KEY_D))

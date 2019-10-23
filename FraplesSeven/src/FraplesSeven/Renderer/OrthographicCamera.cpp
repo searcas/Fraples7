@@ -17,7 +17,7 @@ namespace Fraples
 		_mViewProjectionMatrix = _mProjectionMatrix * _mViewMatrix;
 
 	}
-
+	
 	void OrthographicCamera::RecalculateViewMatrix()
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), _mPosition) * glm::rotate(glm::mat4(1.0f),glm::radians(_mRotation), glm::vec3(0, 0, 1));

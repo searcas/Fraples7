@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FraplesSeven/Core.h"
+#include "FraplesSeven/Core/Core.h"
 #include "FraplesSeven/Events/Events.h"
 
 #include "FraplesSeven/Core/TimeSteps.h" 

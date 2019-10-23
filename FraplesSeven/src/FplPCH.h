@@ -13,7 +13,7 @@
 #include<algorithm>
 #include<utility>
 
-#include "FraplesSeven/Log.h"
+#include "FraplesSeven/Core/Log.h"
 
 #ifdef FPL_PLATFORM_WINDOWS
 #include<Windows.h>

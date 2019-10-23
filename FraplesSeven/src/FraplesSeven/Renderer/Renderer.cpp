@@ -11,6 +11,11 @@ namespace Fraples
 		RenderCommands::Init();
 	}
 
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		RenderCommands::SetViewPort(0, 0, width, height);
+	}
+
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		_sSceneData->viewProjectionMatrix = camera.GetViewProjectionMatrix();
