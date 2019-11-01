@@ -22,11 +22,11 @@ IncludeDir ["stb_image"] = "FraplesSeven/Vendor/stb_image"
 
 
 
-
+group "Dependencies"
 	include "FraplesSeven/Vendor/glfw"
 	include "FraplesSeven/Vendor/glad"
 	include "FraplesSeven/Vendor/imgui"
-
+group ""
 
 
 

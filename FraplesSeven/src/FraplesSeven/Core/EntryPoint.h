@@ -12,10 +12,10 @@ void main(int argc, char** argv)
 {
 	
 
-	int val = 562958282;
+	int val = (float)7.007;
 	Fraples::Log::initialize();
-	FPL_CORE_WARN("[Initalized log!] VAL ={0} ",val);
-	FPL_CLIENT_CRITICAL("[CRITICAL] VAL = {0}",val);
+	FPL_CORE_WARN("[Initalized log!] VAL ={0} ", val);
+	FPL_CLIENT_CRITICAL("[CRITICAL] VAL = {0}", val);
 
 	auto app = Fraples::CreateApplication();
 	app->Run();

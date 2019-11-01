@@ -7,7 +7,7 @@
 
 namespace Fraples
 {
-	VertexArray* VertexArray::Create()
+	std::shared_ptr<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetRendererAPI())
 		{
@@ -15,7 +15,7 @@ namespace Fraples
 			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return std::make_shared<OpenGLVertexArray>();
 		}
 		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
 		return nullptr;

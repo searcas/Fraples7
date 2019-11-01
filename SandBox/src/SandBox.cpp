@@ -3,12 +3,18 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
+
+
+#include "SandBox2D.h"
+//------------Entry Point---------------//
+#include "FraplesSeven/Core/EntryPoint.h"
+//----------------END-------------------//
 class ExampleLayer : public Fraples::Layer
 {
 public:
 	ExampleLayer() : Fraples::Layer("Example"), _mCameraCtrl(1280.0f / 720.0f, true)
 	{
-		_mVertexArray.reset(Fraples::VertexArray::Create());
+		_mVertexArray = Fraples::VertexArray::Create();
 
 		float vertices[3 * 7] =
 		{
@@ -30,7 +36,7 @@ public:
 		_mVertexArray->SetIndexBuffer(indexBuffer);
 
 
-		_mSquareVArray.reset(Fraples::VertexArray::Create());
+		_mSquareVArray = Fraples::VertexArray::Create();
 
 		float squareVertices[5 * 4] =
 		{
@@ -170,7 +176,7 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit3("Square Color",glm::value_ptr(_mSquareColor));
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(_mSquareColor));
 		ImGui::End();
 	}
 	void OnEvent(Fraples::Event& e)override
@@ -195,14 +201,13 @@ private:
 };
 
 
-
-
 class SandBox : public Fraples::Application
 {
 public:
 	SandBox() : Fraples::Application()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		  PushLayer(new SandBox2D());
 	}
 	~SandBox()
 	{

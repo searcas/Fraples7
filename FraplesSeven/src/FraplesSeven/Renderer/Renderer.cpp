@@ -1,7 +1,8 @@
 #include "FplPCH.h"
 #include "Renderer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "Renderer2D.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
 namespace Fraples
 {
 	Renderer::SceneData* Renderer::_sSceneData = new Renderer::SceneData();
@@ -9,6 +10,7 @@ namespace Fraples
 	void Renderer::Init()
 	{
 		RenderCommands::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -28,6 +30,7 @@ namespace Fraples
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_uViewProjectionMatrix", _sSceneData->viewProjectionMatrix);
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_uTransform", transform);
+		
 		VA->Bind();
 		RenderCommands::DrawIndexed(VA);
 	}

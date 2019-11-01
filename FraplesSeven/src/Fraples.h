@@ -12,6 +12,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 //------------Renderer---------------//
 #include "FraplesSeven/Renderer/Renderer.h"
+#include "FraplesSeven/Renderer/Renderer2D.h"
 #include "FraplesSeven/Renderer/RenderCommands.h"
 #include "FraplesSeven/Renderer/Buffer.h"
 #include "FraplesSeven/Renderer/Shader.h"
@@ -20,6 +21,3 @@
 #include "FraplesSeven/Renderer/OrthographicCamera.h"
 #include "FraplesSeven/Renderer/OrthographicCameraController.h"
 
-//------------Entry Point---------------//
-#include "FraplesSeven/Core/EntryPoint.h"
-//----------------END-------------------//
