@@ -1,7 +1,9 @@
 #pragma once
 #include "FraplesSeven/Renderer/Shader.h"
 #include "glm/glm.hpp"
-//TODO:REMOVE!
+
+
+
 namespace Fraples
 {
 	typedef unsigned int GLenum;
@@ -23,6 +25,10 @@ namespace Fraples
 		void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
 		void UploadUniformFloat3(const std::string& name, const glm::vec3& values);
 		void UploadUniformFloat4(const std::string& name, const glm::vec4& values);
+		
+		void SetUniformFloat3(const std::string& name, const glm::vec3& color) override;
+		void SetUniformFloat4(const std::string& name, const glm::vec4& color) override;
+		void SetUniformMat4(const std::string& name, const glm::mat4& mat) override;
 
 		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);

@@ -116,6 +116,19 @@ namespace Fraples
 		GLint location = glGetUniformLocation(_mRendererID, name.c_str());
 		glUniform4f(location, values.x, values.y, values.z, values.w);
 	}
+	void OpenGLShader::SetUniformFloat3(const std::string& name, const glm::vec3& color)
+	{
+		UploadUniformFloat3(name, color);
+	}
+	void OpenGLShader::SetUniformFloat4(const std::string& name, const glm::vec4& color)
+	{
+		UploadUniformFloat4(name, color);
+	}
+
+	void OpenGLShader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
+	{
+		UploadUniformMat4(name, mat);
+	}
 	void OpenGLShader::UploadUniformMat3(const std::string & name, const glm::mat3 & matrix)
 	{
 		GLint location = glGetUniformLocation(_mRendererID, name.c_str());

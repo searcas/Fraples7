@@ -3,10 +3,9 @@
 
 #include "VertexArray.h"
 #include "Shader.h"
-
 #include "RenderCommands.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
+#include "glm/gtc/matrix_transform.hpp"
 namespace Fraples
 {
 	struct Renderer2DStorage
@@ -47,9 +46,8 @@ namespace Fraples
 	}
 	void Renderer2D::BeginScene(const Fraples::OrthographicCamera& orthoCam)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(_sData->flatColorShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(_sData->flatColorShader)->UploadUniformMat4("_uViewProjectionMatrix", orthoCam.GetViewProjectionMatrix());
-		std::dynamic_pointer_cast<OpenGLShader>(_sData->flatColorShader)->UploadUniformMat4("_uTransform", glm::mat4(1.0f));
+		_sData->flatColorShader->Bind();
+		_sData->flatColorShader->SetUniformMat4("_uViewProjectionMatrix", orthoCam.GetViewProjectionMatrix());
 
 	}
 	void Renderer2D::EndScene()
@@ -68,10 +66,10 @@ namespace Fraples
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 
-		std::dynamic_pointer_cast<OpenGLShader>(_sData->flatColorShader)->Bind();
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_sData->flatColorShader)->UploadUniformFloat4("_uColor", color);
-
-
+		_sData->flatColorShader->Bind();
+		_sData->flatColorShader->SetUniformFloat4("_uColor", color);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });
+		_sData->flatColorShader->SetUniformMat4("_uTransform", transform);
 		_sData->QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
 	}

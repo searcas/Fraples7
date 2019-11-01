@@ -1,6 +1,5 @@
 #include "SandBox2D.h"
 #include "imGui/imgui.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 #include "glm/gtc/type_ptr.hpp"
 
 
@@ -26,13 +25,9 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 	Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
 
 
-	Fraples::Renderer2D::DrawQuad({ 0.0f,0.0f }, { 1.0f, 1.0f }, { 0.8f,0.2f,0.3f,1.0f });
+	Fraples::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	Fraples::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.4f, 0.9f, 1.0f });
 	Fraples::Renderer2D::EndScene();
-
-
-
-	//std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mFlatColorShader)->UploadUniformFloat4("_uColor", _mSquareColor);
-	//std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mFlatColorShader)->Bind();
 
 }
 
