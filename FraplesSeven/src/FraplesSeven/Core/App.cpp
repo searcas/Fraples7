@@ -90,11 +90,11 @@ namespace Fraples{
 	void Application::PushLayer(Layer* layer)
 	{
 		_mLayerStack.PushLayer(layer);
-		layer->OnAttach();
+	
 	}
 	void Application::PushOverLay(Layer* overlay)
 	{
 		_mLayerStack.PushOverLay(overlay);
-		overlay->OnAttach();
+	
 	}
 }

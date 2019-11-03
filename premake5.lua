@@ -23,9 +23,9 @@ IncludeDir ["stb_image"] = "FraplesSeven/Vendor/stb_image"
 
 
 group "Dependencies"
-	include "FraplesSeven/Vendor/glfw"
-	include "FraplesSeven/Vendor/glad"
-	include "FraplesSeven/Vendor/imgui"
+	include "FraplesSeven/Vendor/GLFW"
+	include "FraplesSeven/Vendor/GLAD"
+	include "FraplesSeven/Vendor/imGui"
 group ""
 
 
