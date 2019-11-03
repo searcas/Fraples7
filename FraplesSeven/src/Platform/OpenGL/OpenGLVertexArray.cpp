@@ -62,15 +62,15 @@ namespace Fraples
 
 		FPL_CORE_ASSERTS(vertexBuffer->GetLayout().GetElements().size()," Vertex Buffer has no layout");
 
-		uint32_t index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& elements : layout)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, elements.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(elements.SDataType), elements.Normalized ? GL_TRUE : GL_FALSE, vertexBuffer->GetLayout().GetStride(), (const void*)elements.Offset);
-			index++;
+			glEnableVertexAttribArray(_mVertexBufferIndex);
+			glVertexAttribPointer( _mVertexBufferIndex, elements.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(elements.SDataType), elements.Normalized ? GL_TRUE : GL_FALSE, vertexBuffer->GetLayout().GetStride(), (const void*)(intptr_t)elements.Offset);
+			_mVertexBufferIndex++;
 		}
 		_mVertexBuffer.push_back(vertexBuffer);
+
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)

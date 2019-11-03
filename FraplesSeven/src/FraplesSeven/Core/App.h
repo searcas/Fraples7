@@ -20,7 +20,7 @@ namespace Fraples{
 		
 	public:
 	Application();
-	virtual ~Application();
+	~Application() = default;
 	void Run();
 
 	void OnEvent(Event& e);

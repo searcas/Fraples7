@@ -23,7 +23,7 @@ namespace Fraples
 	
 }
 //Core log macro
-#define FPL_CORE_CRITICAL(...) ::Fraples::Log::GetCoreLogger()->fatal(__VA_ARGS__);
+#define FPL_CORE_CRITICAL(...) ::Fraples::Log::GetCoreLogger()->critical(__VA_ARGS__);
 #define FPL_CORE_ERROR(...) ::Fraples::Log::GetCoreLogger()->error(__VA_ARGS__);
 #define FPL_CORE_WARN(...) ::Fraples::Log::GetCoreLogger()->warn(__VA_ARGS__);
 #define FPL_CORE_INFO(...) ::Fraples::Log::GetCoreLogger()->info(__VA_ARGS__);

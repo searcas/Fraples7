@@ -6,9 +6,12 @@ namespace Fraples
 {
 	class FPL_API Input
 	{
+	protected:
+		Input() = default;
 	public:
-
-		
+		Input(const Input&) = delete;
+		Input& operator=(const Input&) = delete;
+	public:
 		inline static bool  IsKeyPressed(int keyCode) { return _sInstance->IsKeyPressedImpl(keyCode); }
 		
 		inline static bool  IsMouseButtonPressed(int button) { return _sInstance->IsMouseButtonPressedImpl(button); }

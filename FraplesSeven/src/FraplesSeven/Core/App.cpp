@@ -84,9 +84,6 @@ namespace Fraples{
 		}
 
 	}
-	Application::~Application()
-	{
-	}
 	void Application::PushLayer(Layer* layer)
 	{
 		_mLayerStack.PushLayer(layer);

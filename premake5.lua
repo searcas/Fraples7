@@ -9,7 +9,10 @@ workspace "FraplesSeven"
         "Dist"
     }
 
-
+    flags
+    {
+        "MultiProcessorCompile"
+    }
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- include Directories relative to root folder (solution Directory)

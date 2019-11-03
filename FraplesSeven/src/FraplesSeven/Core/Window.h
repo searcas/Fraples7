@@ -19,7 +19,7 @@ namespace Fraples
 	public:
 		using EventCallBackFn = std::function<void(Event&)>;
 
-		virtual ~Window(){}
+		virtual ~Window() = default;
 
 		virtual void OnUpdate() = 0;
 

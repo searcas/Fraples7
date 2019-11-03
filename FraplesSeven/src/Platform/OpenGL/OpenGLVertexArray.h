@@ -23,5 +23,6 @@ namespace Fraples
 		std::vector<std::shared_ptr<VertexBuffer>>_mVertexBuffer;
 		std::shared_ptr<IndexBuffer>_mIndexBuffer;
 		uint32_t _mRendererID;
+		uint32_t _mVertexBufferIndex = 0;
 	};
 }

@@ -209,7 +209,10 @@ namespace Fraples
 			}
 
 			for (auto id : glShaderIDs)
-			glDetachShader(program, id);
+			{
+				glDetachShader(program, id);
+				glDeleteShader(id);
+			}
 
 			_mRendererID = program;
 

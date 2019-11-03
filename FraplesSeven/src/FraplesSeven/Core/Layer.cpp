@@ -9,8 +9,4 @@ namespace Fraples
 	{
 
 	}
-	Layer::~Layer()
-	{
-		 
-	}
 }

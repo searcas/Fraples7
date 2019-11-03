@@ -11,13 +11,16 @@ namespace Fraples
 	LayerStack::~LayerStack()
 	{
 		for (Layer* layer : _mLayers)
+		{
+			layer->OnDetach();
 			delete layer;
+		}
 	}
 	void LayerStack::PushLayer(Layer* layer)
 	{
 		_mLayers.emplace(_mLayers.begin() + _mLayerInsertIndex, layer);
-		layer->OnAttach();
 		_mLayerInsertIndex++;
+		layer->OnAttach();
 	}
 	void LayerStack::PushOverLay(Layer* overlay)
 	{
@@ -26,23 +29,23 @@ namespace Fraples
 	}
 	void LayerStack::PopLayer(Layer* poplayer)
 	{
-		auto it = std::find(_mLayers.begin(), _mLayers.end(), poplayer);
+		auto it = std::find(_mLayers.begin(), _mLayers.begin() + _mLayerInsertIndex, poplayer);
 
-		if (it !=_mLayers.end())
+		if (it != _mLayers.end() + _mLayerInsertIndex)
 		{
+			poplayer->OnDetach();
 			_mLayers.erase(it);
 			_mLayerInsertIndex--;
-			poplayer->OnDetach();
 		}
 
 	}
 	void LayerStack::PopOverlay(Layer* overlay)
 	{
-		auto it = std::find(_mLayers.begin(), _mLayers.end(), overlay);
+		auto it = std::find(_mLayers.begin() + _mLayerInsertIndex, _mLayers.end(), overlay);
 		if (it != _mLayers.end())
 		{
-			_mLayers.erase(it);
 			overlay->OnDetach();
+			_mLayers.erase(it);
 		}
 	}
 }
