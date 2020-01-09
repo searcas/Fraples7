@@ -25,5 +25,6 @@ namespace Fraples
 	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& VA)
 	{
 		glDrawElements(GL_TRIANGLES, VA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

@@ -14,15 +14,18 @@
 		_vTexCoord = _aTexCoord;
 		gl_Position = _uViewProjectionMatrix * _uTransform * vec4(_aPosition, 1.0);
 	}
+
 #type fragment
 #version 330 core
 
 	layout(location = 0) out vec4 color;
 	in vec2 _vTexCoord;
+	
 	uniform sampler2D _uTexture;
+	uniform vec4 _uColor;
 
 
 	void main()
 	{	
-		color = texture(_uTexture, _vTexCoord);
+		color = texture(_uTexture, _vTexCoord * 10) * _uColor;
 	}

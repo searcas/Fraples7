@@ -11,9 +11,8 @@ namespace Fraples
 	struct Renderer2DStorage
 	{
 		std::shared_ptr<VertexArray>QuadVertexArray;
-		std::shared_ptr<Shader>flatColorShader;
 		std::shared_ptr<Shader>textureShader;
-
+		std::shared_ptr<Texture2D> WhiteTexture;
 	};
 	static Renderer2DStorage* _sData;
 
@@ -42,17 +41,15 @@ namespace Fraples
 		squareIBuffer.reset(Fraples::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		_sData->QuadVertexArray->SetIndexBuffer(squareIBuffer);
 
-
-		_sData->flatColorShader = Fraples::Shader::Create("assets/Shaders/FlatColor.glsl");
+		_sData->WhiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		_sData->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 		_sData->textureShader   = Fraples::Shader::Create("assets/Shaders/Texture.glsl");
 		_sData->textureShader->Bind();
 		_sData->textureShader->SetUniformInt("_uTexture", 0);
 	}
 	void Renderer2D::BeginScene(const Fraples::OrthographicCamera& orthoCam)
 	{
-		_sData->flatColorShader->Bind();
-		_sData->flatColorShader->SetUniformMat4("_uViewProjectionMatrix", orthoCam.GetViewProjectionMatrix());
-
 		_sData->textureShader->Bind();
 		_sData->textureShader->SetUniformMat4("_uViewProjectionMatrix", orthoCam.GetViewProjectionMatrix());
 
@@ -71,10 +68,12 @@ namespace Fraples
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		_sData->flatColorShader->Bind();
-		_sData->flatColorShader->SetUniformFloat4("_uColor", color);
+		_sData->textureShader->SetUniformFloat4("_uColor", color);
+		_sData->WhiteTexture->Bind();
+
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });
-		_sData->flatColorShader->SetUniformMat4("_uTransform", transform);
+		_sData->textureShader->SetUniformMat4("_uTransform", transform);
+
 		_sData->QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
 	}
@@ -84,6 +83,7 @@ namespace Fraples
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
 	{
+		_sData->textureShader->SetUniformFloat4("_uColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 		_sData->textureShader->Bind();
 	
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x,size.y, 1.0f });
@@ -92,5 +92,6 @@ namespace Fraples
 		texture->Bind();
 		_sData->QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
+
 	}
 }

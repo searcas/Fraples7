@@ -16,9 +16,9 @@ namespace Fraples
 	{
 		//FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts, ts.GetMilliSeconds());
 		if (Input::IsKeyPressed(FPL_KEY_A))
-			_mCameraPosition.x += _mCameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(FPL_KEY_D))
 			_mCameraPosition.x -= _mCameraTranslationSpeed * ts;
+		else if (Input::IsKeyPressed(FPL_KEY_D))
+			_mCameraPosition.x += _mCameraTranslationSpeed * ts;
 	
 		if (Input::IsKeyPressed(FPL_KEY_W))
 			_mCameraPosition.y += _mCameraTranslationSpeed * ts;
