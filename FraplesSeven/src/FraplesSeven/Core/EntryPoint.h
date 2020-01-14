@@ -1,4 +1,5 @@
 #pragma once
+#include "Core.h"
 
 #ifdef FPL_PLATFORM_WINDOWS
 
@@ -12,14 +13,18 @@ void main(int argc, char** argv)
 {
 	
 
-	int val = (float)7.007;
 	Fraples::Log::initialize();
-	FPL_CORE_WARN("[Initalized log!] VAL ={0} ", val);
-	FPL_CLIENT_CRITICAL("[CRITICAL] VAL = {0}", val);
 
+	FPL_PROFILE_SESSION_BEGIN("Startup", "FraplesProfile-Startup.json");
 	auto app = Fraples::CreateApplication();
+	FPL_PROFILE_SESSION_END();
+	FPL_PROFILE_SESSION_BEGIN("RunTime", "FraplesProfile-Runtime.json");
 	app->Run();
+	FPL_PROFILE_SESSION_END();
+
+	FPL_PROFILE_SESSION_BEGIN("End", "FraplesProfile-Shutdown.json");
 	delete	app;
+	FPL_PROFILE_SESSION_END();
 	 
 }
 

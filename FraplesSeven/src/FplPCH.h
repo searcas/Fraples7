@@ -14,6 +14,7 @@
 #include<utility>
 
 #include "FraplesSeven/Core/Log.h"
+#include "FraplesSeven/Debug/Instrumentor.h"
 
 #ifdef FPL_PLATFORM_WINDOWS
 #include<Windows.h>

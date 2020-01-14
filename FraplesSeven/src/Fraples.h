@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FraplesSeven/Core/Core.h"
 //------------For Sandbox---------------//
 #include "FraplesSeven/Core/App.h"
 #include "FraplesSeven/Core/Layer.h"
