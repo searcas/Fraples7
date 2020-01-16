@@ -121,7 +121,7 @@ namespace Fraples {
 		bool _mStopped;
 	};
 }
-#define FPL_PROFILER 1
+#define FPL_PROFILER 0
 #if FPL_PROFILER
 	#define FPL_PROFILE_SESSION_BEGIN(name, filepath) ::Fraples::Instrumentor::Get().BeginSession(name, filepath)
 	#define FPL_PROFILE_SESSION_END() ::Fraples::Instrumentor::Get().EndSession()

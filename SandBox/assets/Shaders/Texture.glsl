@@ -22,10 +22,11 @@
 	in vec2 _vTexCoord;
 	
 	uniform sampler2D _uTexture;
+	uniform float _uTiling;
 	uniform vec4 _uColor;
 
 
 	void main()
 	{	
-		color = texture(_uTexture, _vTexCoord * 10) * _uColor;
+		color = texture(_uTexture, _vTexCoord * _uTiling) * _uColor;
 	}

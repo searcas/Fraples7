@@ -128,11 +128,17 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 		UploadUniformInt(name, value);
 	}
+	void OpenGLShader::SetUniformFloat(const std::string& name, float value)
+	{
+		FPL_PROFILE_FUNCTION();
+		UploadUniformFloat(name, value);
+	}
 	void OpenGLShader::SetUniformFloat3(const std::string& name, const glm::vec3& color)
 	{
 		FPL_PROFILE_FUNCTION();
 		UploadUniformFloat3(name, color);
 	}
+	
 	void OpenGLShader::SetUniformFloat4(const std::string& name, const glm::vec4& color)
 	{
 		FPL_PROFILE_FUNCTION();

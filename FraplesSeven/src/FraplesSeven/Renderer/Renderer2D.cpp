@@ -74,22 +74,25 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		_sData->textureShader->SetUniformFloat4("_uColor", color);
+		_sData->textureShader->SetUniformFloat("_uTiling", 1.0f);
 		_sData->WhiteTexture->Bind();
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		_sData->textureShader->SetUniformMat4("_uTransform", transform);
 
 		_sData->QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
 	}
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
 		FPL_PROFILE_FUNCTION();
-		DrawQuad({ position.x,position.y, 0.0f }, size, texture);
+		DrawQuad({ position.x,position.y, 0.0f }, size, texture, tiling, tintColor);
 	}
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
-		_sData->textureShader->SetUniformFloat4("_uColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		_sData->textureShader->SetUniformFloat4("_uColor", tintColor);
+		_sData->textureShader->SetUniformFloat("_uTiling", tiling);
+
 		_sData->textureShader->Bind();
 	
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x,size.y, 1.0f });
@@ -99,5 +102,44 @@ namespace Fraples
 		_sData->QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
 
+	}
+	void Renderer2D::DrawQuadRotation(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		DrawQuadRotation({ position.x, position.y, 0.0f }, size, rotation,color);
+
+	}
+	void Renderer2D::DrawQuadRotation(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		FPL_PROFILE_FUNCTION();
+		_sData->textureShader->SetUniformFloat4("_uColor", color);
+		_sData->textureShader->SetUniformFloat("_uTiling", 1.0f);
+		_sData->WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		_sData->textureShader->SetUniformMat4("_uTransform", transform);
+
+		_sData->QuadVertexArray->Bind();
+		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
+	}
+	void Renderer2D::DrawQuadRotation(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
+	{
+		FPL_PROFILE_FUNCTION();
+		DrawQuadRotation({ position.x,position.y, 0.0f }, size, rotation, texture, tiling, tintColor);
+	}
+	void Renderer2D::DrawQuadRotation(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
+	{
+		_sData->textureShader->SetUniformFloat4("_uColor", tintColor);
+		_sData->textureShader->SetUniformFloat("_uTiling", tiling);
+
+		_sData->textureShader->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f}) 
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		_sData->textureShader->SetUniformMat4("_uTransform", transform);
+
+		texture->Bind();
+		_sData->QuadVertexArray->Bind();
+		RenderCommands::DrawIndexed(_sData->QuadVertexArray);
 	}
 }
