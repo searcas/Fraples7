@@ -12,6 +12,7 @@ namespace Fraples
 	}
 	void OpenGLContext::Init()
 	{
+		FPL_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(_mWinHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		FPL_CORE_ASSERTS(status, " Failed to initialize GLAD ");
@@ -25,6 +26,8 @@ namespace Fraples
 	}
 	void OpenGLContext::SwapBuffers()
 	{
+		FPL_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(_mWinHandle);
 	}
 }

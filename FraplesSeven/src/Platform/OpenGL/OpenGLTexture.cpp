@@ -10,7 +10,7 @@ namespace Fraples
 {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) :_mWidth(width), _mHeight(height)
 	{
-
+		FPL_PROFILE_FUNCTION();
 		_mInternalFormat = GL_RGBA8, _mDataFormat = GL_RGBA;
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &_mRendererID);
@@ -24,10 +24,14 @@ namespace Fraples
 	}
 	OpenGLTexture2D::OpenGLTexture2D(const std::string & filepath) :_mPath(filepath)
 	{
+		FPL_PROFILE_FUNCTION();
 		int width, height, channels;
-
+		stbi_uc* data = nullptr;
 		stbi_set_flip_vertically_on_load(1);  
-		stbi_uc* data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+		{
+			FPL_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&) stbi_load");
+			data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+		}
 		FPL_CORE_ASSERTS(data, "Fail to load images");
 		_mWidth = width;
 		_mHeight = height;
@@ -63,11 +67,13 @@ namespace Fraples
 	}
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		FPL_PROFILE_FUNCTION();
 		glDeleteTextures(1, &_mRendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		FPL_PROFILE_FUNCTION();
 		uint32_t bpp = _mDataFormat == GL_RGBA ? 4 : 3;
 		FPL_CORE_ASSERTS(size == _mWidth * _mHeight * bpp, "Data must be entire texture");
 		glTextureSubImage2D(_mRendererID, 0, 0, 0, _mWidth, _mHeight, _mDataFormat, GL_UNSIGNED_BYTE, data);

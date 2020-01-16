@@ -9,6 +9,7 @@ namespace Fraples
 	 
 	void Renderer::Init()
 	{
+		FPL_PROFILE_FUNCTION();
 		RenderCommands::Init();
 		Renderer2D::Init();
 	}

@@ -8,6 +8,7 @@ namespace Fraples
 {
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
+
 		if (type == "vertex")
 			return GL_VERTEX_SHADER;
 
@@ -18,6 +19,7 @@ namespace Fraples
 	}
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		FPL_PROFILE_FUNCTION();
 		std::string shaderSrc = ReadFile(filepath);
 		auto shaderSources = PreProcess(shaderSrc);
 		Compile(shaderSources);
@@ -32,7 +34,7 @@ namespace Fraples
 	}
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) :_mName(name)
 	{
-
+		FPL_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string>sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -40,6 +42,7 @@ namespace Fraples
 	}
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		FPL_PROFILE_FUNCTION();
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
@@ -59,6 +62,7 @@ namespace Fraples
 	}
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& shaderSrcCode)
 	{
+		FPL_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -81,14 +85,17 @@ namespace Fraples
 	}
 	OpenGLShader::~OpenGLShader()
 	{
-
+		FPL_PROFILE_FUNCTION();
+		glDeleteProgram(_mRendererID);
 	}
 	void OpenGLShader::Bind()const
 	{
+		FPL_PROFILE_FUNCTION();
 		glUseProgram(_mRendererID);
 	}
 	void OpenGLShader::Unbind()const
 	{
+		FPL_PROFILE_FUNCTION();
 		glUseProgram(0);
 	}
 	void OpenGLShader::UploadUniformInt(const std::string & name, int value)
@@ -118,19 +125,23 @@ namespace Fraples
 	}
 	void OpenGLShader::SetUniformInt(const std::string& name, int value)
 	{
-		UploadUniformInt(name, value); 
+		FPL_PROFILE_FUNCTION();
+		UploadUniformInt(name, value);
 	}
 	void OpenGLShader::SetUniformFloat3(const std::string& name, const glm::vec3& color)
 	{
+		FPL_PROFILE_FUNCTION();
 		UploadUniformFloat3(name, color);
 	}
 	void OpenGLShader::SetUniformFloat4(const std::string& name, const glm::vec4& color)
 	{
+		FPL_PROFILE_FUNCTION();
 		UploadUniformFloat4(name, color);
 	}
 
 	void OpenGLShader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
 	{
+		FPL_PROFILE_FUNCTION();
 		UploadUniformMat4(name, mat);
 	}
 	void OpenGLShader::UploadUniformMat3(const std::string & name, const glm::mat3 & matrix)
@@ -147,6 +158,7 @@ namespace Fraples
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		FPL_PROFILE_FUNCTION();
 		GLuint program = glCreateProgram();
 		FPL_CORE_ASSERTS(shaderSources.size() <= 2, "Shader must be less than 3 atm.");
 		std::array<GLenum, 2> glShaderIDs;

@@ -40,23 +40,28 @@ namespace Fraples
 	}
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		FPL_PROFILE_FUNCTION();
 		glCreateVertexArrays(1, &_mRendererID);
 	}
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		FPL_PROFILE_FUNCTION();
 		glDeleteVertexArrays(1, &_mRendererID);
 	}
 	void OpenGLVertexArray::Bind() const
 	{
+		FPL_PROFILE_FUNCTION();
 		glBindVertexArray(_mRendererID);
 	}
 	void OpenGLVertexArray::Unbind() const
 	{
+		FPL_PROFILE_FUNCTION();
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 	{
+		FPL_PROFILE_FUNCTION();
 		glBindVertexArray(_mRendererID);
 		vertexBuffer->Bind();
 
@@ -75,6 +80,7 @@ namespace Fraples
 
 	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 	{
+		FPL_PROFILE_FUNCTION();
 		glBindVertexArray(_mRendererID);
 		indexBuffer->Bind();
 

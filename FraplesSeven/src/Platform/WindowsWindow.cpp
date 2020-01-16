@@ -22,12 +22,17 @@ namespace Fraples
 	}
 	WindowsWindow::WindowsWindow(const WindowProperties& prop)
 	{
+		FPL_PROFILE_FUNCTION();
 		Init(prop);
 	}
-	WindowsWindow::~WindowsWindow() { ShutDown(); }
+	WindowsWindow::~WindowsWindow() { 
+		FPL_PROFILE_FUNCTION();
+		ShutDown(); 
+	}
 
 	void WindowsWindow::Init(const WindowProperties& prop)
 	{
+		FPL_PROFILE_FUNCTION();
 		_mData._mTitle = prop._mTitle;
 		_mData._mWidth = prop._mWidth;
 		_mData._mHeight = prop._mHeight;
@@ -38,13 +43,16 @@ namespace Fraples
 		{
 			//TODO:GLFW terminate on system shutdown
 
+			FPL_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
 			FPL_CORE_ASSERTS(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
 			isInitialized = true;
 		}
+		{
+			FPL_PROFILE_SCOPE("glfwCreateWindow");
 		_mWindow = glfwCreateWindow((int)prop._mWidth, (int)_mData._mHeight, _mData._mTitle.c_str(), nullptr, nullptr);
-
+		}
 		_mContext = new OpenGLContext(_mWindow);
 		_mContext->Init();
 		//
@@ -138,10 +146,12 @@ namespace Fraples
 	}
 	void WindowsWindow::ShutDown()
 	{
+		FPL_PROFILE_FUNCTION();
 		glfwDestroyWindow(_mWindow);
 	}
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		FPL_PROFILE_FUNCTION();
 		if (enabled)
 			glfwSwapInterval(1);
 		else
@@ -155,6 +165,8 @@ namespace Fraples
 	}
 	void WindowsWindow::OnUpdate()
 	{
+		FPL_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		_mContext->SwapBuffers();
 	}

@@ -20,12 +20,10 @@ namespace Fraples
 	{
 		_mLayers.emplace(_mLayers.begin() + _mLayerInsertIndex, layer);
 		_mLayerInsertIndex++;
-		layer->OnAttach();
 	}
 	void LayerStack::PushOverLay(Layer* overlay)
 	{
 		_mLayers.emplace_back(overlay);
-		overlay->OnAttach();
 	}
 	void LayerStack::PopLayer(Layer* poplayer)
 	{

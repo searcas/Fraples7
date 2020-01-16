@@ -18,6 +18,7 @@ namespace Fraples{
 	Application::Application() 
 	{
 
+		FPL_PROFILE_FUNCTION();
 		FPL_CORE_ASSERTS(!_sInstance, "Application already Exists");
 		_sInstance = this;
 
@@ -33,6 +34,7 @@ namespace Fraples{
 	}
 	void Application::OnEvent(Event& e)
 	{
+		FPL_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowsClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
@@ -62,20 +64,28 @@ namespace Fraples{
 	}
 	void Application::Run()
 	{
+		FPL_PROFILE_FUNCTION();
 		while (_mRunning)
 		{
+			FPL_PROFILE_SCOPE("RUN LOOP");
 			float time = (float)glfwGetTime();
 			TimeSteps timesteps = time - _mLastTime;
 			_mLastTime = time;
 			if (!_mMinimized)
 			{
+				{
+					FPL_PROFILE_SCOPE("LayerStack OnUpdates");
 				for (Layer* layer : _mLayerStack)
 					layer->OnUpdate(timesteps);
-
+				}
 			}
 			_mImguiLayer->Begin();
-			for (Layer* layer : _mLayerStack)
+			{
+
+				FPL_PROFILE_SCOPE("LayerStack OnImGuiRender");
+				for (Layer* layer : _mLayerStack)
 				layer->OnImGuiRender();
+			}
 			_mImguiLayer->End();
 			//auto[x, y] = Input::GetMousePosition();
 			//FPL_CLIENT_TRACE("{0},{1}", x, y);
@@ -86,12 +96,15 @@ namespace Fraples{
 	}
 	void Application::PushLayer(Layer* layer)
 	{
+		FPL_PROFILE_FUNCTION();
 		_mLayerStack.PushLayer(layer);
+		layer->OnAttach();
 	
 	}
 	void Application::PushOverLay(Layer* overlay)
 	{
+		FPL_PROFILE_FUNCTION();
 		_mLayerStack.PushOverLay(overlay);
-	
+		overlay->OnAttach();
 	}
 }

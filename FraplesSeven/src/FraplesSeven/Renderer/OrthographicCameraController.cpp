@@ -14,6 +14,7 @@ namespace Fraples
 	
 	void OrthographicCameraController::OnUpdate(TimeSteps ts)
 	{
+		FPL_PROFILE_FUNCTION();
 		//FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts, ts.GetMilliSeconds());
 		if (Input::IsKeyPressed(FPL_KEY_A))
 			_mCameraPosition.x -= _mCameraTranslationSpeed * ts;
@@ -40,6 +41,7 @@ namespace Fraples
 	
 	void OrthographicCameraController::OnEvent(Event& ev)
 	{
+		FPL_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(ev);
 		dispatcher.Dispatch<MouseScrollEvent>(FplBindeventFn(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(FplBindeventFn(OrthographicCameraController::OnWindowResize));
@@ -48,6 +50,7 @@ namespace Fraples
 	
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrollEvent& ev)
 	{
+		FPL_PROFILE_FUNCTION();
 		_mZoomLevel -= ev.GetYOffset() * 0.25f;
 		_mZoomLevel = std::max(_mZoomLevel, 0.25f);
 		_mOrthoCam.SetProjection(-_mAspectRatio * _mZoomLevel, _mAspectRatio * _mZoomLevel, -_mZoomLevel, _mZoomLevel);
@@ -56,6 +59,7 @@ namespace Fraples
 	
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& ev)
 	{
+		FPL_PROFILE_FUNCTION();
 		_mAspectRatio -= (float)ev.GetWidth() / (float)ev.GetHeight();
 		_mOrthoCam.SetProjection(-_mAspectRatio * _mZoomLevel, _mAspectRatio * _mZoomLevel, -_mZoomLevel, _mZoomLevel);
 		return false;

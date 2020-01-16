@@ -18,6 +18,7 @@ namespace Fraples
 
 	void Renderer2D::Init()
 	{
+		FPL_PROFILE_FUNCTION();
 		_sData = new Renderer2DStorage;
 		_sData->QuadVertexArray = Fraples::VertexArray::Create();
 
@@ -50,16 +51,19 @@ namespace Fraples
 	}
 	void Renderer2D::BeginScene(const Fraples::OrthographicCamera& orthoCam)
 	{
+		FPL_PROFILE_FUNCTION();
 		_sData->textureShader->Bind();
 		_sData->textureShader->SetUniformMat4("_uViewProjectionMatrix", orthoCam.GetViewProjectionMatrix());
 
 	}
 	void Renderer2D::EndScene()
 	{
+		FPL_PROFILE_FUNCTION();
 
 	}
 	void Renderer2D::ShutDown()
 	{
+		FPL_PROFILE_FUNCTION();
 		delete _sData;
 	}
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -68,6 +72,7 @@ namespace Fraples
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
+		FPL_PROFILE_FUNCTION();
 		_sData->textureShader->SetUniformFloat4("_uColor", color);
 		_sData->WhiteTexture->Bind();
 
@@ -79,6 +84,7 @@ namespace Fraples
 	}
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
 	{
+		FPL_PROFILE_FUNCTION();
 		DrawQuad({ position.x,position.y, 0.0f }, size, texture);
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)

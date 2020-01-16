@@ -9,6 +9,7 @@ SandBox2D::SandBox2D() :Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f, true)
 
 void SandBox2D::OnAttach()
 {
+	FPL_PROFILE_FUNCTION();
 	_mRandomTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
 
 }
@@ -17,10 +18,7 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 {
 	//update
 	FPL_PROFILE_FUNCTION();
-	{
-		FPL_PROFILE_SCOPE("CameraControlOnUpdate ");
 		_mCameraCtrl.OnUpdate(ts);
-	}
 	//Renderer
 	{
 		FPL_PROFILE_SCOPE("Renderer Preparation ");
@@ -39,6 +37,7 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 
 void SandBox2D::OnDetach()
 {
+	FPL_PROFILE_FUNCTION();
 }
 
 
