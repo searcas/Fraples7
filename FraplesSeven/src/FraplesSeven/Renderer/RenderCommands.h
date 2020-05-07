@@ -23,9 +23,9 @@ namespace Fraples
 			_sRendererAPI->Clear();
 		}
 
-		inline static void DrawIndexed(const std::shared_ptr<VertexArray>&VA)
+		inline static void DrawIndexed(const std::shared_ptr<VertexArray>&VA, uint32_t count = 0)
 		{
-			_sRendererAPI->DrawIndexed(VA);
+			_sRendererAPI->DrawIndexed(VA, count);
 		}
 	
 	private:

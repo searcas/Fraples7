@@ -1,14 +1,13 @@
 #include <Fraples.h>
 #include "FraplesSeven/Core/Core.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
-
 
 #include "SandBox2D.h"
 //------------Entry Point---------------//
 #include "FraplesSeven/Core/EntryPoint.h"
 //----------------END-------------------//
+
 class ExampleLayer : public Fraples::Layer
 {
 public:
@@ -22,8 +21,8 @@ public:
 			 0.5f, -0.5f, 0.0f, 0.1f, 0.6f, 0.6f, 1.0f,
 			 0.0f,	0.5f, 0.0f, 0.8f, 0.3f, 0.6f, 1.0f
 		};
-		std::shared_ptr<Fraples::VertexBuffer>vertexBuffer;
-		vertexBuffer.reset(Fraples::VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<Fraples::VertexBuffer>vertexBuffer = Fraples::VertexBuffer::Create(vertices, sizeof(vertices));;
+		
 
 		Fraples::BufferLayout layout = { {Fraples::ShaderDataType::Float3,"_aPosition"}, {Fraples::ShaderDataType::Float4,"_aColor"} };
 
@@ -31,8 +30,8 @@ public:
 		_mVertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<Fraples::IndexBuffer>indexBuffer;
-		indexBuffer.reset(Fraples::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		std::shared_ptr<Fraples::IndexBuffer>indexBuffer = Fraples::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));;
+		
 		_mVertexArray->SetIndexBuffer(indexBuffer);
 
 
@@ -46,16 +45,19 @@ public:
 			-0.5f,	0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		std::shared_ptr<Fraples::VertexBuffer>squareVBuffer;
-		squareVBuffer.reset(Fraples::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		std::shared_ptr<Fraples::VertexBuffer>squareVBuffer = Fraples::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
-		squareVBuffer->SetLayout({ {Fraples::ShaderDataType::Float3, "_aPosition"},{Fraples::ShaderDataType::Float2, "_aTexCoord"} });
+		
+		squareVBuffer->SetLayout({ 
+			{Fraples::ShaderDataType::Float3, "_aPosition"},
+			{Fraples::ShaderDataType::Float2, "_aTexCoord"} 
+			});
 		_mSquareVArray->AddVertexBuffer(squareVBuffer);
 
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Fraples::IndexBuffer>squareIBuffer;
-		squareIBuffer.reset(Fraples::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		std::shared_ptr<Fraples::IndexBuffer>squareIBuffer = Fraples::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+		
 		_mSquareVArray->SetIndexBuffer(squareIBuffer);
 
 		std::string vertexSrc = R"(
@@ -136,8 +138,8 @@ public:
 
 		_mTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
 
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(textureShader)->UploadUniformInt("_uTexture", 0);
+		textureShader->Bind();
+		textureShader->SetUniformInt("u_Texture", 0);
 	}
 	void OnUpdate(Fraples::TimeSteps ts) override
 	{
@@ -151,8 +153,7 @@ public:
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mShader2)->Bind();
-		std::dynamic_pointer_cast<Fraples::OpenGLShader>(_mShader2)->UploadUniformFloat3("_uColor",_mSquareColor);
+		
 
 		for (int y = 0; y < 20; y++)
 		{

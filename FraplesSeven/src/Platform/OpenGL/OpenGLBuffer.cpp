@@ -4,14 +4,25 @@
 
 
 namespace Fraples{
-
+	//#######################################################################
+	//Vertex Buffer
+	//#######################################################################
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
 		FPL_PROFILE_FUNCTION();
+		
 		glCreateBuffers(1, &_mRendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, _mRendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+	}
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		FPL_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &_mRendererID);
+		glBindBuffer(GL_ARRAY_BUFFER, _mRendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
 	}
 	
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -29,8 +40,13 @@ namespace Fraples{
 		FPL_PROFILE_FUNCTION();
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, _mRendererID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	}
 	//#######################################################################
-	//INDEX BUFFER
+	//Index Buffer
 	//#######################################################################
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count) :_mCount(count)
 	{
