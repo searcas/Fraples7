@@ -22,7 +22,7 @@ namespace Fraples{
 
 		glCreateBuffers(1, &_mRendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, _mRendererID);
-		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW );
 	}
 	
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()

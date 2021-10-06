@@ -73,7 +73,6 @@ project "FraplesSeven"
         "%{IncludeDir.imGui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}"
-
     }
 
     links
@@ -134,7 +133,6 @@ project "SandBox"
         "FraplesSeven/src",
         "FraplesSeven/Vendor/",
         "%{IncludeDir.glm}"
-        
     }
 
 

@@ -2,7 +2,8 @@
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
 
-SandBox2D::SandBox2D() :Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f, true)
+SandBox2D::SandBox2D() 
+	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f, true)
 {
 }
 

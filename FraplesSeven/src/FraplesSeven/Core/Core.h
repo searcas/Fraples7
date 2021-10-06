@@ -30,6 +30,7 @@
 
 #define FplBindeventFn(x) std::bind(&x, this, std::placeholders::_1)
 #include <memory>
+
 namespace Fraples
 {
 	template<typename T>
@@ -41,6 +42,7 @@ namespace Fraples
 	}
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
+
 	template<typename T, typename ... Args>
 	constexpr Ref<T> CreateRef(Args&& ...args)
 	{

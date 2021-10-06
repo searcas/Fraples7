@@ -109,6 +109,7 @@ namespace Fraples
 				KeyTypedEvent eve(c);
 				data._mEventCallbackFn(eve);
 		});
+
 		glfwSetMouseButtonCallback(_mWindow, [](GLFWwindow* window, int button,  int action, int mods) {
 			
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

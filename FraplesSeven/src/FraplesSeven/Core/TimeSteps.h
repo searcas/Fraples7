@@ -13,7 +13,7 @@ namespace Fraples
 		}
 		float GetSeconds() const { return _mTime; }
 		float GetMilliSeconds() const { return _mTime * 1000.0f; }
-		operator float()const { return _mTime; }
+		operator float() const { return _mTime; }
 	private:
 		float _mTime = 0.0f;
 	};

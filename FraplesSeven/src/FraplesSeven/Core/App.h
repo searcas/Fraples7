@@ -36,7 +36,6 @@ namespace Fraples{
 
 	private:
 		std::unique_ptr<Window>_mWindow;
-
 		ImGuiLayer* _mImguiLayer;
 		bool _mRunning = true;
 		bool _mMinimized = false;
@@ -45,9 +44,6 @@ namespace Fraples{
 		float _mLastTime = 0.0f;
 	private:
 		static Application* _sInstance;
-
-
 	};
 	//TODO Define in Client;
-	Application* CreateApplication();
 }

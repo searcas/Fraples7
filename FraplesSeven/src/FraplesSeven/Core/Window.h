@@ -12,7 +12,9 @@ namespace Fraples
 		unsigned int _mWidth;
 		unsigned int _mHeight;
 
-		WindowProperties(const std::string& title = "FrapleSeven Engine", unsigned int width = 1280, unsigned int height = 720) : _mTitle(title), _mWidth(width), _mHeight(height) { }
+		WindowProperties(const std::string& title = "FrapleSeven Engine", 
+			unsigned int width = 1280, unsigned int height = 720) 
+			: _mTitle(title), _mWidth(width), _mHeight(height) { }
 	};
 	class FPL_API Window
 	{

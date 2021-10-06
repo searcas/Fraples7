@@ -216,7 +216,7 @@ public:
 	}
 };
 
-Fraples::Application* Fraples::CreateApplication()
+Fraples::Application* CreateApplication()
 {
 	return new SandBox();
 }
