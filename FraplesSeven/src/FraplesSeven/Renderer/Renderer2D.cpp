@@ -14,12 +14,12 @@ namespace Fraples
 		glm::vec2 TexCoord;
 		glm::vec4 Color;
 	};
-	struct Renderer2DStorage
+	struct Renderer2DData
 	{
 		const uint32_t MaxQuads = 10000;
 		const uint32_t MaxVertices = MaxQuads * 4;
 		const uint32_t MaxIndices = MaxQuads * 6;
-
+		 
 		std::shared_ptr<VertexArray>QuadVertexArray;
 		std::shared_ptr<VertexBuffer>QuadVertexBuffer;
 		std::shared_ptr<Shader>TextureShader;
@@ -28,29 +28,33 @@ namespace Fraples
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
-
 	};
 
 
-	static Renderer2DStorage _sData;
+	static Renderer2DData _sData;
 
 	void Renderer2D::Init()
 	{
 		FPL_PROFILE_FUNCTION();
 		_sData.QuadVertexArray = VertexArray::Create();
 
-	_sData.QuadVertexBuffer = VertexBuffer::Create(_sData.MaxVertices * sizeof(QuadVertex));
+		_sData.QuadVertexBuffer = VertexBuffer::Create(_sData.MaxVertices * sizeof(QuadVertex));
 
-	_sData.QuadVertexBuffer->SetLayout({
-			{ Fraples::ShaderDataType::Float3, "_aPosition"},
-			{ Fraples::ShaderDataType::Float2, "_aTexCoord"},
-			{ Fraples::ShaderDataType::Float4, "_aColor"}
-			});
+		_sData.QuadVertexBuffer->SetLayout({
+			
+		{ Fraples::ShaderDataType::Float3, "_aPosition"},
+			
+		{ Fraples::ShaderDataType::Float2, "_aTexCoord"},
+			
+		{ Fraples::ShaderDataType::Float4, "_aColor"}
+			
+		});
 		_sData.QuadVertexArray->AddVertexBuffer(_sData.QuadVertexBuffer);
 		_sData.QuadVertexBufferBase = new QuadVertex[_sData.MaxVertices];
 
 		uint32_t* quadIndices = new uint32_t[_sData.MaxIndices];
 		uint32_t offset = 0;
+
 		for (uint32_t i = 0; i < _sData.MaxIndices; i += 6)
 		{
 			quadIndices[i + 0] = offset + 0;
@@ -68,9 +72,10 @@ namespace Fraples
 		delete[] quadIndices;
 
 		_sData.WhiteTexture = Texture2D::Create(1, 1);
-		uint32_t whiteTextureData = 0xffffffff;
+		 uint32_t whiteTextureData = 0xffffffff;
 		_sData.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-		_sData.TextureShader   = Fraples::Shader::Create("assets/Shaders/Texture.glsl");
+
+		_sData.TextureShader = Fraples::Shader::Create("assets/Shaders/Texture.glsl");
 		_sData.TextureShader->Bind();
 		_sData.TextureShader->SetUniformInt("_uTexture", 0);
 	}
@@ -79,7 +84,7 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 		_sData.TextureShader->Bind();
 		_sData.TextureShader->SetUniformMat4("_uViewProjectionMatrix", orthoCam.GetViewProjectionMatrix());
-
+		 
 		_sData.QuadIndexCount = 0;
 		_sData.QuadVertexBufferPtr = _sData.QuadVertexBufferBase;
 	}
@@ -88,8 +93,8 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 		uint32_t dataSize = (uint8_t*)_sData.QuadVertexBufferPtr - (uint8_t*)_sData.QuadVertexBufferBase;
 		_sData.QuadVertexBuffer->SetData(_sData.QuadVertexBufferBase, dataSize);
+		
 		Flush();
-
 	}
 	void Renderer2D::Flush()
 	{
@@ -113,17 +118,17 @@ namespace Fraples
 
 		_sData.QuadVertexBufferPtr->Position = {position.x + size.x, position.y, 0.0f};
 		_sData.QuadVertexBufferPtr->Color = color;
-		_sData.QuadVertexBufferPtr->TexCoord = { 1.0f,0.0f };
+		_sData.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
 		_sData.QuadVertexBufferPtr++;
 
-		_sData.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };;
+		_sData.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };
 		_sData.QuadVertexBufferPtr->Color = color;
-		_sData.QuadVertexBufferPtr->TexCoord = { 1.0f,0.0f };
+		_sData.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
 		_sData.QuadVertexBufferPtr++;
 
-		_sData.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.0f };;
+		_sData.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.0f };
 		_sData.QuadVertexBufferPtr->Color = color;
-		_sData.QuadVertexBufferPtr->TexCoord = { 0.0f,0.0f };
+		_sData.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
 		_sData.QuadVertexBufferPtr++;
 
 		_sData.QuadIndexCount += 6;
@@ -145,6 +150,11 @@ namespace Fraples
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
+		FPL_PROFILE_FUNCTION();
+
+
+
+#if 1
 		_sData.TextureShader->SetUniformFloat4("_uColor", tintColor);
 		_sData.TextureShader->SetUniformFloat("_uTiling", tiling);
 
@@ -156,6 +166,7 @@ namespace Fraples
 		texture->Bind();
 		_sData.QuadVertexArray->Bind();
 		RenderCommands::DrawIndexed(_sData.QuadVertexArray);
+#endif
 
 	}
 	void Renderer2D::DrawQuadRotation(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
