@@ -21,7 +21,8 @@ namespace  Fraples
 		virtual void SetUniformFloat3(const std::string& name, const glm::vec3& color) = 0;
 		virtual void SetUniformFloat4(const std::string& name, const glm::vec4& color) = 0;
 		virtual void SetUniformMat4(const std::string& name, const glm::mat4& mat) = 0;
-
+		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) = 0;
+		
 		static std::shared_ptr<Shader> Create(const std::string& filepath);
 		static std::shared_ptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	};

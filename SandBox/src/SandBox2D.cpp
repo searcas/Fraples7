@@ -11,6 +11,7 @@ void SandBox2D::OnAttach()
 {
 	FPL_PROFILE_FUNCTION();
 	_mRandomTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
+	_mCheckBoardTex = Fraples::Texture2D::Create("../Checkerboard.png");
 
 }
 
@@ -31,7 +32,8 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 	// 	Fraples::Renderer2D::DrawQuadRotation({ -1.0f, 0.0f }, { 0.8f, 0.8f  }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
 		Fraples::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f  }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Fraples::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.4f, 0.9f, 1.0f });
-	//  Fraples::Renderer2D::DrawQuadRotation({ 0.3f, 0.2f }, { 0.5f, 0.75f }, glm::radians(45.0f), _mRandomTexture,1.0f, { 1.0f,0.8f,0.9f,1.0f });
+		Fraples::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.00f, }, _mCheckBoardTex, 10.0f);
+	//	Fraples::Renderer2D::DrawQuad({ -0.5f, -0.5f,  0.0f }, { 1.0f, 1.0f, },  _mCheckBoardTex ,20.0f );
 		Fraples::Renderer2D::EndScene();
 	}
 }

@@ -18,6 +18,8 @@ private:
 	std::shared_ptr<Fraples::Shader> _mFlatColorShader;
 	std::shared_ptr<Fraples::VertexArray> _mSquareVA;
 	std::shared_ptr<Fraples::Texture2D>_mRandomTexture;
+	std::shared_ptr<Fraples::Texture2D>_mCheckBoardTex;
+
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
 
 };

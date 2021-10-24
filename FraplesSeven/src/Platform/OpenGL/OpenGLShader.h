@@ -31,6 +31,9 @@ namespace Fraples
 		void SetUniformFloat3(const std::string& name, const glm::vec3& color) override;
 		void SetUniformFloat4(const std::string& name, const glm::vec4& color) override;
 		void SetUniformMat4(const std::string& name, const glm::mat4& mat) override;
+		
+		void SetIntArray(const std::string& name, int* values, uint32_t count) override;
+		void UploadUniformIntArray(const std::string& name, int* values, uint32_t count);
 
 		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);

@@ -12,13 +12,16 @@ namespace Fraples
 		OpenGLTexture2D(uint32_t width, uint32_t height);
 		OpenGLTexture2D(const std::string& filepath);
 		virtual ~OpenGLTexture2D();
-		inline virtual uint32_t GetWidth() const override { return _mWidth; }
-		inline virtual uint32_t GetHeight() const override { return _mHeight; }
+		inline uint32_t GetWidth() const override { return _mWidth; }
+		inline uint32_t GetHeight() const override { return _mHeight; }
 		
-		virtual void SetData(void* data, uint32_t size) override;
+		void SetData(void* data, uint32_t size) override;
 
-		virtual void Bind(uint32_t slot = 0)const override;
-
+		void Bind(uint32_t slot = 0)const override;
+		bool operator ==(const Texture& rhs) const override
+		{
+			return _mRendererID == ((OpenGLTexture2D&)rhs)._mRendererID;
+		}
 	private:
 		uint32_t _mWidth;
 		uint32_t _mHeight;
