@@ -28,12 +28,15 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 	}
 	{
 		FPL_PROFILE_SCOPE("Renderer Draw ");
+		static float rotation = 0.0f;
+		rotation += ts * 50.0f;
 		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-	// 	Fraples::Renderer2D::DrawQuadRotation({ -1.0f, 0.0f }, { 0.8f, 0.8f  }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
-		Fraples::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f  }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Fraples::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.4f, 0.9f, 1.0f });
-		Fraples::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.00f, }, _mCheckBoardTex, 10.0f);
-	//	Fraples::Renderer2D::DrawQuad({ -0.5f, -0.5f,  0.0f }, { 1.0f, 1.0f, },  _mCheckBoardTex ,20.0f );
+	 	Fraples::Renderer2D::RenderRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f  },(rotation), { 0.8f, 0.2f, 0.3f, 1.0f });
+	//	Fraples::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.00f, }, _mCheckBoardTex, 10.0f);
+		Fraples::Renderer2D::DrawQuad({ -0.5f, -0.5f,  0.0f }, { 1.0f, 1.0f, }, _mCheckBoardTex, 20.0f);
+		//Fraples::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f  }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Fraples::Renderer2D::RenderRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, _mCheckBoardTex, 20.0f);
+
 		Fraples::Renderer2D::EndScene();
 	}
 }
