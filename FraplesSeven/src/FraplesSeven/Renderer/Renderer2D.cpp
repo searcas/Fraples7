@@ -215,6 +215,10 @@ namespace Fraples
 
 		if (textureIndex == 0.0f)
 		{
+			if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+			{
+				FlushAndReset();
+			}
 			textureIndex = (float)_sData.TextureSlotIndex;
 			_sData.TextureSlots[_sData.TextureSlotIndex] = texture;
 			_sData.TextureSlotIndex++;
@@ -308,6 +312,10 @@ namespace Fraples
 
 		if (textureIndex == 0.0f)
 		{
+			if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+			{
+				FlushAndReset();
+			}
 			textureIndex = (float)_sData.TextureSlotIndex;
 			_sData.TextureSlots[_sData.TextureSlotIndex] = texture;
 			_sData.TextureSlotIndex++;
