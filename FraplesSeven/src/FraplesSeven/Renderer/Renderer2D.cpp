@@ -19,9 +19,9 @@ namespace Fraples
 	};
 	struct Renderer2DData
 	{
-		const uint32_t MaxQuads = 10000;
-		const uint32_t MaxVertices = MaxQuads * 4;
-		const uint32_t MaxIndices = MaxQuads * 6;
+		static constexpr uint32_t MaxQuads = 10000;
+		static constexpr uint32_t MaxVertices = MaxQuads * 4;
+		static constexpr uint32_t MaxIndices = MaxQuads * 6;
 		
 		static constexpr uint32_t MaxTextureSlots = 32;
 		 
@@ -38,6 +38,8 @@ namespace Fraples
 		std::array<std::shared_ptr<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1;
 		glm::vec4 QuadVertexPositions[4];
+		Renderer2D::Statistics stats;
+	
 	};
 
 
@@ -127,6 +129,16 @@ namespace Fraples
 			_sData.TextureSlots[i]->Bind(i);
 		}
 		RenderCommands::DrawIndexed(_sData.QuadVertexArray, _sData.QuadIndexCount);
+		_sData.stats.DrawCalls++;
+
+	}
+	void Renderer2D::FlushAndReset()
+	{
+		EndScene();
+		_sData.QuadIndexCount = 0;
+		_sData.QuadVertexBufferPtr = _sData.QuadVertexBufferBase;
+
+		_sData.TextureSlotIndex = 1;
 	}
 	void Renderer2D::ShutDown()
 	{
@@ -139,6 +151,11 @@ namespace Fraples
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		FPL_PROFILE_FUNCTION();
+
+		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
 		constexpr float texIndex = 0.0f; //White Texture
 		constexpr float tiling = 1.0f; 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
@@ -171,6 +188,9 @@ namespace Fraples
 		_sData.QuadVertexBufferPtr++;
 
 		_sData.QuadIndexCount += 6;
+
+		_sData.stats.QuadCounts++;
+
 	}
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
@@ -180,6 +200,11 @@ namespace Fraples
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
 		FPL_PROFILE_FUNCTION();
+
+		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
 		
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float textureIndex = 0.0f;
@@ -229,6 +254,9 @@ namespace Fraples
 		_sData.QuadVertexBufferPtr++;
 
 		_sData.QuadIndexCount += 6;
+
+		_sData.stats.QuadCounts++;
+
 	}
 	void Renderer2D::RenderRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
@@ -238,6 +266,11 @@ namespace Fraples
 	void Renderer2D::RenderRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		FPL_PROFILE_FUNCTION();
+
+		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
 		constexpr float texIndex = 0.0f; //White Texture
 		constexpr float tiling = 1.0f;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
@@ -272,6 +305,9 @@ namespace Fraples
 		_sData.QuadVertexBufferPtr++;
 
 		_sData.QuadIndexCount += 6;
+
+		_sData.stats.QuadCounts++;
+
 	}
 	void Renderer2D::RenderRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
@@ -280,6 +316,12 @@ namespace Fraples
 	}
 	void Renderer2D::RenderRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
 	{
+		FPL_PROFILE_FUNCTION();
+
+		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float textureIndex = 0.0f;
 		for (uint32_t i = 0; i < _sData.TextureSlotIndex; i++)
@@ -329,5 +371,15 @@ namespace Fraples
 		_sData.QuadVertexBufferPtr++;
 
 		_sData.QuadIndexCount += 6;
+
+		_sData.stats.QuadCounts++;
+	}
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return _sData.stats;
+	}
+	void Renderer2D::ResetStats()
+	{
+		memset(&_sData.stats, 0, sizeof(Statistics));
 	}
 }
