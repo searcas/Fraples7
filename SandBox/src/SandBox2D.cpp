@@ -2,8 +2,8 @@
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
 
-SandBox2D::SandBox2D() 
-	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f, true)
+SandBox2D::SandBox2D()
+	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
 {
 }
 
@@ -33,9 +33,9 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		rotation += ts * 50.0f;
 		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
 	 	Fraples::Renderer2D::RenderRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f  },(rotation), { 0.8f, 0.2f, 0.3f, 1.0f });
-		Fraples::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.00f, }, _mCheckBoardTex, 10.0f);
+		Fraples::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 0.5f,0.75f }, _mCheckBoardTex, 10.0f);
 		Fraples::Renderer2D::DrawQuad({ -0.5f, -0.5f,  0.0f }, { 1.0f, 1.0f, }, _mCheckBoardTex, 20.0f);
-		Fraples::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f  }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Fraples::Renderer2D::DrawQuad({ .5f, -.5f }, { 0.5f, 0.5f  }, _mSquareColor);
 		Fraples::Renderer2D::RenderRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, _mCheckBoardTex, 20.0f);
 		Fraples::Renderer2D::EndScene();
 

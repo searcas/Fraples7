@@ -15,7 +15,7 @@
 
 namespace Fraples{
 		
-	class FPL_API Application
+	class  Application
 	{
 		
 	public:

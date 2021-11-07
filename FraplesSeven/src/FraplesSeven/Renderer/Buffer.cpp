@@ -10,12 +10,12 @@ namespace Fraples
 		switch (Renderer::GetRendererAPI())
 		{
 		case RendererAPI::API::NONE:
-			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
+			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return std::make_shared<OpenGLVertexBuffer>(size);
 		}
-		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
+		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 	std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
@@ -23,12 +23,12 @@ namespace Fraples
 		switch (Renderer::GetRendererAPI())
 		{
 		case RendererAPI::API::NONE:
-			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
+			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return std::make_shared<OpenGLVertexBuffer>(vertices, size);
 		}
-		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
+		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 	
@@ -39,12 +39,12 @@ namespace Fraples
 		switch (Renderer::GetRendererAPI())
 		{
 		case RendererAPI::API::NONE:
-			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
+			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return std::make_shared<OpenGLIndexBuffer>(indices, count);
 		}
-		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
+		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 }

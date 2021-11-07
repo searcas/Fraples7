@@ -7,7 +7,7 @@
 
 namespace Fraples
 {
-	class FPL_API KeyEvent : public Event
+	class  KeyEvent : public Event
 	{
 	public:
 		inline int GetKeyCode()const { return _mKeyCode; }
@@ -17,7 +17,7 @@ namespace Fraples
 		int _mKeyCode;
 	};
 
-	class FPL_API KeyPressedEvent : public KeyEvent
+	class  KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int keyRepeat) : KeyEvent(keycode), _mKeyRepeat(keyRepeat) { }
@@ -34,7 +34,7 @@ namespace Fraples
 		int _mKeyRepeat;
 	};
 
-	class FPL_API KeyReleasedEvent : public KeyEvent
+	class  KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keyRleased) : KeyEvent(keyRleased){}
@@ -48,7 +48,7 @@ namespace Fraples
 		EVENT_CLASS_TYPE(KeyReleased);
 	private:
 	};
-	class FPL_API KeyTypedEvent : public KeyEvent
+	class  KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(int keycode) : KeyEvent(keycode) { }

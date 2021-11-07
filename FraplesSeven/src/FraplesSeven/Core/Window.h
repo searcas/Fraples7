@@ -16,7 +16,7 @@ namespace Fraples
 			unsigned int width = 1280, unsigned int height = 720) 
 			: _mTitle(title), _mWidth(width), _mHeight(height) { }
 	};
-	class FPL_API Window
+	class Window
 	{
 	public:
 		using EventCallBackFn = std::function<void(Event&)>;

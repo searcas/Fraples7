@@ -37,7 +37,7 @@ namespace Fraples
 		_mData._mWidth = prop._mWidth;
 		_mData._mHeight = prop._mHeight;
 
-		FPL_CORE_INFO("Creating Window {0} ({1}, {2})", prop._mTitle, prop._mWidth, prop._mHeight);
+		FPL_CORE_INFO("\tCreating Window {0} ({1}, {2})", prop._mTitle, prop._mWidth, prop._mHeight);
 
 		if (!isInitialized)
 		{
@@ -45,7 +45,7 @@ namespace Fraples
 
 			FPL_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
-			FPL_CORE_ASSERTS(success, "Could not initialize GLFW!");
+			FPL_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
 			isInitialized = true;
 		}

@@ -1,172 +1,149 @@
 workspace "FraplesSeven"
-    architecture "x64"
-    startproject "SandBox"
+	architecture "x86_64"
+	startproject "Sandbox"
 
-    configurations
-    {
-        "Debug",
-        "Release",
-        "Dist"
-    }
+	configurations
+	{
+		"Debug",
+		"Release",
+		"Dist"
+	}
+	
+	flags
+	{
+		"MultiProcessorCompile"
+	}
 
-    flags
-    {
-        "MultiProcessorCompile"
-    }
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- include Directories relative to root folder (solution Directory)
+-- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir ["GLFW"] = "FraplesSeven/Vendor/glfw/include"
-IncludeDir ["GLAD"] = "FraplesSeven/Vendor/glad/include"
-IncludeDir ["imGui"] = "FraplesSeven/Vendor/imGui"
-IncludeDir ["glm"] = "FraplesSeven/Vendor/glm"
-IncludeDir ["stb_image"] = "FraplesSeven/Vendor/stb_image"
-
-
+IncludeDir["GLFW"] = "FraplesSeven/vendor/GLFW/include"
+IncludeDir["Glad"] = "FraplesSeven/vendor/Glad/include"
+IncludeDir["ImGui"] = "FraplesSeven/vendor/imgui"
+IncludeDir["glm"] = "FraplesSeven/vendor/glm"
+IncludeDir["stb_image"] = "FraplesSeven/vendor/stb_image"
 
 group "Dependencies"
-	include "FraplesSeven/Vendor/GLFW"
-	include "FraplesSeven/Vendor/GLAD"
-	include "FraplesSeven/Vendor/imGui"
+	include "FraplesSeven/vendor/GLFW"
+	include "FraplesSeven/vendor/Glad"
+	include "FraplesSeven/vendor/imgui"
+
 group ""
 
-
-
-
-
-
 project "FraplesSeven"
-    location "FraplesSeven"
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
+	location "FraplesSeven"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
-    targetdir("bin/" .. outputdir .. "/%{prj.name}")
-    objdir("bin-int/" .. outputdir .. "/%{prj.name}")
-                    
-    -- PRE COMPAILED HEADER
-    pchheader "FplPCH.h"
-    pchsource "FraplesSeven/src/FplPCH.cpp"
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    files
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp",
-        "%{prj.name}/Vendor/stb_image/**.cpp",
-        "%{prj.name}/Vendor/stb_image/**.h",
-        "%{prj.name}/Vendor/glm/glm/**.hpp",
-        "%{prj.name}/Vendor/glm/glm/**.inl",
-    }
+	pchheader "FplPCH.h"
+	pchsource "FraplesSeven/src/FplPCH.cpp"
 
-    defines
-    {
-        "_CRT_SECURE_NO_WARNINGS"
-    }
-    includedirs
-    {
-        "%{prj.name}/src",
-        "%{prj.name}/Vendor/spdlog/include",
-        "%{IncludeDir.GLFW}",
-        "%{IncludeDir.GLAD}",
-        "%{IncludeDir.imGui}",
-        "%{IncludeDir.glm}",
-        "%{IncludeDir.stb_image}"
-    }
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
 
-    links
-    {
-        "GLFW",
-        "GLAD",
-        "imGui",
-        "opengl32.lib"
-    }
-    filter "system:windows"
-        systemversion "latest"
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE"
+	}
 
-    defines
-    {
-        "FPL_PLATFORM_WINDOWS",
-        "FPL_BUILD_DLL",
-        "GLFW_INCLUDE_NONE"
-    }
+	includedirs
+	{
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
+	}
 
+	links 
+	{ 
+		"GLFW",
+		"Glad",
+		"ImGui",
+		"opengl32.lib"
+	}
 
+	filter "system:windows"
+		systemversion "latest"
 
-    filter "configurations:Debug"
-        defines"FPL_DEBUG"
-        runtime "Debug"
-        symbols "on"
-            
-    filter "configurations:Release"
-        defines"FPL_RELEASE"
-        runtime "Release"
-        optimize "on"
-    
-    filter "configurations:Dist"
-        defines"FPL_DIST"
-        runtime "Release"
-        optimize "on"
+		defines
+		{
+		}
 
-        
+	filter "configurations:Debug"
+		defines "FPL_DEBUG"
+		runtime "Debug"
+		symbols "on"
 
-project "SandBox"
-    location "SandBox"
-        kind "ConsoleApp"
-        language "C++"
-        cppdialect "C++17"
-        staticruntime "on"
+	filter "configurations:Release"
+		defines "FPL_RELEASE"
+		runtime "Release"
+		optimize "on"
 
-                
-                targetdir("bin/".. outputdir .. "/%{prj.name}")
-                objdir("bin-int/".. outputdir .. "/%{prj.name}")
+	filter "configurations:Dist"
+		defines "FPL_DIST"
+		runtime "Release"
+		optimize "on"
 
-    files
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
-    includedirs
-    {
-        "FraplesSeven/Vendor/spdlog/include",
-        "FraplesSeven/src",
-        "FraplesSeven/Vendor/",
-        "%{IncludeDir.glm}"
-    }
+project "Sandbox"
+	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    links
-    {
-        "FraplesSeven"
-    }
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
 
+	includedirs
+	{
+		"FraplesSeven/vendor/spdlog/include",
+		"FraplesSeven/src",
+		"FraplesSeven/vendor",
+		"%{IncludeDir.glm}"
+	}
 
+	links
+	{
+		"FraplesSeven"
+	}
 
-        filter "system:windows"
-        systemversion "latest"
-    
+	filter "system:windows"
+		systemversion "latest"
+		
+	filter "configurations:Debug"
+		defines "FPL_DEBUG"
+		runtime "Debug"
+		symbols "on"
 
-    defines
-    {
-        "FPL_PLATFORM_WINDOWS",
-    }
+	filter "configurations:Release"
+		defines "FPL_RELEASE"
+		runtime "Release"
+		optimize "on"
 
-
-
-    filter "configurations:Debug"
-        defines"FPL_DEBUG"
-        runtime "Debug"
-        symbols "on"
-            
-    filter "configurations:Release"
-        defines"FPL_RELEASE"
-        runtime "Release"
-            optimize "on"
-
-
-    filter "configurations:Dist"
-        defines"FPL_DIST"
-        runtime "Release"
-            optimize "on"
-------------------------------------------------------------
+	filter "configurations:Dist"
+		defines "FPL_DIST"
+		runtime "Release"
+		optimize "on"

@@ -14,7 +14,7 @@ namespace Fraples
 
 		if (type == "fragment" || type =="pixel")
 			return GL_FRAGMENT_SHADER;
-		FPL_CORE_ASSERTS(false, "Unknown Shader Type!");
+		FPL_CORE_ASSERT(false, "Unknown Shader Type!");
 		return 0;
 	}
 	OpenGLShader::OpenGLShader(const std::string& filepath)
@@ -71,10 +71,10 @@ namespace Fraples
 		while (pos !=std::string::npos)
 		{
 			size_t eol = shaderSrcCode.find_first_of("\r\n", pos);
-			FPL_CORE_ASSERTS(eol != std::string::npos, "Syntax error");
+			FPL_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = shaderSrcCode.substr(begin, eol - begin);
-			FPL_CORE_ASSERTS(ShaderTypeFromString(type), "Invalid shader type specified");
+			FPL_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
 
 			size_t nextLinePos = shaderSrcCode.find_first_not_of("\r\n", eol);
 			pos = shaderSrcCode.find(typeToken, nextLinePos);
@@ -175,7 +175,7 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		GLuint program = glCreateProgram();
-		FPL_CORE_ASSERTS(shaderSources.size() <= 2, "Shader must be less than 3 atm.");
+		FPL_CORE_ASSERT(shaderSources.size() <= 2, "Shader must be less than 3 atm.");
 		std::array<GLenum, 2> glShaderIDs;
 		int glShaderIDIndex = 0;
 		for (auto& keyValue : shaderSources)
@@ -203,7 +203,7 @@ namespace Fraples
 				glDeleteShader(shader);
 
 				FPL_CORE_ERROR("{0}", infoLog.data());
-				FPL_CORE_ASSERTS(false, "Shader compilation failure!");
+				FPL_CORE_ASSERT(false, "Shader compilation failure!");
 				break;
 			}
 			glAttachShader(program, shader);
@@ -231,7 +231,7 @@ namespace Fraples
 					glDeleteShader(id);
 
 				FPL_CORE_ERROR("{0}", infoLog.data());
-				FPL_CORE_ASSERTS(false, "Linking compilation failure!");
+				FPL_CORE_ASSERT(false, "Linking compilation failure!");
 				return;
 			}
 

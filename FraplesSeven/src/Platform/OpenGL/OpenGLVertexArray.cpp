@@ -34,7 +34,7 @@ namespace Fraples
 		default:
 			break;
 		}
-		FPL_CORE_ASSERTS(false, "Unkonwn Shader Type.");
+		FPL_CORE_ASSERT(false, "Unkonwn Shader Type.");
 
 		return 0;
 	}
@@ -65,7 +65,7 @@ namespace Fraples
 		glBindVertexArray(_mRendererID);
 		vertexBuffer->Bind();
 
-		FPL_CORE_ASSERTS(vertexBuffer->GetLayout().GetElements().size()," Vertex Buffer has no layout");
+		FPL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size()," Vertex Buffer has no layout");
 
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& elements : layout)

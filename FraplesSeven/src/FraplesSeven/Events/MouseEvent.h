@@ -7,7 +7,7 @@
 
 namespace Fraples
 {
-	class FPL_API MouseMovedEvent : public Event {
+	class  MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(float x, float y) :_mX(x), _mY(y) {}
 		
@@ -28,7 +28,7 @@ namespace Fraples
 		float _mX;
 		float _mY;
 	};
-	class FPL_API MouseScrollEvent : public Event
+	class  MouseScrollEvent : public Event
 	{
 	public:
 		MouseScrollEvent(float xOffset, float yOffset) : _mXOffset(xOffset), _mYOffset(yOffset){}
@@ -50,7 +50,7 @@ namespace Fraples
 	
 
 	};
-	class FPL_API MouseButtonEvent : public Event
+	class  MouseButtonEvent : public Event
 	{
 	public:
 		inline int GetMouseButton()const { return _mMbutton; }
@@ -61,7 +61,7 @@ namespace Fraples
 		MouseButtonEvent(int msButtonKey):_mMbutton(msButtonKey) {}
 		int _mMbutton;
 	};
-	class FPL_API MouseButtonPressedEvent : public MouseButtonEvent
+	class  MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int ButtonKey) : MouseButtonEvent(ButtonKey) {}
@@ -74,7 +74,7 @@ namespace Fraples
 		}
 		EVENT_CLASS_TYPE(MouseButtonPressed);
 	};
-	class FPL_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class  MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 
 	public:

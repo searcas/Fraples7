@@ -12,12 +12,12 @@ namespace Fraples
 		switch (Renderer::GetRendererAPI())
 		{
 		case RendererAPI::API::NONE:
-			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
+			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return std::make_shared<OpenGLShader>(filepath);
 		}
-		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
+		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 	std::shared_ptr<Shader> Shader::Create(const std::string& name,const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -25,12 +25,12 @@ namespace Fraples
 		switch (Renderer::GetRendererAPI())
 		{
 		case RendererAPI::API::NONE:
-			FPL_CORE_ASSERTS(false, "RendererAPI::NONE is currently not supported");
+			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
-		FPL_CORE_ASSERTS(false, "Unknown RendererAPI");
+		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
 	}
 	
@@ -38,7 +38,7 @@ namespace Fraples
 	void  ShaderLibrary::Add(const std::string& name, const std::shared_ptr<Shader>& shader)
 	{
 	
-		FPL_CORE_ASSERTS(Exists(name), "Shader already exist!!");
+		FPL_CORE_ASSERT(Exists(name), "Shader already exist!!");
 		_mShaders[name] = shader;
 	}
 	void ShaderLibrary::Add(const std::shared_ptr<Shader>& shader)
@@ -62,7 +62,7 @@ namespace Fraples
 
 	std::shared_ptr<Shader> ShaderLibrary::GetShader(const std::string& name)
 	{
-		FPL_CORE_ASSERTS(!Exists(name), "Shader not folund!");
+		FPL_CORE_ASSERT(!Exists(name), "Shader not folund!");
 		return _mShaders[name];
 	}
 	bool ShaderLibrary::Exists(const std::string& name) const

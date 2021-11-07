@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "FraplesSeven/Core/Core.h"
 
 
 namespace Fraples
@@ -25,7 +25,7 @@ namespace Fraples
 		switch (type)
 		{
 		case Fraples::ShaderDataType::NONE:
-			FPL_CORE_ASSERTS(false, "None Shader.");
+			FPL_CORE_ASSERT(false, "None Shader.");
 			return 0;
 			break;
 		case Fraples::ShaderDataType::Float:
@@ -64,7 +64,7 @@ namespace Fraples
 		default:
 			break;
 		}
-		FPL_CORE_ASSERTS(false, "Unkonwn Shader Type.");
+		FPL_CORE_ASSERT(false, "Unkonwn Shader Type.");
 		return 0;
 	}
 	struct BufferElements
@@ -105,7 +105,7 @@ namespace Fraples
 			case ShaderDataType::Boolean: 
 				return 1;
 			default:
-				FPL_CORE_ASSERTS(false, "Unkonwn Shader Type.");
+				FPL_CORE_ASSERT(false, "Unkonwn Shader Type.");
 				return 0;
 			}
 		}

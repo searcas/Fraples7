@@ -7,8 +7,7 @@
 
 namespace Fraples
 {
-	
-	class FPL_API Log
+	class Log
 	{
 	public:
 		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger(){ return _sCoreLogger; }
@@ -18,9 +17,7 @@ namespace Fraples
 	private:
 		static std::shared_ptr<spdlog::logger> _sCoreLogger;
 		static std::shared_ptr<spdlog::logger> _sClientLogger;
-
 	};
-	
 }
 //Core log macro
 #define FPL_CORE_CRITICAL(...) ::Fraples::Log::GetCoreLogger()->critical(__VA_ARGS__);

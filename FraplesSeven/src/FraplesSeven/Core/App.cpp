@@ -22,7 +22,7 @@ namespace Fraples{
 	{
 
 		FPL_PROFILE_FUNCTION();
-		FPL_CORE_ASSERTS(!_sInstance, "Application already Exists");
+		FPL_CORE_ASSERT(!_sInstance, "Application already Exists");
 		_sInstance = this;
 
 		_mWindow = std::unique_ptr<Window>(Window::Create());

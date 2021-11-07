@@ -43,8 +43,8 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(ev);
-		dispatcher.Dispatch<MouseScrollEvent>(FplBindeventFn(OrthographicCameraController::OnMouseScrolled));
-		dispatcher.Dispatch<WindowResizeEvent>(FplBindeventFn(OrthographicCameraController::OnWindowResize));
+		dispatcher.Dispatch<MouseScrollEvent>(FPL_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
+		dispatcher.Dispatch<WindowResizeEvent>(FPL_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
 		
 	}
 	

@@ -4,7 +4,7 @@
 
 namespace Fraples
 {
-	class FPL_API Input
+	class  Input
 	{
 	protected:
 		Input() = default;

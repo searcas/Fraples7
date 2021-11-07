@@ -32,7 +32,7 @@ namespace Fraples
 			FPL_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&) stbi_load");
 			data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 		}
-		FPL_CORE_ASSERTS(data, "Fail to load images");
+		FPL_CORE_ASSERT(data, "Fail to load images");
 		_mWidth = width;
 		_mHeight = height;
 
@@ -49,7 +49,7 @@ namespace Fraples
 		}
 		_mInternalFormat = internalFormat;
 		_mDataFormat = dataFormat;
-		FPL_CORE_ASSERTS(internalFormat && dataFormat, "Format not supported!");
+		FPL_CORE_ASSERT(internalFormat && dataFormat, "Format not supported!");
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &_mRendererID);
 		glTextureStorage2D(_mRendererID, 1, internalFormat, _mWidth, _mHeight);
@@ -75,7 +75,7 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		uint32_t bpp = _mDataFormat == GL_RGBA ? 4 : 3;
-		FPL_CORE_ASSERTS(size == _mWidth * _mHeight * bpp, "Data must be entire texture");
+		FPL_CORE_ASSERT(size == _mWidth * _mHeight * bpp, "Data must be entire texture");
 		glTextureSubImage2D(_mRendererID, 0, 0, 0, _mWidth, _mHeight, _mDataFormat, GL_UNSIGNED_BYTE, data);
 	}
 

@@ -8,14 +8,14 @@ namespace Fraples
 {
 	OpenGLContext::OpenGLContext(GLFWwindow* winHandle): _mWinHandle(winHandle)
 	{
-		FPL_CORE_ASSERTS(winHandle, " Window handle is null.");
+		FPL_CORE_ASSERT(winHandle, " Window handle is null.");
 	}
 	void OpenGLContext::Init()
 	{
 		FPL_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(_mWinHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		FPL_CORE_ASSERTS(status, " Failed to initialize GLAD ");
+		FPL_CORE_ASSERT(status, " Failed to initialize GLAD ");
 		
 		
 		FPL_CORE_INFO("   INFO:: ");
