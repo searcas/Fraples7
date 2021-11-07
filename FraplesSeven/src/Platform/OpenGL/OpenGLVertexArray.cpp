@@ -68,11 +68,48 @@ namespace Fraples
 		FPL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size()," Vertex Buffer has no layout");
 
 		const auto& layout = vertexBuffer->GetLayout();
-		for (const auto& elements : layout)
+		for (const auto& element : layout)
 		{
-			glEnableVertexAttribArray(_mVertexBufferIndex);
-			glVertexAttribPointer( _mVertexBufferIndex, elements.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(elements.SDataType), elements.Normalized ? GL_TRUE : GL_FALSE, vertexBuffer->GetLayout().GetStride(), (const void*)(intptr_t)elements.Offset);
-			_mVertexBufferIndex++;
+			switch (element.SDataType)
+			{
+			case ShaderDataType::Float:
+			case ShaderDataType::Float2:
+			case ShaderDataType::Float3:
+			case ShaderDataType::Float4:
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			case ShaderDataType::Boolean:
+			{
+				glEnableVertexAttribArray(_mVertexBufferIndex);
+				glVertexAttribPointer(_mVertexBufferIndex, element.GetComponentCount(), 
+					ShaderDataTypeToOpenGLBaseType(element.SDataType),
+					element.Normalized ? GL_TRUE : GL_FALSE, 
+					layout.GetStride(),
+					(const void*)element.Offset);
+				_mVertexBufferIndex++;
+				break;
+			}
+			case ShaderDataType::Mat3:
+			case ShaderDataType::Mat4:
+			{
+				uint8_t count = element.GetComponentCount();
+				for (uint8_t i = 0; i < count; i++)
+				{
+					glEnableVertexAttribArray(_mVertexBufferIndex);
+					glVertexAttribPointer(_mVertexBufferIndex, count, ShaderDataTypeToOpenGLBaseType(element.SDataType),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(), (const void*)(sizeof(float) * count * i));
+					glVertexAttribDivisor(_mVertexBufferIndex, 1);
+					_mVertexBufferIndex++;
+				}
+				break;
+			}
+			default:
+				FPL_CORE_ASSERT(false, "Unknown ShaderDataType");
+			}
+			
 		}
 		_mVertexBuffer.push_back(vertexBuffer);
 

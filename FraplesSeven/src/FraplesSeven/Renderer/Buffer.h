@@ -27,40 +27,28 @@ namespace Fraples
 		case Fraples::ShaderDataType::NONE:
 			FPL_CORE_ASSERT(false, "None Shader.");
 			return 0;
-			break;
 		case Fraples::ShaderDataType::Float:
 			return 4;
-			break;
 		case Fraples::ShaderDataType::Float2:
 			return 4 * 2;
-			break;
 		case Fraples::ShaderDataType::Float3:
 			return 4 * 3;
-			break;
 		case Fraples::ShaderDataType::Float4:
 			return 4 * 4;
-			break;
 		case Fraples::ShaderDataType::Mat3:
 			return 4 * 3 * 3;
-			break;
 		case Fraples::ShaderDataType::Mat4:
 			return 4 * 4 * 4;
-			break;
 		case Fraples::ShaderDataType::Int:
 			return 4;
-			break;
 		case Fraples::ShaderDataType::Int2:
 			return 4 * 2;
-			break;
 		case Fraples::ShaderDataType::Int3:
 			return 4 * 3;
-			break;
 		case Fraples::ShaderDataType::Int4:
 			return 4 * 4;
-			break;
 		case Fraples::ShaderDataType::Boolean:
 			return 1;
-			break;
 		default:
 			break;
 		}
@@ -91,9 +79,9 @@ namespace Fraples
 			case ShaderDataType::Float4:
 				return 4;
 			case ShaderDataType::Mat3:
-				return 4 * 3;
+				return 3;
 			case ShaderDataType::Mat4:
-				return 4 * 4;
+				return 4;
 			case ShaderDataType::Int:
 				return 1;
 			case ShaderDataType::Int2:
