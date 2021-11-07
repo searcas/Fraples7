@@ -1,10 +1,18 @@
-# Directories 
-.vs/
-bin/
-bin-int/ 
+# Binaries
+**/bin/
+bin-int/
 
-# Files
-*.user
-*.filters
-*.vcxproj
-*.sln
+# Fraples files
+*.log
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# Directories
+# Fraples/vendor/VulkanSDK
+# Fraples/assets/cache
+# scripts/__pycache__
