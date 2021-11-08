@@ -195,7 +195,6 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		constexpr int quadVertexCount = 0b100;
 		float textureIndex = 0.0f;
 
@@ -231,7 +230,7 @@ namespace Fraples
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
-			_sData.QuadVertexBufferPtr->Color = color;
+			_sData.QuadVertexBufferPtr->Color = tintColor;
 			_sData.QuadVertexBufferPtr->TexCoord = coords[i];
 			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
 			_sData.QuadVertexBufferPtr->Tilling = tiling;
@@ -293,7 +292,6 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 
 	
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		float textureIndex = 0.0f;
 		constexpr int quadVertexCount = 0b100;
 
@@ -327,7 +325,7 @@ namespace Fraples
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
-			_sData.QuadVertexBufferPtr->Color = color;
+			_sData.QuadVertexBufferPtr->Color = tintColor;
 			_sData.QuadVertexBufferPtr->TexCoord = coords[i];
 			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
 			_sData.QuadVertexBufferPtr->Tilling = tiling;

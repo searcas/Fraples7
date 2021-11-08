@@ -55,9 +55,8 @@ namespace Fraples
 		{
 			return GetCategoryFlags() & category;
 		}
-
-	protected:
 		bool _mHandled = false;
+	protected:
 	};
 	class EventDispatcher
 	{

@@ -42,11 +42,12 @@ namespace Fraples{
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowsClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (auto it = _mLayerStack.end(); it != _mLayerStack.begin();)
+		for (auto it = _mLayerStack.rbegin(); it != _mLayerStack.rend(); ++it)
 		{
-			(*--it)->OnEvent(e);
 			if (e._mHandled)
 				break;
+			(*it)->OnEvent(e);
+
 		}
 	}
 	bool Application::OnWindowsClosed(WindowCloseEvent& winEvent)
