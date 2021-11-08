@@ -133,6 +133,8 @@ namespace Fraples
 	}
 	void Renderer2D::Flush()
 	{
+		if (_sData.QuadIndexCount == 0)
+			return void();
 		for (uint32_t i = 0; i < _sData.TextureSlotIndex; i++)
 		{
 			_sData.TextureSlots[i]->Bind(i);

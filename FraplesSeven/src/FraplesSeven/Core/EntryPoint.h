@@ -6,9 +6,6 @@
 extern Fraples::Application* CreateApplication();
 
 
-
-
-
 void main(int argc, char** argv)
 {
 	
@@ -19,9 +16,7 @@ void main(int argc, char** argv)
 	FPL_PROFILE_END_SESSION();
 	FPL_PROFILE_BEGIN_SESSION("RunTime", "FraplesProfile-Runtime.json");
 	app->Run();
-	
 	FPL_PROFILE_END_SESSION();
-
 	FPL_PROFILE_BEGIN_SESSION("End", "FraplesProfile-Shutdown.json");
 	delete	app;
 	FPL_PROFILE_END_SESSION();
