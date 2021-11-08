@@ -120,16 +120,68 @@ namespace Fraples {
 		std::chrono::time_point<std::chrono::high_resolution_clock> _mStartTimepoint;
 		bool _mStopped;
 	};
+
+	namespace InstrumentorUtils
+	{
+		template<size_t N>
+		struct ChangeResult
+		{
+			char Data[N];
+		};
+		template<size_t N, size_t K>
+		constexpr auto CleanupOutputString(const char(&expr)[N], const char(&remove)[K])
+		{
+			ChangeResult<N> result = {};
+			size_t srcIndex = 0;
+			size_t dstIndex = 0;
+
+			while (srcIndex < N)
+			{
+				size_t matchIndex = 0;
+				while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && expr[srcIndex + matchIndex] == remove[matchIndex])
+					++matchIndex;
+				if (matchIndex == K - 1)
+				{
+					srcIndex += matchIndex;
+				}
+				result.Data[dstIndex++] = expr[srcIndex] == '"' ? '\'' : expr[srcIndex];
+				++srcIndex;
+			}
+			return result;
+		}
+	}
 }
-#define FPL_PROFILER 0
-#if FPL_PROFILER
-	#define FPL_PROFILE_SESSION_BEGIN(name, filepath) ::Fraples::Instrumentor::Get().BeginSession(name, filepath)
-	#define FPL_PROFILE_SESSION_END() ::Fraples::Instrumentor::Get().EndSession()
-	#define FPL_PROFILE_SCOPE(name) ::Fraples::InstrumentationTimer timer##__LINE__(name)
-	#define FPL_PROFILE_FUNCTION() FPL_PROFILE_SCOPE(__FUNCSIG__)
+#define FPL_PROFILE 0
+#if FPL_PROFILE
+// Resolve which function signature macro will be used. Note that this only
+// is resolved when the (pre)compiler starts, so the syntax highlighting
+// could mark the wrong one in your editor!
+#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
+#define FPL_FUNC_SIG __PRETTY_FUNCTION__
+#elif defined(__DMC__) && (__DMC__ >= 0x810)
+#define FPL_FUNC_SIG __PRETTY_FUNCTION__
+#elif (defined(__FUNCSIG__) || (_MSC_VER))
+#define FPL_FUNC_SIG __FUNCSIG__
+#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+#define FPL_FUNC_SIG __FUNCTION__
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
+#define FPL_FUNC_SIG __FUNC__
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+#define FPL_FUNC_SIG __func__
+#elif defined(__cplusplus) && (__cplusplus >= 201103)
+#define FPL_FUNC_SIG __func__
 #else
-	#define FPL_PROFILE_SESSION_BEGIN()
-	#define FPL_PROFILE_SESSION_END()
-	#define FPL_PROFILE_SCOPE(name)
-	#define FPL_PROFILE_FUNCTION()
+#define FPL_FUNC_SIG "FPL_FUNC_SIG unknown!"
+#endif
+
+#define FPL_PROFILE_BEGIN_SESSION(name, filepath) ::Fraples::Instrumentor::Get().BeginSession(name, filepath)
+#define FPL_PROFILE_END_SESSION() ::Fraples::Instrumentor::Get().EndSession()
+#define FPL_PROFILE_SCOPE(name) constexpr auto fixedName = ::Fraples::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
+									::Fraples::InstrumentationTimer timer##__LINE__(fixedName.Data)
+#define FPL_PROFILE_FUNCTION() FPL_PROFILE_SCOPE(FPL_FUNC_SIG)
+#else
+#define FPL_PROFILE_BEGIN_SESSION(name, filepath)
+#define FPL_PROFILE_END_SESSION()
+#define FPL_PROFILE_SCOPE(name)
+#define FPL_PROFILE_FUNCTION()
 #endif

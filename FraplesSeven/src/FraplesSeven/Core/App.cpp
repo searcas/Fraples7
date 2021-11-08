@@ -47,7 +47,6 @@ namespace Fraples{
 			if (e._mHandled)
 				break;
 			(*it)->OnEvent(e);
-
 		}
 	}
 	bool Application::OnWindowsClosed(WindowCloseEvent& winEvent)

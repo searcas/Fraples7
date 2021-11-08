@@ -14,18 +14,17 @@ void main(int argc, char** argv)
 	
 
 	Fraples::Log::initialize();
-
-	FPL_PROFILE_SESSION_BEGIN("Startup", "FraplesProfile-Startup.json");
+	FPL_PROFILE_BEGIN_SESSION("Startup", "FraplesProfile-Startup.json");
 	auto app = CreateApplication();
-	FPL_PROFILE_SESSION_END();
-	FPL_PROFILE_SESSION_BEGIN("RunTime", "FraplesProfile-Runtime.json");
+	FPL_PROFILE_END_SESSION();
+	FPL_PROFILE_BEGIN_SESSION("RunTime", "FraplesProfile-Runtime.json");
 	app->Run();
 	
-	FPL_PROFILE_SESSION_END();
+	FPL_PROFILE_END_SESSION();
 
-	FPL_PROFILE_SESSION_BEGIN("End", "FraplesProfile-Shutdown.json");
+	FPL_PROFILE_BEGIN_SESSION("End", "FraplesProfile-Shutdown.json");
 	delete	app;
-	FPL_PROFILE_SESSION_END();
+	FPL_PROFILE_END_SESSION();
 	 
 }
 
