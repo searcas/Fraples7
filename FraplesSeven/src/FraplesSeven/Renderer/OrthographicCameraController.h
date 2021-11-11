@@ -7,6 +7,15 @@
 
 namespace Fraples
 {
+	struct OrthographicCameraBounds
+	{
+		float left, right;
+		float bottom, top;
+
+		float GetWidth() { return right - left; }
+		float GetHeight() { return top - bottom; }
+
+	};
 	class OrthographicCameraController
 	{
 	public:
@@ -14,11 +23,14 @@ namespace Fraples
 
 		void OnUpdate(TimeSteps ts);
 		void OnEvent(Event& ev);
-		inline const OrthographicCamera& GetCamera() const { return _mOrthoCam; }
-		inline OrthographicCamera& GetCamera() { return _mOrthoCam; }
+		 const OrthographicCamera& GetCamera() const { return _mOrthoCam; }
+		 OrthographicCamera& GetCamera() { return _mOrthoCam; }
 
 		void SetZoomLevel(float level) { _mZoomLevel = level; }
 		float GetZoomLevel() { return _mZoomLevel; }
+
+		const OrthographicCameraBounds& GetBounds() const { return _mBounds; }
+		
 		
 	private:
 		bool OnMouseScrolled(MouseScrollEvent& ev);
@@ -26,8 +38,8 @@ namespace Fraples
 	private:
 		float _mAspectRatio;
 		float _mZoomLevel = 1.0f;
+		OrthographicCameraBounds _mBounds;
 		OrthographicCamera _mOrthoCam;
-		
 		
 		
 		bool _mRotation;

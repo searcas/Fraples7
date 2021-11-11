@@ -6,6 +6,7 @@
 
 namespace Fraples
 {
+	
 	class OrthographicCamera
 	{
 	public:

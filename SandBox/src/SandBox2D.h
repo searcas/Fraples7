@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Fraples.h"
-
+#include "experiments/ParticleSystem.h"
 class SandBox2D : public Fraples::Layer
 {
 public:
@@ -12,7 +12,7 @@ public:
 	void OnUpdate(Fraples::TimeSteps ts) override;
 	void OnImGuiRender() override;
 	void OnEvent(Fraples::Event& e) override;
-private:
+public:
 	Fraples::OrthographicCameraController _mCameraCtrl;
 	//temp
 	std::shared_ptr<Fraples::Shader> _mFlatColorShader;
@@ -22,4 +22,6 @@ private:
 
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
 
+	Fraples::Experiment::ParticleSystem _mParticle;
+	Fraples::Experiment::ParticleProps _mProps;
 };
