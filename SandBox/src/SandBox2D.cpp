@@ -14,6 +14,9 @@ void SandBox2D::OnAttach()
 	FPL_PROFILE_FUNCTION();
 	_mRandomTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
 	_mCheckBoardTex = Fraples::Texture2D::Create("../Checkerboard.png");
+	_mSpriteSheet = Fraples::Texture2D::Create("assets/Sprites/GameSpritesTest/ships_packed.png");
+
+
 	//_mProps.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	_mProps.ColorBegin = { Fraples::Random::Float(), Fraples::Random::Float(), Fraples::Random::Float(), 1.0f };
 	_mProps.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -42,6 +45,7 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		FPL_PROFILE_SCOPE("Renderer Draw ");
 		static float rotation = 0.0f;
 		rotation += ts * 50.0f;
+		/*
 		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
 		Fraples::Renderer2D::RenderRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(rotation), { 0.8f, 0.2f, 0.3f, 1.0f });
 		Fraples::Renderer2D::DrawQuad({ -1.0f,  0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
@@ -61,6 +65,9 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 			}
 		}
 		Fraples::Renderer2D::EndScene();
+		*/
+
+
 	}
 
 	if (Fraples::Input::IsMouseButtonPressed(FPL_MOUSE_BUTTON_LEFT))
@@ -80,6 +87,10 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		}
 
 	}
+	Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
+	Fraples::Renderer2D::DrawQuad({ 0.0f, 0.0f,  0.0f }, { 1.0f, 1.0f, }, _mSpriteSheet);
+
+	Fraples::Renderer2D::EndScene();
 	_mParticle.OnUpdate(ts);
 	_mParticle.OnRender(_mCameraCtrl.GetCamera());
 }

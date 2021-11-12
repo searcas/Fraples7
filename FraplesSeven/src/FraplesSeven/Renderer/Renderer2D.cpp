@@ -197,6 +197,20 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		
+		constexpr float x = 2, y = 3;
+		constexpr float sheetWidth = 128.0f;
+		constexpr float sheetHeight = 192.0f;
+
+		constexpr float spriteWidth = 32.0f;
+		constexpr float spriteHeight = 32.0f;
+		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		constexpr glm::vec2 texcoord[] = { 
+			{ (x * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight},
+			{ ((x + 1) * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight},
+			{ ((x + 1) * spriteWidth) / sheetWidth, ((y + 1) * spriteHeight) / sheetHeight},
+			{ (x * spriteWidth) / sheetWidth, ((y + 1) * spriteHeight) / sheetHeight}
+		};
+
 		constexpr int quadVertexCount = 0b100;
 		float textureIndex = 0.0f;
 
@@ -232,8 +246,8 @@ namespace Fraples
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
-			_sData.QuadVertexBufferPtr->Color = tintColor;
-			_sData.QuadVertexBufferPtr->TexCoord = coords[i];
+			_sData.QuadVertexBufferPtr->Color = color;
+			_sData.QuadVertexBufferPtr->TexCoord = texcoord[i];
 			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
 			_sData.QuadVertexBufferPtr->Tilling = tiling;
 			_sData.QuadVertexBufferPtr++;
