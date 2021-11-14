@@ -14,13 +14,19 @@ void SandBox2D::OnAttach()
 	FPL_PROFILE_FUNCTION();
 	_mRandomTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
 	_mCheckBoardTex = Fraples::Texture2D::Create("../Checkerboard.png");
+
 	_mSpriteSheet = Fraples::Texture2D::Create("assets/Sprites/GameSpritesTest/ships_packed.png");
+	_mGreenSprites = Fraples::Texture2D::Create("assets/Sprites/GameSpritesTest/tiles_packed.png");
+
+	_mSheep = Fraples::SubTexture2D::CreateFromCoords(_mSpriteSheet, { 1,2 }, { 32, 32 });
+	_mSuperSheep = Fraples::SubTexture2D::CreateFromCoords(_mSpriteSheet, { 1,5 }, { 32, 32 });
+	_mGreenland = Fraples::SubTexture2D::CreateFromCoords(_mGreenSprites, { 13, 3 }, { 37, 37 });
 
 
 	//_mProps.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	_mProps.ColorBegin = { Fraples::Random::Float(), Fraples::Random::Float(), Fraples::Random::Float(), 1.0f };
 	_mProps.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
-	_mProps. SizeBegin = 0.5f, _mProps.SizeVariation = 0.3f, _mProps.SizeEnd = 0.0f;
+	_mProps.SizeBegin = 0.5f, _mProps.SizeVariation = 0.3f, _mProps.SizeEnd = 0.0f;
 	_mProps.LifeTime = 1.0f;
 	_mProps.Velocity = { 0.0f, 0.0f };
 	_mProps.VelocityVariation = { 3.0f, 1.0f };
@@ -87,12 +93,16 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		}
 
 	}
-	Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-	Fraples::Renderer2D::DrawQuad({ 0.0f, 0.0f,  0.0f }, { 1.0f, 1.0f, }, _mSpriteSheet);
 
-	Fraples::Renderer2D::EndScene();
 	_mParticle.OnUpdate(ts);
 	_mParticle.OnRender(_mCameraCtrl.GetCamera());
+
+	Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
+	Fraples::Renderer2D::DrawQuad({ 0.0f, 0.0f,  0.0f }, { 1.0f, 1.0f, }, _mSheep);
+	Fraples::Renderer2D::DrawQuad({ 0.0f, 1.0f,  0.0f }, { 1.0f, 1.0f, }, _mSuperSheep);
+
+	Fraples::Renderer2D::DrawQuad({ 2.0f, 0.0f,  0.0f }, { 1.0f, 1.0f, }, _mGreenland);
+	Fraples::Renderer2D::EndScene();
 }
 
 void SandBox2D::OnDetach()

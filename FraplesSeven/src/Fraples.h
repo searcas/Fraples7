@@ -18,6 +18,7 @@
 #include "FraplesSeven/Renderer/Buffer.h"
 #include "FraplesSeven/Renderer/Shader.h"
 #include "FraplesSeven/Renderer/Texture.h"
+#include "FraplesSeven/Renderer/SubTexture2D.h"
 #include "FraplesSeven/Renderer/VertexArray.h"
 #include "FraplesSeven/Renderer/OrthographicCamera.h"
 #include "FraplesSeven/Renderer/OrthographicCameraController.h"

@@ -12,7 +12,7 @@ namespace Fraples
 {
 
 	static constexpr glm::vec2 coords[] = {
-		{ 0.0f,0.0f },
+		{ 0.0f, 0.0f },
 		{ 1.0f, 0.0f },
 		{ 1.0f, 1.0f },
 		{ 0.0f, 1.0f }
@@ -197,19 +197,6 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		
-		constexpr float x = 2, y = 3;
-		constexpr float sheetWidth = 128.0f;
-		constexpr float sheetHeight = 192.0f;
-
-		constexpr float spriteWidth = 32.0f;
-		constexpr float spriteHeight = 32.0f;
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-		constexpr glm::vec2 texcoord[] = { 
-			{ (x * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight},
-			{ ((x + 1) * spriteWidth) / sheetWidth, (y * spriteHeight) / sheetHeight},
-			{ ((x + 1) * spriteWidth) / sheetWidth, ((y + 1) * spriteHeight) / sheetHeight},
-			{ (x * spriteWidth) / sheetWidth, ((y + 1) * spriteHeight) / sheetHeight}
-		};
 
 		constexpr int quadVertexCount = 0b100;
 		float textureIndex = 0.0f;
@@ -246,13 +233,72 @@ namespace Fraples
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
-			_sData.QuadVertexBufferPtr->Color = color;
-			_sData.QuadVertexBufferPtr->TexCoord = texcoord[i];
+			_sData.QuadVertexBufferPtr->Color = tintColor;
+			_sData.QuadVertexBufferPtr->TexCoord = coords[i];
 			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
 			_sData.QuadVertexBufferPtr->Tilling = tiling;
 			_sData.QuadVertexBufferPtr++;
 		}
 		
+
+		_sData.QuadIndexCount += 6;
+
+		_sData.stats.QuadCounts++;
+
+	}
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& subTexture, float tiling, const glm::vec4& tintColor)
+	{
+		FPL_PROFILE_FUNCTION();
+		DrawQuad({ position.x,position.y, 0.0f }, size, subTexture, tiling, tintColor);
+	}
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& subTexture, float tiling, const glm::vec4& tintColor)
+	{
+		FPL_PROFILE_FUNCTION();
+
+
+		constexpr int quadVertexCount = 0b100;
+		float textureIndex = 0.0f;
+		const glm::vec2* textureCoords = subTexture->GetTexCoords();
+
+		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+
+		for (uint32_t i = 0; i < _sData.TextureSlotIndex; i++)
+		{
+			if (*_sData.TextureSlots[i].get() == *subTexture->GetTexture().get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+			{
+				FlushAndReset();
+			}
+			textureIndex = (float)_sData.TextureSlotIndex;
+			_sData.TextureSlots[_sData.TextureSlotIndex] = subTexture->GetTexture();
+			_sData.TextureSlotIndex++;
+		}
+
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
+			_sData.QuadVertexBufferPtr->Color = tintColor;
+			_sData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			_sData.QuadVertexBufferPtr->Tilling = tiling;
+			_sData.QuadVertexBufferPtr++;
+		}
+
 
 		_sData.QuadIndexCount += 6;
 
@@ -350,6 +396,62 @@ namespace Fraples
 
 
 		
+		_sData.QuadIndexCount += 6;
+
+		_sData.stats.QuadCounts++;
+	}
+	void Renderer2D::RenderRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& subTexture, float tiling, const glm::vec4& tintColor)
+	{
+		FPL_PROFILE_FUNCTION();
+		RenderRotatedQuad({ position.x,position.y, 0.0f }, size, rotation, subTexture, tiling, tintColor);
+	}
+	void Renderer2D::RenderRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& subTexture, float tiling, const glm::vec4& tintColor)
+	{
+		FPL_PROFILE_FUNCTION();
+
+
+		float textureIndex = 0.0f;
+		constexpr int quadVertexCount = 0b100;
+		const glm::vec2* textureCoords = subTexture->GetTexCoords();
+
+
+		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+		for (uint32_t i = 0; i < _sData.TextureSlotIndex; i++)
+		{
+			if (*_sData.TextureSlots[i].get() == *subTexture->GetTexture().get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)
+			{
+				FlushAndReset();
+			}
+			textureIndex = (float)_sData.TextureSlotIndex;
+			_sData.TextureSlots[_sData.TextureSlotIndex] = subTexture->GetTexture();
+			_sData.TextureSlotIndex++;
+		}
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f,1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
+			_sData.QuadVertexBufferPtr->Color = tintColor;
+			_sData.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
+			_sData.QuadVertexBufferPtr->Tilling = tiling;
+			_sData.QuadVertexBufferPtr++;
+		}
+
 		_sData.QuadIndexCount += 6;
 
 		_sData.stats.QuadCounts++;

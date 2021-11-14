@@ -21,6 +21,15 @@ public:
 
 	std::shared_ptr<Fraples::Texture2D>_mCheckBoardTex;
 	std::shared_ptr<Fraples::Texture2D>_mSpriteSheet;
+	std::shared_ptr<Fraples::Texture2D>_mGreenSprites;
+
+	
+	std::shared_ptr<Fraples::SubTexture2D>_mSheep;
+	std::shared_ptr<Fraples::SubTexture2D>_mSuperSheep;
+
+	
+	
+	std::shared_ptr<Fraples::SubTexture2D>_mGreenland;
 
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
 
