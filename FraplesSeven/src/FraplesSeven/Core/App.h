@@ -13,23 +13,23 @@
 
 
 
-namespace Fraples{
-		
-	class  Application
+namespace Fraples {
+
+	class Application
 	{
-		
+
 	public:
-	Application();
-	~Application() = default;
-	void Run();
+		Application();
+		~Application() = default;
+		void Run();
+		void Close();
+		void OnEvent(Event& e);
 
-	void OnEvent(Event& e);
+		void PushLayer(Layer* layer);
+		void PushOverLay(Layer* layer);
 
-	void PushLayer(Layer* layer);
-	void PushOverLay(Layer* layer);
-
-	inline static Application& GetApp() { return *_sInstance; }
-	inline Window& GetWindow()   { return *_mWindow; }
+		inline static Application& GetApp() { return *_sInstance; }
+		inline Window& GetWindow() { return *_mWindow; }
 	private:
 		bool OnWindowsClosed(WindowCloseEvent& winEvent);
 		bool OnWindowResize(WindowResizeEvent& winEvent);

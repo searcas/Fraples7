@@ -26,13 +26,13 @@ namespace Fraples
 		 const OrthographicCamera& GetCamera() const { return _mOrthoCam; }
 		 OrthographicCamera& GetCamera() { return _mOrthoCam; }
 
-		void SetZoomLevel(float level) { _mZoomLevel = level; }
+		 void SetZoomLevel(float level) { _mZoomLevel = level; CalculateView(); }
 		float GetZoomLevel() { return _mZoomLevel; }
 
 		const OrthographicCameraBounds& GetBounds() const { return _mBounds; }
 		
-		
 	private:
+		void CalculateView();
 		bool OnMouseScrolled(MouseScrollEvent& ev);
 		bool OnWindowResize(WindowResizeEvent& ev);
 	private:

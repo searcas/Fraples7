@@ -2,6 +2,7 @@
 
 #include "Fraples.h"
 #include "experiments/ParticleSystem.h"
+
 class SandBox2D : public Fraples::Layer
 {
 public:
@@ -24,15 +25,21 @@ public:
 	std::shared_ptr<Fraples::Texture2D>_mGreenSprites;
 
 	
-	std::shared_ptr<Fraples::SubTexture2D>_mSheep;
+	std::shared_ptr<Fraples::SubTexture2D>_mRPGBarrel;
+	/*std::shared_ptr<Fraples::SubTexture2D>_mSheep;
 	std::shared_ptr<Fraples::SubTexture2D>_mSuperSheep;
+	std::shared_ptr<Fraples::SubTexture2D>_mGreenland;
+	*/
 
 	
 	
-	std::shared_ptr<Fraples::SubTexture2D>_mGreenland;
+	
 
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
 
 	Fraples::Experiment::ParticleSystem _mParticle;
 	Fraples::Experiment::ParticleProps _mProps;
+
+	uint32_t m_MapWidth, m_MapHeight;
+	std::unordered_map<char, std::shared_ptr<Fraples::SubTexture2D>>_sTextureMap;
 };
