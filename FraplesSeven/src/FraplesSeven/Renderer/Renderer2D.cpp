@@ -198,7 +198,7 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 		
 
-		constexpr int quadVertexCount = 0b100;
+ 		constexpr int quadVertexCount = 0b100;
 		float textureIndex = 0.0f;
 
 		if (_sData.QuadIndexCount >= Renderer2DData::MaxIndices)

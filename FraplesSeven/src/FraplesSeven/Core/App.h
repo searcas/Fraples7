@@ -28,8 +28,9 @@ namespace Fraples {
 		void PushLayer(Layer* layer);
 		void PushOverLay(Layer* layer);
 
-		inline static Application& GetApp() { return *_sInstance; }
-		inline Window& GetWindow() { return *_mWindow; }
+		static Application& GetApp() { return *_sInstance; }
+		Window& GetWindow() const { return *_mWindow; }
+		ImGuiLayer* GetImGuiLayer()const { return _mImguiLayer; }
 	private:
 		bool OnWindowsClosed(WindowCloseEvent& winEvent);
 		bool OnWindowResize(WindowResizeEvent& winEvent);

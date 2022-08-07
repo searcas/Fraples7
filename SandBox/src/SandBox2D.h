@@ -34,4 +34,6 @@ public:
 
 	uint32_t m_MapWidth, m_MapHeight;
 	std::unordered_map<char, std::shared_ptr<Fraples::SubTexture2D>>_sTextureMap;
+	bool _mViewportFocused = false;
+	bool _mViewportHovered = false;
 };

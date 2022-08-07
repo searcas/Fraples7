@@ -5,7 +5,7 @@
 #include "FraplesSeven/Events/MouseEvent.h"
 #include "FraplesSeven/Events/KeyEvent.h"
 
-#include "OpenGL/OpenGLContext.h"
+#include "../OpenGL/OpenGLContext.h"
 
 
 namespace Fraples

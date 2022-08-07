@@ -17,9 +17,10 @@ namespace Fraples
 		virtual void OnEvent(Event& e) override;
 		void Begin();
 		void End();
-
+		void SetBlockEvents(bool set) { _mBlockEvents = set; }
 	private:
 		float _mTime = 0.0f;
+		bool _mBlockEvents = true;
 	};
 
 }

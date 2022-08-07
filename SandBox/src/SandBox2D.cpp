@@ -3,7 +3,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "experiments/ParticleSystem.h"
 #include "experiments/Random.h"
-
+#include "FraplesSeven/Core/Log.h"
 								
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
@@ -25,7 +25,8 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 {
 	//update
 	FPL_PROFILE_FUNCTION();
-	_mCameraCtrl.OnUpdate(ts);
+	if(_mViewportFocused)
+		_mCameraCtrl.OnUpdate(ts);
 	//Renderer
 	Fraples::Renderer2D::ResetStats();
 	{
@@ -38,14 +39,14 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		FPL_PROFILE_SCOPE("Renderer Draw");
 		static float rotation = 0.0f;
 		rotation += ts * 50.0f;
-
+	
 		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-		Fraples::Renderer2D::RenderRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(- 45.0f), {0.8f, 0.2f, 0.3f, 1.0f});
-		Fraples::Renderer2D::DrawQuad({ -1.0f,  0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Fraples::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, _mSquareColor);
-
 		Fraples::Renderer2D::DrawQuad({ 0.0f, 0.0f,  -0.1f }, { 20.0f, 20.0f, }, _mCheckBoardTex, 10.0f);
-		Fraples::Renderer2D::RenderRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), _mCheckBoardTex, 20.0f);
+		Fraples::Renderer2D::RenderRotatedQuad({ 2.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(- 45.0f), {0.8f, 0.2f, 0.3f, 1.0f});
+		Fraples::Renderer2D::DrawQuad({ -1.0f,  2.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Fraples::Renderer2D::DrawQuad({ 4.5f, -0.5f }, { 0.5f, 0.75f }, _mSquareColor);
+
+		Fraples::Renderer2D::RenderRotatedQuad({ -2.0f, -2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), _mCheckBoardTex, 20.0f);
 		Fraples::Renderer2D::EndScene();
 
 		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
@@ -54,7 +55,7 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 			for (float x = -5.0f; x < 5.0f; x += 0.5f)
 			{
 				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (i + 5.0f) / 10.0f, 0.7f };
-				Fraples::Renderer2D::DrawQuad({ x, i }, { 0.45f, 0.45f }, color);
+				Fraples::Renderer2D::DrawQuad({ x, i }, { 0.1f, 0.1f }, color);
 			}
 		}
  		Fraples::Renderer2D::EndScene();
@@ -146,7 +147,11 @@ void SandBox2D::OnImGuiRender()
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(_mSquareColor));
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
-	ImGui::Begin("Vieport");
+	ImGui::Begin("Viewport");
+	_mViewportFocused = ImGui::IsWindowFocused();
+	_mViewportHovered= ImGui::IsWindowHovered();
+	Fraples::Application::GetApp().GetImGuiLayer()->SetBlockEvents(!_mViewportFocused || !_mViewportHovered );
+
 	ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
 	if (_mViewPortSize != *((glm::vec2*)&viewPortSize))
 	{
