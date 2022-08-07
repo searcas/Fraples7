@@ -8,8 +8,7 @@
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
 {
-	_mCameraCtrl.SetZoomLevel(5);
-}
+}  
 
 using namespace Fraples::Experiment;
 void SandBox2D::OnAttach()
@@ -145,8 +144,21 @@ void SandBox2D::OnImGuiRender()
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(_mSquareColor));
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+	ImGui::Begin("Vieport");
+	ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
+	if (_mViewPortSize != *((glm::vec2*)&viewPortSize))
+	{
+		_mFrameBuffer->Resize(viewPortSize.x, viewPortSize.y);
+		_mViewPortSize = { viewPortSize.x, viewPortSize.y };
+		
+		_mCameraCtrl.OnResize(viewPortSize.x, viewPortSize.y);
+	}
 	uint32_t textureId = _mFrameBuffer->GetColorAttachmentRendererID();
-	ImGui::Image((void*)textureId, ImVec2{ 800, 600 });
+	ImGui::Image((void*)textureId, ImVec2{ _mViewPortSize.x, _mViewPortSize.y });
+	ImGui::End();
+	ImGui::PopStyleVar();
 	ImGui::End();
 
 	ImGui::End();
@@ -156,3 +168,4 @@ void SandBox2D::OnEvent(Fraples::Event& e)
 {
 	_mCameraCtrl.OnEvent(e);
 }
+;

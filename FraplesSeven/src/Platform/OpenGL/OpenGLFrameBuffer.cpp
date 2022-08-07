@@ -12,17 +12,33 @@ namespace Fraples
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &_mRendererID);
+		glDeleteTextures(1, &_mColorAttach);
+		glDeleteTextures(1, &_mDepthAttach);
 	}
 	void OpenGLFrameBuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, _mRendererID); 
+		glViewport(0, 0, _mFrameBufferSpec.width, _mFrameBufferSpec.width);
 	}
 	void OpenGLFrameBuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+	void OpenGLFrameBuffer::Resize(uint32_t width, uint32_t height)
+	{
+		_mFrameBufferSpec.width = width;
+		_mFrameBufferSpec.height = height;
+		Validate();
+	}
 	void OpenGLFrameBuffer::Validate()
 	{
+		if (_mRendererID)
+		{
+			glDeleteFramebuffers(1, &_mRendererID);
+			glDeleteTextures(1, &_mColorAttach);
+			glDeleteTextures(1, &_mDepthAttach);
+		}
+
 		glCreateFramebuffers(1, &_mRendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, _mRendererID);
 

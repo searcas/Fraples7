@@ -30,7 +30,7 @@ public:
 	Fraples::shared<Fraples::FrameBuffer> _mFrameBuffer;
 
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
-
+	glm::vec2 _mViewPortSize = {0, 0};
 
 	uint32_t m_MapWidth, m_MapHeight;
 	std::unordered_map<char, std::shared_ptr<Fraples::SubTexture2D>>_sTextureMap;

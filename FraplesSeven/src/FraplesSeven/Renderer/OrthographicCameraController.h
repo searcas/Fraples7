@@ -23,25 +23,25 @@ namespace Fraples
 
 		void OnUpdate(TimeSteps ts);
 		void OnEvent(Event& ev);
-		 const OrthographicCamera& GetCamera() const { return _mOrthoCam; }
-		 OrthographicCamera& GetCamera() { return _mOrthoCam; }
+		const OrthographicCamera& GetCamera() const { return _mOrthoCam; }
+		OrthographicCamera& GetCamera() { return _mOrthoCam; }
 
-		 void SetZoomLevel(float level) { _mZoomLevel = level; CalculateView(); }
+		void SetZoomLevel(float level) { _mZoomLevel = level; CalculateView(); }
 		float GetZoomLevel() { return _mZoomLevel; }
-
+		void OnResize(float width, float height);
 		const OrthographicCameraBounds& GetBounds() const { return _mBounds; }
-		
+
 	private:
 		void CalculateView();
 		bool OnMouseScrolled(MouseScrollEvent& ev);
-		bool OnWindowResize(WindowResizeEvent& ev);
+		bool OnWindowResize(WindowResizeEvent ev);
 	private:
 		float _mAspectRatio;
 		float _mZoomLevel = 1.0f;
 		OrthographicCameraBounds _mBounds;
 		OrthographicCamera _mOrthoCam;
-		
-		
+
+
 		bool _mRotation;
 
 		glm::vec3 _mCameraPosition = { 0.0f,0.0f,0.0f };

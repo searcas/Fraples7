@@ -53,6 +53,11 @@ namespace Fraples
 		
 	}
 	
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		OnWindowResize({ (uint32_t)width, (uint32_t)height });
+	}
+
 	void OrthographicCameraController::CalculateView()
 	{
 		_mBounds = { -_mAspectRatio * _mZoomLevel, _mAspectRatio * _mZoomLevel, -_mZoomLevel, _mZoomLevel };
@@ -64,15 +69,14 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 		_mZoomLevel -= ev.GetYOffset() * 0.25f;
 		_mZoomLevel = std::max(_mZoomLevel, 0.25f);
-		//_mOrthoCam.SetProjection(-_mAspectRatio * _mZoomLevel, _mAspectRatio * _mZoomLevel, -_mZoomLevel, _mZoomLevel);
 		CalculateView();
 		return false;
 	}
 	
-	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& ev)
+	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent ev)
 	{
 		FPL_PROFILE_FUNCTION();
-		_mAspectRatio -= (float)ev.GetWidth() / (float)ev.GetHeight();
+		_mAspectRatio = (float)ev.GetWidth() / (float)ev.GetHeight();
 		CalculateView();
 		return false;
 	}

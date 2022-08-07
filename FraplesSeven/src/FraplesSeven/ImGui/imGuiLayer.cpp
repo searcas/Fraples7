@@ -64,9 +64,9 @@ namespace Fraples
 
 	void ImGuiLayer::OnEvent(Event& e)
 	{
-		ImGuiIO& io = ImGui::GetIO();
-		e._mHandled |= e.IsInCategory(EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
-		e._mHandled |= e.IsInCategory(EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		//ImGuiIO& io = ImGui::GetIO();
+		//e._mHandled |= e.IsInCategory(EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
+		//e._mHandled |= e.IsInCategory(EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
 	}
 
 	void ImGuiLayer::Begin()

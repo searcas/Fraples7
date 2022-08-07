@@ -12,13 +12,14 @@ namespace Fraples
 		virtual void Unbind() override; 
 		virtual const FrameBufferSpec& GetFrameBufferSpec() override { return _mFrameBufferSpec; }
 		virtual uint32_t GetColorAttachmentRendererID() const { return _mColorAttach; }
+		virtual void Resize(uint32_t width, uint32_t height) override;
 
 		void Validate();
 	private:
 		FrameBufferSpec _mFrameBufferSpec;
-		uint32_t _mRendererID;
-		uint32_t _mColorAttach; 
-		uint32_t _mDepthAttach;
+		uint32_t _mRendererID = 0;
+		uint32_t _mColorAttach = 0;
+		uint32_t _mDepthAttach = 0;
 	};
 
 }
