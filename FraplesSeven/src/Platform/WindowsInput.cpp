@@ -1,43 +1,40 @@
 #include "FplPCH.h"
-#include "Platform/WindowsInput.h"
-
-#include"GLFW/glfw3.h"
+#include "FraplesSeven/Core/Input.h"
+#include "GLFW/glfw3.h"
 #include "FraplesSeven/Core/App.h"
 
 
 namespace Fraples
 {
-	Input* Input::_sInstance = new WindowsInput();
-
-	bool WindowsInput::IsKeyPressedImpl(int keyCoede)
+	bool Input::IsKeyPressed(int keyCoede)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keyCoede);
 
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window,button);
 
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-		auto[x, y] = GetMousePosImpl();
+		auto[x, y] = GetMousePosition();
 
 		return x;
 	}
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-		auto[x, y] = GetMousePosImpl();
+		auto[x, y] = GetMousePosition();
 
 		return y;
 		
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePosImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		double x, y;
