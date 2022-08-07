@@ -26,19 +26,11 @@ public:
 
 	
 	std::shared_ptr<Fraples::SubTexture2D>_mRPGBarrel;
-	/*std::shared_ptr<Fraples::SubTexture2D>_mSheep;
-	std::shared_ptr<Fraples::SubTexture2D>_mSuperSheep;
-	std::shared_ptr<Fraples::SubTexture2D>_mGreenland;
-	*/
 
-	
-	
-	
+	Fraples::shared<Fraples::FrameBuffer> _mFrameBuffer;
 
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
 
-	Fraples::Experiment::ParticleSystem _mParticle;
-	Fraples::Experiment::ParticleProps _mProps;
 
 	uint32_t m_MapWidth, m_MapHeight;
 	std::unordered_map<char, std::shared_ptr<Fraples::SubTexture2D>>_sTextureMap;

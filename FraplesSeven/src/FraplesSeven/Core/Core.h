@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-
+#include "Log.h"
 // Platform detection using predefined macros
 #ifdef _WIN32
 	/* Windows x64/x86 */
@@ -58,7 +58,7 @@
 #endif
 
 #ifdef FPL_ENABLE_ASSERTS
-#define FPL_ASSERT(x, ...) { if(!(x)) { FPL_ERROR("Assertion Failed: {0}", __VA_ARGS__); FPL_DEBUGBREAK(); } }
+#define FPL_ASSERT(x, ...) { if(!(x)) { assert("Assertion Failed: {0}", __VA_ARGS__); FPL_DEBUGBREAK(); } }
 #define FPL_CORE_ASSERT(x, ...) { if(!(x)) { FPL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); FPL_DEBUGBREAK(); } }
 #else
 #define FPL_ASSERT(x, ...)
@@ -72,17 +72,17 @@
 namespace Fraples {
 
 	template<typename T>
-	using Scope = std::unique_ptr<T>;
+	using unique = std::unique_ptr<T>;
 	template<typename T, typename ... Args>
-	constexpr Scope<T> CreateScope(Args&& ... args)
+	constexpr unique<T> Unique(Args&& ... args)
 	{
 		return std::make_unique<T>(std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	using Ref = std::shared_ptr<T>;
+	using shared = std::shared_ptr<T>;
 	template<typename T, typename ... Args>
-	constexpr Ref<T> CreateRef(Args&& ... args)
+	constexpr shared<T> Shared(Args&& ... args)
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}

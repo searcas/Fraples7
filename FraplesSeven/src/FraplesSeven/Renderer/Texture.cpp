@@ -12,7 +12,7 @@ namespace Fraples{
 			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLTexture2D>(width, height);
+			return Shared<OpenGLTexture2D>(width, height);
 		}
 		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;
@@ -25,7 +25,7 @@ namespace Fraples{
 			FPL_CORE_ASSERT(false, "RendererAPI::NONE is currently not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLTexture2D>(filepath);
+			return Shared<OpenGLTexture2D>(filepath);
 		}
 		FPL_CORE_ASSERT(false, "Unknown RendererAPI");
 		return nullptr;

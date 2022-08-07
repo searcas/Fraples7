@@ -13,13 +13,15 @@ namespace Fraples
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keyCoede);
+
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window,button);
-		return state == GLFW_PRESS ;
+
+		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 	float WindowsInput::GetMouseXImpl()
 	{

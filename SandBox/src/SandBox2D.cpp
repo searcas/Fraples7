@@ -4,58 +4,22 @@
 #include "experiments/ParticleSystem.h"
 #include "experiments/Random.h"
 
-static const uint32_t s_mapWidth = 24;
-static const char* s_MapTiles = 
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWDDDDDWWWWWWWWWWWW"
-"WWWWWDDDDDDDDDDDWWWWWWWW"
-"WWWWDDDDDDDDDDDDDDWWWWWW"
-"WWWDDDDDDDDDDDDDDDDDDWWW"
-"WWDDDWWWDDDDDDDDDDDDWWWW"
-"WDDDDWWWDDDDDDDDDDDDDDDW"
-"WWDDDDDDDDDDDDDDDDDDDDWW"
-"WWWDDDDDDDDDDDDDDDDDDWWW"
-"WWWWDDDDDDDDDDDDDDDDWWWW"
-"WWWWWDDDDDDDDDDDDDDWWWWW"
-"WWWWWWDDDDDDDDDDDDWWWWWW"
-"WWWWWWWWWDDDDDDWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-;	
 								
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
 {
+	_mCameraCtrl.SetZoomLevel(5);
 }
 
 using namespace Fraples::Experiment;
 void SandBox2D::OnAttach()
 {
 	FPL_PROFILE_FUNCTION();
-	_mRandomTexture = Fraples::Texture2D::Create("assets/texture/dirt.png");
 	_mCheckBoardTex = Fraples::Texture2D::Create("../Checkerboard.png");
-
-	_mSpriteSheet = Fraples::Texture2D::Create("assets/Sprites/GameSpritesTest/Spritesheet/RPGpack_sheet_2X.png");
-
-	
-	m_MapWidth = s_mapWidth;
-	m_MapHeight = strlen(s_MapTiles) / s_mapWidth;
-	
-	_mRPGBarrel = Fraples::SubTexture2D::CreateFromCoords(_mSpriteSheet, { 0, 11 }, { 128, 128 });
-
-	_sTextureMap['D'] = Fraples::SubTexture2D::CreateFromCoords(_mSpriteSheet, { 6, 11 }, { 128, 128 });
-	_sTextureMap['W'] = Fraples::SubTexture2D::CreateFromCoords(_mSpriteSheet, {11, 11}, {128, 128});
-
-
-	//_mProps.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	_mProps.ColorBegin = { Fraples::Random::Float(), Fraples::Random::Float(), Fraples::Random::Float(), 1.0f };
-	_mProps.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
-	_mProps.SizeBegin = 0.5f, _mProps.SizeVariation = 0.3f, _mProps.SizeEnd = 0.0f;
-	_mProps.LifeTime = 1.0f;
-	_mProps.Velocity = { 0.0f, 0.0f };
-	_mProps.VelocityVariation = { 3.0f, 1.0f };
-	_mProps.Position = { 0.0f, 0.0f };
-
-	_mCameraCtrl.SetZoomLevel(10.0f);
+	Fraples::FrameBufferSpec spec;
+	spec.width = 1280;
+	spec.height = 720;
+	_mFrameBuffer = Fraples::FrameBuffer::Create(spec);
 }
 
 void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
@@ -67,16 +31,17 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 	Fraples::Renderer2D::ResetStats();
 	{
 		FPL_PROFILE_SCOPE("Renderer Preparation ");
+		_mFrameBuffer->Bind();
 		Fraples::RenderCommands::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Fraples::RenderCommands::Clear();
 	}
 	{
-		FPL_PROFILE_SCOPE("Renderer Draw ");
+		FPL_PROFILE_SCOPE("Renderer Draw");
 		static float rotation = 0.0f;
 		rotation += ts * 50.0f;
-		/*
+
 		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-		Fraples::Renderer2D::RenderRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(rotation), { 0.8f, 0.2f, 0.3f, 1.0f });
+		Fraples::Renderer2D::RenderRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(- 45.0f), {0.8f, 0.2f, 0.3f, 1.0f});
 		Fraples::Renderer2D::DrawQuad({ -1.0f,  0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Fraples::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, _mSquareColor);
 
@@ -93,58 +58,10 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 				Fraples::Renderer2D::DrawQuad({ x, i }, { 0.45f, 0.45f }, color);
 			}
 		}
-		Fraples::Renderer2D::EndScene();
-		*/
-
-
-	}
-
-	if (Fraples::Input::IsMouseButtonPressed(FPL_MOUSE_BUTTON_LEFT))
-	{
-		auto [x, y] = Fraples::Input::GetMousePosition();
-		auto width = Fraples::Application::GetApp().GetWindow().GetWidth();
-		auto height = Fraples::Application::GetApp().GetWindow().GetHeight();
-
-		auto bounds = _mCameraCtrl.GetBounds();
-		auto pos = _mCameraCtrl.GetCamera().GetPosition();
-		x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
-		y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
-		_mProps.Position = { x + pos.x, y + pos.y };
-		for (size_t i = 0; i < 50; i++)
-		{
-			_mParticle.Emit(_mProps);
-		}
+ 		Fraples::Renderer2D::EndScene();
+		_mFrameBuffer->Unbind();
 
 	}
-
-	_mParticle.OnUpdate(ts);
-	_mParticle.OnRender(_mCameraCtrl.GetCamera());
-
-	Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-
-	for (uint32_t y = 0; y < m_MapHeight; y++)
-	{
-		for (uint32_t x = 0; x < m_MapWidth; x++)
-		{
-			char tileType = s_MapTiles[x + y * s_mapWidth];
-			std::shared_ptr<Fraples::SubTexture2D> texture;
-			if (_sTextureMap.find(tileType) != _sTextureMap.end())
-			{
-				texture = _sTextureMap[tileType];
-			}
-			else
-			{
-				texture = _mRPGBarrel;
-			}
-			Fraples::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f, y - m_MapHeight / 2.0f,  0.5f }, { 1.0f, 1.0f }, texture);
-		}
-	}
-
-	/*Fraples::Renderer2D::DrawQuad({ 0.0f, 0.0f,  0.0f }, { 1.0f, 1.0f }, _mSheep);
-	Fraples::Renderer2D::DrawQuad({ 0.0f, 1.0f,  0.0f }, { 1.0f, 1.0f }, _mSuperSheep);
-	Fraples::Renderer2D::DrawQuad({ 2.0f, 0.0f,  0.0f }, { 1.0f, 1.0f }, _mGreenland);*/
-
-	Fraples::Renderer2D::EndScene();
 }
 
 void SandBox2D::OnDetach()
@@ -228,8 +145,8 @@ void SandBox2D::OnImGuiRender()
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(_mSquareColor));
-	uint32_t textureId = _mCheckBoardTex->GetRendererID();
-	ImGui::Image((void*)textureId, ImVec2{ 64.0f,64.0f });
+	uint32_t textureId = _mFrameBuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)textureId, ImVec2{ 800, 600 });
 	ImGui::End();
 
 	ImGui::End();
@@ -238,5 +155,4 @@ void SandBox2D::OnImGuiRender()
 void SandBox2D::OnEvent(Fraples::Event& e)
 {
 	_mCameraCtrl.OnEvent(e);
-
 }

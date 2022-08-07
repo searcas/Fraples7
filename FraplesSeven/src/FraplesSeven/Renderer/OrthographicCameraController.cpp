@@ -2,6 +2,7 @@
 #include "OrthographicCameraController.h"
 #include "FraplesSeven/Core/Input.h"
 #include "FraplesSeven/Core/KeyCode.h"
+#include "FraplesSeven/Core/MouseButtonCodes.h"
 #include "FraplesSeven/Core/Core.h"
 
 
@@ -27,6 +28,8 @@ namespace Fraples
 			_mCameraPosition.y += _mCameraTranslationSpeed * ts;
 		else if (Input::IsKeyPressed(FPL_KEY_S))
 			_mCameraPosition.y -= _mCameraTranslationSpeed * ts;
+	
+	
 	
 		if (_mRotation)
 		{
@@ -61,6 +64,7 @@ namespace Fraples
 		FPL_PROFILE_FUNCTION();
 		_mZoomLevel -= ev.GetYOffset() * 0.25f;
 		_mZoomLevel = std::max(_mZoomLevel, 0.25f);
+		//_mOrthoCam.SetProjection(-_mAspectRatio * _mZoomLevel, _mAspectRatio * _mZoomLevel, -_mZoomLevel, _mZoomLevel);
 		CalculateView();
 		return false;
 	}
