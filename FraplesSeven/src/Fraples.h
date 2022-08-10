@@ -23,4 +23,7 @@
 #include "FraplesSeven/Renderer/VertexArray.h"
 #include "FraplesSeven/Renderer/OrthographicCamera.h"
 #include "FraplesSeven/Renderer/OrthographicCameraController.h"
+#include "FraplesSeven/Scene/Component.h"
+#include "FraplesSeven/Scene/Scene.h"
+#include "FraplesSeven/Scene/Entity.h"
 

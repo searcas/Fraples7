@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Fraples.h"
-#include "experiments/ParticleSystem.h"
+using namespace Fraples;
 
 class SandBox2D : public Fraples::Layer
 {
@@ -14,15 +14,17 @@ public:
 	void OnImGuiRender() override;
 	void OnEvent(Fraples::Event& e) override;
 public:
+	Entity _mSquareEntity;
+	Entity _mCameraEntity;
+	Entity _mSecondCameraEntity;
+	Fraples::shared<Fraples::Scene> _mActiveScene;
 	Fraples::OrthographicCameraController _mCameraCtrl;
 	//temp
 	std::shared_ptr<Fraples::Shader> _mFlatColorShader;
 	std::shared_ptr<Fraples::VertexArray> _mSquareVA;
-	std::shared_ptr<Fraples::Texture2D>_mRandomTexture;
 
 	std::shared_ptr<Fraples::Texture2D>_mCheckBoardTex;
-	std::shared_ptr<Fraples::Texture2D>_mSpriteSheet;
-	std::shared_ptr<Fraples::Texture2D>_mGreenSprites;
+
 
 	
 	std::shared_ptr<Fraples::SubTexture2D>_mRPGBarrel;
@@ -36,4 +38,5 @@ public:
 	std::unordered_map<char, std::shared_ptr<Fraples::SubTexture2D>>_sTextureMap;
 	bool _mViewportFocused = false;
 	bool _mViewportHovered = false;
+	bool _mPrimaryCamera = true;
 };

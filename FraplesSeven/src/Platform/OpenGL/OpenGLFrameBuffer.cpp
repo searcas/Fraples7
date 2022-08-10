@@ -4,6 +4,7 @@
 
 namespace Fraples
 {
+	static constexpr int _sMaxFrameBufferSize = 8932;
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpec& spec) :
 		_mFrameBufferSpec(spec)
 	{
@@ -26,6 +27,11 @@ namespace Fraples
 	}
 	void OpenGLFrameBuffer::Resize(uint32_t width, uint32_t height)
 	{
+		if (width == 0 || height == 0 || width > _sMaxFrameBufferSize || height > _sMaxFrameBufferSize)
+		{
+			FPL_CORE_WARN("Attempted to resize to width: {0} height: {1}  ", width, height);
+			return;
+		}
 		_mFrameBufferSpec.width = width;
 		_mFrameBufferSpec.height = height;
 		Validate();

@@ -1,16 +1,13 @@
 #include "SandBox2D.h"
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
-#include "experiments/ParticleSystem.h"
-#include "experiments/Random.h"
 #include "FraplesSeven/Core/Log.h"
-								
+		
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
 {
 }  
 
-using namespace Fraples::Experiment;
 void SandBox2D::OnAttach()
 {
 	FPL_PROFILE_FUNCTION();
@@ -19,6 +16,19 @@ void SandBox2D::OnAttach()
 	spec.width = 1280;
 	spec.height = 720;
 	_mFrameBuffer = Fraples::FrameBuffer::Create(spec);
+
+
+	_mActiveScene = std::make_shared<Fraples::Scene>();
+	auto square = _mActiveScene->CreateEntity("Square");
+	square.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.5f, 0.5f, 0.5f));
+	_mSquareEntity = square;
+
+	_mCameraEntity = _mActiveScene->CreateEntity("Camera Entity");
+	_mCameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f) );
+
+	_mSecondCameraEntity = _mActiveScene->CreateEntity("Clip-Space Canera");
+	auto& cc = _mSecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+	cc.mainCamera = false;
 }
 
 void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
@@ -30,37 +40,12 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 	//Renderer
 	Fraples::Renderer2D::ResetStats();
 	{
-		FPL_PROFILE_SCOPE("Renderer Preparation ");
 		_mFrameBuffer->Bind();
 		Fraples::RenderCommands::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Fraples::RenderCommands::Clear();
-	}
-	{
-		FPL_PROFILE_SCOPE("Renderer Draw");
-		static float rotation = 0.0f;
-		rotation += ts * 50.0f;
-	
-		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-		Fraples::Renderer2D::DrawQuad({ 0.0f, 0.0f,  -0.1f }, { 20.0f, 20.0f, }, _mCheckBoardTex, 10.0f);
-		Fraples::Renderer2D::RenderRotatedQuad({ 2.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(- 45.0f), {0.8f, 0.2f, 0.3f, 1.0f});
-		Fraples::Renderer2D::DrawQuad({ -1.0f,  2.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Fraples::Renderer2D::DrawQuad({ 4.5f, -0.5f }, { 0.5f, 0.75f }, _mSquareColor);
-
-		Fraples::Renderer2D::RenderRotatedQuad({ -2.0f, -2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), _mCheckBoardTex, 20.0f);
-		Fraples::Renderer2D::EndScene();
-
-		Fraples::Renderer2D::BeginScene(_mCameraCtrl.GetCamera());
-		for (float i = -5.0f; i < 5.0f; i += 0.5f)
-		{
-			for (float x = -5.0f; x < 5.0f; x += 0.5f)
-			{
-				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (i + 5.0f) / 10.0f, 0.7f };
-				Fraples::Renderer2D::DrawQuad({ x, i }, { 0.1f, 0.1f }, color);
-			}
-		}
- 		Fraples::Renderer2D::EndScene();
+		_mActiveScene->OnUpdate(ts);
 		_mFrameBuffer->Unbind();
-
+		
 	}
 }
 
@@ -139,12 +124,27 @@ void SandBox2D::OnImGuiRender()
 
 	ImGui::Begin("Settings");
 	auto stats = Fraples::Renderer2D::GetStats();
-	ImGui::Text("Renderer2D Stats: ");
+	ImGui::Text("Renderer2D Stats: "); 
 	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 	ImGui::Text("Quads: %d", stats.QuadCounts);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(_mSquareColor));
+
+
+	ImGui::Separator();
+	auto tag = _mSquareEntity.GetComponent<TagComponent>().tag;
+	ImGui::Text("%s", tag.c_str());
+	auto& refColor = _mSquareEntity.GetComponent<SpriteRendererComponent>().color;
+	ImGui::ColorEdit4("Square Color", glm::value_ptr(refColor));
+	ImGui::Separator();
+
+	ImGui::DragFloat3("Camera Transform", glm::value_ptr(_mCameraEntity.GetComponent<TransformComponent>()._mTransform[3]));
+	if (ImGui::Checkbox("Camera A", &_mPrimaryCamera))
+	{
+		_mCameraEntity.GetComponent<CameraComponent>().mainCamera = _mPrimaryCamera;
+		_mSecondCameraEntity.GetComponent<CameraComponent>().mainCamera = !_mPrimaryCamera;
+	}
+
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 	ImGui::Begin("Viewport");
@@ -173,4 +173,3 @@ void SandBox2D::OnEvent(Fraples::Event& e)
 {
 	_mCameraCtrl.OnEvent(e);
 }
-;
