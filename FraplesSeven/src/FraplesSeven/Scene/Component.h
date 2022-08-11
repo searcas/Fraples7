@@ -1,9 +1,11 @@
 #pragma once
 #include "glm/glm.hpp"
-#include "FraplesSeven/Renderer/Camera.h"
+#include "SceneCamera.h"
+
 
 namespace Fraples
 {
+	class SceneCamera;
 	struct TagComponent
 	{
 		std::string tag;
@@ -33,13 +35,11 @@ namespace Fraples
 
 	struct CameraComponent
 	{
-		Camera camera; 
+		SceneCamera camera; 
 		bool mainCamera = true;
-
+		bool fixedAspectRatio = false;
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection) : camera(projection) {}
-		operator const Camera& () { return camera; }
-		operator Camera& () { return camera; }
+
 	};
 }

@@ -23,6 +23,7 @@ IncludeDir["Glad"] = "FraplesSeven/vendor/Glad/include"
 IncludeDir["ImGui"] = "FraplesSeven/vendor/imgui"
 IncludeDir["glm"] = "FraplesSeven/vendor/glm"
 IncludeDir["stb_image"] = "FraplesSeven/vendor/stb_image"
+IncludeDir["entt"] = "FraplesSeven/vendor/entt/single_include/entt"
 
 group "Dependencies"
 	include "FraplesSeven/vendor/GLFW"
@@ -68,7 +69,9 @@ project "FraplesSeven"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
+
 	}
 
 	links 
@@ -122,7 +125,8 @@ project "Sandbox"
 		"FraplesSeven/vendor/spdlog/include",
 		"FraplesSeven/src",
 		"FraplesSeven/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

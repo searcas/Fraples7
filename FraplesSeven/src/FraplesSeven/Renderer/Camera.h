@@ -6,12 +6,13 @@ namespace Fraples
 	class Camera
 	{
 	public:
+		Camera() = default;
 		Camera(const glm::mat4& projection) :_mProjection(projection)
 		{ }
-		~Camera() = default;
+		virtual ~Camera() = default;
 		const glm::mat4& GetProjection() { return _mProjection; }
-	private:
-		glm::mat4 _mProjection;
+	protected:
+		glm::mat4 _mProjection{1.0f};
 	};
 
 }

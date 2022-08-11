@@ -3,20 +3,20 @@
 #include "Component.h"
 #include "../Renderer/Renderer2D.h"
 #include "Entity.h"
-namespace Fraples
+namespace Fraples 
 {
 	Scene::~Scene()
 	{
 	}
 	void Scene::OnUpdate(TimeSteps ts)
 	{
-		Camera* mainCam = nullptr;
+		SceneCamera* mainCam = nullptr;
 		glm::mat4* camTransform = nullptr;
 		{
-			auto group = _mRegistry.view<TransformComponent, CameraComponent>();
-			for (auto& entity : group)
+			auto view = _mRegistry.view<TransformComponent, CameraComponent>();
+			for (auto& entity : view)
 			{
-				auto& [transfrom, camera] = group.get< TransformComponent, CameraComponent>(entity);
+				auto& [transfrom, camera] = view.get< TransformComponent, CameraComponent>(entity);
 				if (camera.mainCamera)
 				{
 					camTransform = &transfrom._mTransform;
@@ -36,6 +36,22 @@ namespace Fraples
 			}
 			Renderer2D::EndScene();
 		}
+	}
+	void Scene::OnViewPortResize(uint32_t width, uint32_t height)
+	{
+		_mViewPortWidth = width;
+		_mViewPortHeight = height;
+
+		auto view = _mRegistry.view<CameraComponent>();
+		for (auto& entity : view)
+		{
+			auto& camComp = view.get<CameraComponent>(entity);
+			if (!camComp.fixedAspectRatio)
+			{
+				camComp.camera.SetViewPortSize(width, height);
+			}
+		}
+
 	}
 	Entity Scene::CreateEntity(const std::string& name)
 	{

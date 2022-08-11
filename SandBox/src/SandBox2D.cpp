@@ -19,15 +19,15 @@ void SandBox2D::OnAttach()
 
 
 	_mActiveScene = std::make_shared<Fraples::Scene>();
-	auto square = _mActiveScene->CreateEntity("Square");
+	auto& square = _mActiveScene->CreateEntity("Square");
 	square.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.5f, 0.5f, 0.5f));
 	_mSquareEntity = square;
 
 	_mCameraEntity = _mActiveScene->CreateEntity("Camera Entity");
-	_mCameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f) );
+	_mCameraEntity.AddComponent<CameraComponent>();
 
 	_mSecondCameraEntity = _mActiveScene->CreateEntity("Clip-Space Canera");
-	auto& cc = _mSecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+	auto& cc = _mSecondCameraEntity.AddComponent<CameraComponent>();
 	cc.mainCamera = false;
 }
 
@@ -35,6 +35,14 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 {
 	//update
 	FPL_PROFILE_FUNCTION();
+	FrameBufferSpec spec = _mFrameBuffer->GetFrameBufferSpec();
+	
+	if ( _mViewPortSize.x > 0.0f && _mViewPortSize.y > 0.0f && spec.width != _mViewPortSize.x || spec.height != _mViewPortSize.y)
+	{
+		_mFrameBuffer->Resize((uint32_t)_mViewPortSize.x, (uint32_t)_mViewPortSize.y );
+		_mCameraCtrl.OnResize(_mViewPortSize.x, _mViewPortSize.y);
+		_mActiveScene->OnViewPortResize(_mViewPortSize.x, _mViewPortSize.y);
+	}
 	if(_mViewportFocused)
 		_mCameraCtrl.OnUpdate(ts);
 	//Renderer
@@ -124,7 +132,7 @@ void SandBox2D::OnImGuiRender()
 
 	ImGui::Begin("Settings");
 	auto stats = Fraples::Renderer2D::GetStats();
-	ImGui::Text("Renderer2D Stats: "); 
+	ImGui::Text("Renderer2D Stats: ");
 	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 	ImGui::Text("Quads: %d", stats.QuadCounts);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
@@ -144,22 +152,23 @@ void SandBox2D::OnImGuiRender()
 		_mCameraEntity.GetComponent<CameraComponent>().mainCamera = _mPrimaryCamera;
 		_mSecondCameraEntity.GetComponent<CameraComponent>().mainCamera = !_mPrimaryCamera;
 	}
-
+	{
+		auto& cam = _mSecondCameraEntity.GetComponent<CameraComponent>().camera;
+		float orthoSize = cam.GetOrthographicSize();
+		if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+		{
+			cam.SetOrthographicSize(orthoSize);
+		}
+	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 	ImGui::Begin("Viewport");
 	_mViewportFocused = ImGui::IsWindowFocused();
-	_mViewportHovered= ImGui::IsWindowHovered();
-	Fraples::Application::GetApp().GetImGuiLayer()->SetBlockEvents(!_mViewportFocused || !_mViewportHovered );
+	_mViewportHovered = ImGui::IsWindowHovered();
+	Fraples::Application::GetApp().GetImGuiLayer()->SetBlockEvents(!_mViewportFocused || !_mViewportHovered);
 
 	ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
-	if (_mViewPortSize != *((glm::vec2*)&viewPortSize))
-	{
-		_mFrameBuffer->Resize(viewPortSize.x, viewPortSize.y);
-		_mViewPortSize = { viewPortSize.x, viewPortSize.y };
-		
-		_mCameraCtrl.OnResize(viewPortSize.x, viewPortSize.y);
-	}
+	_mViewPortSize = { viewPortSize.x, viewPortSize.y };
 	uint32_t textureId = _mFrameBuffer->GetColorAttachmentRendererID();
 	ImGui::Image((void*)textureId, ImVec2{ _mViewPortSize.x, _mViewPortSize.y });
 	ImGui::End();
