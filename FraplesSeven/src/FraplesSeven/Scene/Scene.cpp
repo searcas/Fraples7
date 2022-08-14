@@ -10,16 +10,30 @@ namespace Fraples
 	}
 	void Scene::OnUpdate(TimeSteps ts)
 	{
+		//Update Script
+		{
+			_mRegistry.view<NativeScriptComponent>().each( [=](auto entity, auto& nativeScriptController) 
+			{
+					
+				if (!nativeScriptController.instance)
+				{
+					nativeScriptController.instance = nativeScriptController.InstantiateScript();
+					nativeScriptController.instance->_mEntity = { entity, this };
+					nativeScriptController.instance->OnCreate();
+				}
+				nativeScriptController.instance->OnUpdate(ts); 
+			});
+		}
 		SceneCamera* mainCam = nullptr;
-		glm::mat4* camTransform = nullptr;
+		glm::mat4 camTransform;
 		{
 			auto view = _mRegistry.view<TransformComponent, CameraComponent>();
 			for (auto& entity : view)
 			{
-				auto& [transfrom, camera] = view.get< TransformComponent, CameraComponent>(entity);
+				auto[transfrom, camera] = view.get< TransformComponent, CameraComponent>(entity);
 				if (camera.mainCamera)
 				{
-					camTransform = &transfrom._mTransform;
+					camTransform = transfrom.GetTransform();
 					mainCam = &camera.camera;
 					break;
 				}
@@ -27,12 +41,12 @@ namespace Fraples
 		}
 		if (mainCam)
 		{
-			Renderer2D::BeginScene(Camera{ mainCam->GetProjection() }, *camTransform);
+			Renderer2D::BeginScene( Camera(mainCam->GetProjection()) , camTransform );
 			auto group = _mRegistry.group<TransformComponent, SpriteRendererComponent>();
 			for (auto& entity : group)
 			{
-				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform, sprite.color);
+				auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
 			}
 			Renderer2D::EndScene();
 		}

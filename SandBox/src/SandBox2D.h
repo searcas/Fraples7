@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Fraples.h"
+#include "../Panels/SceneHierarchyPanel.h"
 using namespace Fraples;
 
 class SandBox2D : public Fraples::Layer
@@ -39,4 +40,6 @@ public:
 	bool _mViewportFocused = false;
 	bool _mViewportHovered = false;
 	bool _mPrimaryCamera = true;
+
+	SceneHierarchyPanel _mSceneHierarchyPanel;
 };

@@ -26,4 +26,5 @@
 #include "FraplesSeven/Scene/Component.h"
 #include "FraplesSeven/Scene/Scene.h"
 #include "FraplesSeven/Scene/Entity.h"
+#include "FraplesSeven/Scene/ScriptableEntity.h"
 

@@ -19,16 +19,63 @@ void SandBox2D::OnAttach()
 
 
 	_mActiveScene = std::make_shared<Fraples::Scene>();
-	auto& square = _mActiveScene->CreateEntity("Square");
-	square.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.5f, 0.5f, 0.5f));
-	_mSquareEntity = square;
+	auto& squareA = _mActiveScene->CreateEntity("SquareA");
+	squareA.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.5f, 0.5f, 0.5f));
+	auto& squareB = _mActiveScene->CreateEntity("SquareB");
+	squareB.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.0f, 1.0f, 0.5f));
+	
+	_mSquareEntity = squareA;
 
-	_mCameraEntity = _mActiveScene->CreateEntity("Camera Entity");
+	_mCameraEntity = _mActiveScene->CreateEntity("Camera A");
 	_mCameraEntity.AddComponent<CameraComponent>();
 
-	_mSecondCameraEntity = _mActiveScene->CreateEntity("Clip-Space Canera");
+	_mSecondCameraEntity = _mActiveScene->CreateEntity("Camera B");
 	auto& cc = _mSecondCameraEntity.AddComponent<CameraComponent>();
 	cc.mainCamera = false;
+
+
+	class CameraController : public ScriptableEntity
+	{
+	public:
+		void OnCreate()
+		{
+			auto& translation = GetComponent<TransformComponent>().Translation;
+			translation.x += rand() % 5;
+			FPL_CORE_INFO("Initial Call OnCreate");
+		}
+		void OnDestroy()
+		{
+			FPL_CORE_INFO("Destroyed");
+		}
+		void OnUpdate(TimeSteps ts)
+		{
+			auto& translation = GetComponent<TransformComponent>().Translation;
+			float speed = 5.0f;
+			if (Input::IsKeyPressed('A'))
+			{
+				translation.x -= speed * ts;
+			}
+			else if (Input::IsKeyPressed('D'))
+			{
+				translation.x += speed * ts;
+
+			}
+			if (Input::IsKeyPressed('W'))
+			{
+				translation.y -= speed * ts;
+			}
+			else if (Input::IsKeyPressed('S'))
+			{
+				translation.y += speed * ts;
+
+			}
+		}
+	private:
+	};
+	_mSecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+	_mCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+	_mSceneHierarchyPanel.SetScene(_mActiveScene);
+
 }
 
 void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
@@ -129,8 +176,8 @@ void SandBox2D::OnImGuiRender()
 		ImGui::EndMenuBar();
 	}
 	FPL_PROFILE_FUNCTION();
-
-	ImGui::Begin("Settings");
+	_mSceneHierarchyPanel.OnImGuiRender();
+	ImGui::Begin("Stats");
 	auto stats = Fraples::Renderer2D::GetStats();
 	ImGui::Text("Renderer2D Stats: ");
 	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
@@ -138,28 +185,6 @@ void SandBox2D::OnImGuiRender()
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-
-	ImGui::Separator();
-	auto tag = _mSquareEntity.GetComponent<TagComponent>().tag;
-	ImGui::Text("%s", tag.c_str());
-	auto& refColor = _mSquareEntity.GetComponent<SpriteRendererComponent>().color;
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(refColor));
-	ImGui::Separator();
-
-	ImGui::DragFloat3("Camera Transform", glm::value_ptr(_mCameraEntity.GetComponent<TransformComponent>()._mTransform[3]));
-	if (ImGui::Checkbox("Camera A", &_mPrimaryCamera))
-	{
-		_mCameraEntity.GetComponent<CameraComponent>().mainCamera = _mPrimaryCamera;
-		_mSecondCameraEntity.GetComponent<CameraComponent>().mainCamera = !_mPrimaryCamera;
-	}
-	{
-		auto& cam = _mSecondCameraEntity.GetComponent<CameraComponent>().camera;
-		float orthoSize = cam.GetOrthographicSize();
-		if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-		{
-			cam.SetOrthographicSize(orthoSize);
-		}
-	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 	ImGui::Begin("Viewport");

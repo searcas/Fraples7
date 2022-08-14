@@ -17,5 +17,6 @@ namespace Fraples
 		entt::registry _mRegistry;  
 		uint32_t _mViewPortWidth{0};
 		uint32_t _mViewPortHeight{0};
+		friend class SceneHierarchyPanel;
 	};
 }
