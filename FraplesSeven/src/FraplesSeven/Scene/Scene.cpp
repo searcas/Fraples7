@@ -46,7 +46,7 @@ namespace Fraples
 			for (auto& entity : group)
 			{
 				auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+  				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
 			}
 			Renderer2D::EndScene();
 		}
@@ -67,6 +67,10 @@ namespace Fraples
 		}
 
 	}
+	void Scene::DestroyEntity(Entity entity)
+	{
+		_mRegistry.destroy(entity);
+	}
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity = { _mRegistry.create(), this };
@@ -76,5 +80,35 @@ namespace Fraples
 			tag.tag = "Entity";
 		else tag.tag = name;
 		return entity;
+	}
+	template <typename T>
+	void Scene::OnComponentAdded(Entity entity, T& comopent)
+	{
+		static_assert(false);
+	}
+	template<>
+	void Scene::OnComponentAdded<TransformComponent>(Entity entity,TransformComponent& comp)
+	{
+
+	}
+	template<>
+	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& comp)
+	{
+		comp.camera.SetViewPortSize(_mViewPortWidth, _mViewPortHeight);
+	}
+	template<>
+	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& comp)
+	{
+
+	}
+	template<>
+	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& comp)
+	{
+
+	}
+	template<>
+	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& comp)
+	{
+
 	}
 }

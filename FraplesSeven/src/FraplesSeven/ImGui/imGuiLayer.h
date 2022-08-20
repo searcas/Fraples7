@@ -18,6 +18,7 @@ namespace Fraples
 		void Begin();
 		void End();
 		void SetBlockEvents(bool set) { _mBlockEvents = set; }
+		void SetDarkThemeColors();
 	private:
 		float _mTime = 0.0f;
 		bool _mBlockEvents = true;

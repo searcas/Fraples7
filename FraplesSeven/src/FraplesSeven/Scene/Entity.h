@@ -19,7 +19,9 @@ namespace Fraples
 		T& AddComponent(Args&&...  args)
 		{
 			FPL_ASSERT("Component already exist.", !HasComponent<T>());
-			return _mScene->_mRegistry.emplace<T>(_mEntityHandle, std::forward<Args>(args)...);
+			T& component = _mScene->_mRegistry.emplace<T>(_mEntityHandle, std::forward<Args>(args)...);
+			_mScene->OnComponentAdded<T>(*this, component);
+			return component;
 		}
 		template<typename T>
 		T& GetComponent()
@@ -34,6 +36,7 @@ namespace Fraples
 			_mScene->_mRegistry.remove<T>(_mEntityHandle);
 		}
 		
+		operator entt::entity () const { return _mEntityHandle; }
 		operator bool() const { return _mEntityHandle != entt::null; }
 		operator uint32_t()const { return (uint32_t)_mEntityHandle; }
 		bool operator ==(const Entity& rhs)const { return _mEntityHandle == rhs._mEntityHandle && _mScene == rhs._mScene; }

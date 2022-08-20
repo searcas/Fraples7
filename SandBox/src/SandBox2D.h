@@ -25,8 +25,6 @@ public:
 	std::shared_ptr<Fraples::VertexArray> _mSquareVA;
 
 	std::shared_ptr<Fraples::Texture2D>_mCheckBoardTex;
-
-
 	
 	std::shared_ptr<Fraples::SubTexture2D>_mRPGBarrel;
 

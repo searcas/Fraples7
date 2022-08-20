@@ -13,7 +13,7 @@ namespace Fraples
 		unsigned int _mHeight;
 
 		WindowProperties(const std::string& title = "FrapleSeven Engine", 
-			unsigned int width = 1280, unsigned int height = 720) 
+			unsigned int width = 1600, unsigned int height = 900) 
 			: _mTitle(title), _mWidth(width), _mHeight(height) { }
 	};
 	class Window
