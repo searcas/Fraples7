@@ -24,12 +24,13 @@ IncludeDir["ImGui"] = "FraplesSeven/vendor/imgui"
 IncludeDir["glm"] = "FraplesSeven/vendor/glm"
 IncludeDir["stb_image"] = "FraplesSeven/vendor/stb_image"
 IncludeDir["entt"] = "FraplesSeven/vendor/entt/single_include/entt"
+IncludeDir["yaml_cpp"] = "FraplesSeven/vendor/yaml-cpp/include" 
 
 group "Dependencies"
 	include "FraplesSeven/vendor/GLFW"
 	include "FraplesSeven/vendor/Glad"
 	include "FraplesSeven/vendor/imgui"
-
+	include "FraplesSeven/vendor/yaml-cpp"
 group ""
 
 project "FraplesSeven"
@@ -38,7 +39,7 @@ project "FraplesSeven"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
-
+	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -58,7 +59,8 @@ project "FraplesSeven"
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"YAML_CPP_STATIC_DEFINE"
 	}
 
 	includedirs
@@ -70,8 +72,8 @@ project "FraplesSeven"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
-
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links 
@@ -79,15 +81,13 @@ project "FraplesSeven"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 
 	filter "system:windows"
 		systemversion "latest"
 
-		defines
-		{
-		}
 
 	filter "configurations:Debug"
 		defines "FPL_DEBUG"
@@ -117,7 +117,9 @@ project "Sandbox"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/Panels/**.h",
+		"%{prj.name}/Panels/**.cpp"
 	}
 
 	includedirs
@@ -136,6 +138,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
+
 		
 	filter "configurations:Debug"
 		defines "FPL_DEBUG"

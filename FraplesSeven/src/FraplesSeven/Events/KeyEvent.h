@@ -22,6 +22,7 @@ namespace Fraples
 	public:
 		KeyPressedEvent(int keycode, int keyRepeat) : KeyEvent(keycode), _mKeyRepeat(keyRepeat) { }
 
+		int GetKeyRepeat() { return _mKeyRepeat; }
 		std::string ToString() const override
 		{
 			std::stringstream ss;
@@ -62,6 +63,5 @@ namespace Fraples
 		EVENT_CLASS_TYPE(KeyTyped)
 	private:
 		int _mKeyCode;
-
 	};
 }

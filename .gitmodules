@@ -8,3 +8,6 @@
 [submodule "FraplesSeven/Vendor/glm"]
 	path = FraplesSeven/Vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "yaml-cpp"]
+	path = yaml-cpp
+	url = https://github.com/searcas/yaml-cpp

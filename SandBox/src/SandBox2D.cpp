@@ -2,6 +2,8 @@
 #include "imGui/imgui.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "FraplesSeven/Core/Log.h"
+#include "FraplesSeven/Scene/SceneSerializer.h"
+#include "FraplesSeven/Utils/PlatformUtils.h"
 		
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
@@ -17,8 +19,8 @@ void SandBox2D::OnAttach()
 	spec.height = 720;
 	_mFrameBuffer = Fraples::FrameBuffer::Create(spec);
 
-
 	_mActiveScene = std::make_shared<Fraples::Scene>();
+#if 0
 	auto& squareA = _mActiveScene->CreateEntity("SquareA");
 	squareA.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.5f, 0.5f, 0.5f));
 	auto& squareB = _mActiveScene->CreateEntity("SquareB");
@@ -74,7 +76,9 @@ void SandBox2D::OnAttach()
 	};
 	_mSecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	_mCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 	_mSceneHierarchyPanel.SetScene(_mActiveScene);
+
 
 }
 
@@ -171,7 +175,25 @@ void SandBox2D::OnImGuiRender()
 			// Disabling fullscreen would allow the window to be moved to the front of other windows,
 			// which we can't undo at the moment without finer window depth/z control.
 			//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+			if (ImGui::MenuItem("New","CTRL + N"))
+			{
+				NewScene();
+			}
+			if (ImGui::MenuItem("Open", "CTRL + O"))
+			{
+				
+				OpenScene();
 
+			}
+			if (ImGui::MenuItem("Save", "CTRL + S"))
+			{
+				
+				SaveScene();
+			}
+			if (ImGui::MenuItem("Save as", "CTRL + SHIFT + S"))
+			{
+				SaveSceneAs();
+			}
 			if (ImGui::MenuItem("Exit"))
 				Fraples::Application().Close();
 			ImGui::EndMenu();
@@ -209,4 +231,93 @@ void SandBox2D::OnImGuiRender()
 void SandBox2D::OnEvent(Fraples::Event& e)
 {
 	_mCameraCtrl.OnEvent(e);
+	EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<KeyPressedEvent>(FPL_BIND_EVENT_FN(SandBox2D::OnKeyPressed));
+}
+
+void SandBox2D::SaveSceneAs()
+{
+	const std::string& path = FileDialogs::SaveFile("Fraples7 Scene (*.fpl)\0*.fpl;*.txt");
+	if (!path.empty())
+	{
+		SceneSerializer serializer(_mActiveScene);
+		serializer.Serialize(path);
+	}
+}
+
+void SandBox2D::SaveScene()
+{
+	if (_mSceneSaved.empty())
+	{
+		const std::string& path = FileDialogs::SaveFile("Fraples7 Scene (*.fpl)\0*.fpl;*.txt");
+		if (!path.empty())
+		{
+			SceneSerializer serializer(_mActiveScene);
+			serializer.Serialize(path);
+			_mSceneSaved = path;
+		}
+	}
+	else
+	{
+		SceneSerializer serializer(_mActiveScene);
+		serializer.Serialize(_mSceneSaved);
+	}
+}
+
+void SandBox2D::OpenScene()
+{
+	const std::string& path = FileDialogs::SaveFile("Fraples7 Scene (*.fpl)\0*.fpl");
+	if (!path.empty())
+	{
+		_mActiveScene = std::make_shared<Fraples::Scene>();
+		_mActiveScene->OnViewPortResize((uint32_t)_mViewPortSize.x, (uint32_t)_mViewPortSize.y);
+		_mSceneHierarchyPanel.SetScene(_mActiveScene);
+		SceneSerializer serializer(_mActiveScene);
+		serializer.Deserialize(path);
+		_mSceneSaved = path;
+	}
+}
+
+void SandBox2D::NewScene()
+{
+	_mActiveScene = std::make_shared<Fraples::Scene>();
+	_mActiveScene->OnViewPortResize((uint32_t)_mViewPortSize.x, (uint32_t)_mViewPortSize.y);
+	_mSceneHierarchyPanel.SetScene(_mActiveScene);
+}
+
+bool SandBox2D::OnKeyPressed(KeyPressedEvent& e)
+{
+	if (e.GetKeyRepeat() > 0)
+	{
+		return false;
+	}
+	bool control = Input::IsKeyPressed(KEY_LEFT_CONTROL) || Input::IsKeyPressed(KEY_RIGHT_CONTROL);
+	bool shift = Input::IsKeyPressed(KEY_LEFT_SHIFT) || Input::IsKeyPressed(KEY_RIGHT_SHIFT);
+
+	switch (e.GetKeyCode())
+	{
+	case KEY_S:
+		if (control && shift)
+		{
+			SaveSceneAs();
+		}
+		if (control && !shift)
+		{
+			SaveScene();
+		}
+		break;
+	case KEY_N:
+		if (control)
+		{
+			NewScene();
+		}
+		break;
+	case KEY_O:
+		if (control)
+		{
+			OpenScene();
+		}
+		break;
+	}
+	return false;
 }

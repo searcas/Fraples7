@@ -19,23 +19,23 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		//FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts, ts.GetMilliSeconds());
-		if (Input::IsKeyPressed(FPL_KEY_A))
+		if (Input::IsKeyPressed(KEY_A))
 			_mCameraPosition.x -= _mCameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(FPL_KEY_D))
+		else if (Input::IsKeyPressed(KEY_D))
 			_mCameraPosition.x += _mCameraTranslationSpeed * ts;
 	
-		if (Input::IsKeyPressed(FPL_KEY_W))
+		if (Input::IsKeyPressed(KEY_W))
 			_mCameraPosition.y += _mCameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(FPL_KEY_S))
+		else if (Input::IsKeyPressed(KEY_S))
 			_mCameraPosition.y -= _mCameraTranslationSpeed * ts;
 	
 	
 	
 		if (_mRotation)
 		{
-			if (Input::IsKeyPressed(FPL_KEY_R))
+			if (Input::IsKeyPressed(KEY_R))
 				_mCameraRotation += _mCameraRotationSpeed * ts;
-			else if (Input::IsKeyPressed(FPL_KEY_Q))
+			else if (Input::IsKeyPressed(KEY_Q))
 				_mCameraRotation -= _mCameraRotationSpeed * ts;
 			_mOrthoCam.SetRotation(_mCameraRotation);
 		}

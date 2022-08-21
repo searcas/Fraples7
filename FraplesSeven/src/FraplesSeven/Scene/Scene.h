@@ -7,6 +7,7 @@ namespace Fraples
 	class Scene
 	{
 		friend class Entity;
+		friend class SceneSerializer;
 	public:
 		Scene() = default;
 		~Scene();
@@ -18,8 +19,8 @@ namespace Fraples
 		void OnComponentAdded(Entity entity, T& comopent);
 	private:
 		entt::registry _mRegistry;  
-		uint32_t _mViewPortWidth{0};
-		uint32_t _mViewPortHeight{0};
+		uint32_t _mViewPortWidth = 0;
+		uint32_t _mViewPortHeight = 0;
 		friend class SceneHierarchyPanel;
 	};
 }

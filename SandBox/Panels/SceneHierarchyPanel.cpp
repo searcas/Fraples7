@@ -13,6 +13,7 @@ namespace Fraples
 	void SceneHierarchyPanel::SetScene(const std::shared_ptr<Scene>& scene)
 	{
 		_mScene = scene;
+		_mSceneSelection = {};
 	}
 	void SceneHierarchyPanel::OnImGuiRender()
 	{

@@ -14,7 +14,13 @@ public:
 	void OnUpdate(Fraples::TimeSteps ts) override;
 	void OnImGuiRender() override;
 	void OnEvent(Fraples::Event& e) override;
-public:
+	void SaveSceneAs();
+	void SaveScene();
+	void OpenScene();
+	void NewScene();
+private:
+	bool OnKeyPressed(KeyPressedEvent& e);
+private:
 	Entity _mSquareEntity;
 	Entity _mCameraEntity;
 	Entity _mSecondCameraEntity;
@@ -38,6 +44,8 @@ public:
 	bool _mViewportFocused = false;
 	bool _mViewportHovered = false;
 	bool _mPrimaryCamera = true;
+
+	std::string _mSceneSaved = "";
 
 	SceneHierarchyPanel _mSceneHierarchyPanel;
 };
