@@ -4,7 +4,8 @@
 #include "FraplesSeven/Core/Log.h"
 #include "FraplesSeven/Scene/SceneSerializer.h"
 #include "FraplesSeven/Utils/PlatformUtils.h"
-		
+#include "ImGuizmo/ImGuizmo.h"
+#include "FraplesSeven/Math/Math.h"
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
 {
@@ -18,8 +19,8 @@ void SandBox2D::OnAttach()
 	spec.width = 1280;
 	spec.height = 720;
 	_mFrameBuffer = Fraples::FrameBuffer::Create(spec);
-
 	_mActiveScene = std::make_shared<Fraples::Scene>();
+	_mEngineCamera = EngineCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 #if 0
 	auto& squareA = _mActiveScene->CreateEntity("SquareA");
 	squareA.AddComponent<Fraples::SpriteRendererComponent>(glm::vec4(1.0f, 0.5f, 0.5f, 0.5f));
@@ -60,7 +61,6 @@ void SandBox2D::OnAttach()
 			else if (Input::IsKeyPressed('D'))
 			{
 				translation.x += speed * ts;
-
 			}
 			if (Input::IsKeyPressed('W'))
 			{
@@ -88,21 +88,27 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 	FPL_PROFILE_FUNCTION();
 	FrameBufferSpec spec = _mFrameBuffer->GetFrameBufferSpec();
 	
-	if ( _mViewPortSize.x > 0.0f && _mViewPortSize.y > 0.0f && spec.width != _mViewPortSize.x || spec.height != _mViewPortSize.y)
+	if ( _mViewPortSize.x > 0.0f &&  _mViewPortSize.y > 0.0f &&  (spec.width != _mViewPortSize.x || 
+		spec.height != _mViewPortSize.y))
 	{
 		_mFrameBuffer->Resize((uint32_t)_mViewPortSize.x, (uint32_t)_mViewPortSize.y );
 		_mCameraCtrl.OnResize(_mViewPortSize.x, _mViewPortSize.y);
+		_mEngineCamera.SetViewportSize(_mViewPortSize.x, _mViewPortSize.y);
 		_mActiveScene->OnViewPortResize(_mViewPortSize.x, _mViewPortSize.y);
 	}
-	if(_mViewportFocused)
+	if (_mViewportFocused)
+	{
 		_mCameraCtrl.OnUpdate(ts);
+	}
+	_mEngineCamera.OnUpdate(ts);
+
 	//Renderer
 	Fraples::Renderer2D::ResetStats();
 	{
 		_mFrameBuffer->Bind();
-		Fraples::RenderCommands::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		Fraples::RenderCommands::SetClearColor({ 0.081f, 0.082f, 0.082f, 1.0f });
 		Fraples::RenderCommands::Clear();
-		_mActiveScene->OnUpdate(ts);
+		_mActiveScene->OnUpdateEngine(ts, _mEngineCamera);
 		_mFrameBuffer->Unbind();
 		
 	}
@@ -151,7 +157,7 @@ void SandBox2D::OnImGuiRender()
 	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
+	ImGui::Begin("DockSpace", &dockspaceOpen, window_flags);
 	ImGui::PopStyleVar();
 
 	if (opt_fullscreen)
@@ -181,13 +187,10 @@ void SandBox2D::OnImGuiRender()
 			}
 			if (ImGui::MenuItem("Open", "CTRL + O"))
 			{
-				
 				OpenScene();
-
 			}
 			if (ImGui::MenuItem("Save", "CTRL + S"))
 			{
-				
 				SaveScene();
 			}
 			if (ImGui::MenuItem("Save as", "CTRL + SHIFT + S"))
@@ -200,7 +203,6 @@ void SandBox2D::OnImGuiRender()
 		}
 		ImGui::EndMenuBar();
 	}
-	FPL_PROFILE_FUNCTION();
 	_mSceneHierarchyPanel.OnImGuiRender();
 	ImGui::Begin("Stats");
 	auto stats = Fraples::Renderer2D::GetStats();
@@ -209,28 +211,109 @@ void SandBox2D::OnImGuiRender()
 	ImGui::Text("Quads: %d", stats.QuadCounts);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+	ImGui::Text("Position: {%d, %d, %d}", stats.Position.x, stats.Position.y, stats.Position.z);
 
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 	ImGui::Begin("Viewport");
 	_mViewportFocused = ImGui::IsWindowFocused();
 	_mViewportHovered = ImGui::IsWindowHovered();
-	Fraples::Application::GetApp().GetImGuiLayer()->SetBlockEvents(!_mViewportFocused || !_mViewportHovered);
+	Fraples::Application::GetApp().GetImGuiLayer()->SetBlockEvents(!_mViewportFocused && !_mViewportHovered);
 
 	ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
 	_mViewPortSize = { viewPortSize.x, viewPortSize.y };
 	uint32_t textureId = _mFrameBuffer->GetColorAttachmentRendererID();
 	ImGui::Image((void*)textureId, ImVec2{ _mViewPortSize.x, _mViewPortSize.y });
+
+	Entity selectedEntity = _mSceneHierarchyPanel.GetSelectedEntity();
+	if (selectedEntity && _mGuizmoType != -1)
+	{
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::SetDrawlist();
+
+		float windowWidth = (float)ImGui::GetWindowWidth();
+		float windowHeight = (float)ImGui::GetWindowHeight();
+
+		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+		//Camera && guizmo not working well
+		/*auto cameraEntity = _mActiveScene->GetMainCameraEntity();
+		const auto& camera = cameraEntity.GetComponent<CameraComponent>().camera;
+		const glm::mat4& cameraProjection = camera.GetProjection();
+		glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());*/
+		const glm::mat4& cameraProjection = _mEngineCamera.GetProjection();
+		glm::mat4 cameraView = _mEngineCamera.GetViewMatrix();
+
+		//Entity Transform
+		auto& tc = selectedEntity.GetComponent<TransformComponent>();
+		glm::mat4 transform = tc.GetTransform();
+		//snapping
+		bool snap = Input::IsKeyPressed(Key::LeftControl);
+		float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+		if (_mGuizmoType == ImGuizmo::OPERATION::ROTATE)
+		{
+			snapValue = 45.0f;
+		}
+		float snapValues[] = { snapValue, snapValue, snapValue };
+		ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+			static_cast<ImGuizmo::OPERATION>(_mGuizmoType), ImGuizmo::LOCAL, glm::value_ptr(transform),nullptr, snap ? snapValues : nullptr );
+
+		if (ImGuizmo::IsUsing())
+		{
+			glm::vec3 translation, rotation, scale;
+			DecomposeTransform(transform, translation, rotation, scale);
+			
+			glm::vec3 deltalRotation = rotation - tc.Rotation;
+			tc.Translation = translation;
+			tc.Rotation += deltalRotation;
+			tc.Scale = scale;
+		}
+
+	}
+
+
 	ImGui::End();
 	ImGui::PopStyleVar();
 	ImGui::End();
-
 	ImGui::End();
 }
+//
 
+/*
+// Handle imguizmo
+			if (app->scn.selected_ != nullptr)
+			{
+				glm::mat4 mat;
+				auto& selected = *app->scn.selected_;
+
+				// Convert to degrees, imguizmo uses degrees
+				selected.angle = glm::degrees(selected.angle);
+
+				ImGuizmo::RecomposeMatrixFromComponents(glm::value_ptr(selected.origin), glm::value_ptr(selected.angle), glm::value_ptr(selected.scale),
+					glm::value_ptr(mat));
+
+				auto view = cam.view();
+				auto perspective = cam.perspective();
+
+				auto vp = perspective * view;
+
+				ImGuizmo::Manipulate(
+					glm::value_ptr(view), glm::value_ptr(perspective),
+					app->ui.get_ui_element<transform_mode>()->mode(),
+					ImGuizmo::WORLD, glm::value_ptr(mat));
+
+				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(mat), glm::value_ptr(selected.origin), glm::value_ptr(selected.angle), glm::value_ptr(selected.scale));
+
+				// Convert to radians, we use radians
+				selected.angle = glm::radians(selected.angle);
+			}
+
+*/
+//
 void SandBox2D::OnEvent(Fraples::Event& e)
 {
 	_mCameraCtrl.OnEvent(e);
+	_mEngineCamera.OnEvent(e);
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<KeyPressedEvent>(FPL_BIND_EVENT_FN(SandBox2D::OnKeyPressed));
 }
@@ -291,12 +374,12 @@ bool SandBox2D::OnKeyPressed(KeyPressedEvent& e)
 	{
 		return false;
 	}
-	bool control = Input::IsKeyPressed(KEY_LEFT_CONTROL) || Input::IsKeyPressed(KEY_RIGHT_CONTROL);
-	bool shift = Input::IsKeyPressed(KEY_LEFT_SHIFT) || Input::IsKeyPressed(KEY_RIGHT_SHIFT);
+	bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+	bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 
 	switch (e.GetKeyCode())
 	{
-	case KEY_S:
+	case Key::S:
 		if (control && shift)
 		{
 			SaveSceneAs();
@@ -306,17 +389,29 @@ bool SandBox2D::OnKeyPressed(KeyPressedEvent& e)
 			SaveScene();
 		}
 		break;
-	case KEY_N:
+	case Key::N:
 		if (control)
 		{
 			NewScene();
 		}
 		break;
-	case KEY_O:
+	case Key::O:
 		if (control)
 		{
 			OpenScene();
 		}
+		break;
+	case Key::Q:
+		_mGuizmoType = -1;
+		break;
+	case Key::W:
+		_mGuizmoType = ImGuizmo::OPERATION::TRANSLATE;
+		break;
+	case Key::E:
+		_mGuizmoType = ImGuizmo::OPERATION::SCALE;
+		break;
+	case Key::R:
+		_mGuizmoType = ImGuizmo::OPERATION::ROTATE;
 		break;
 	}
 	return false;

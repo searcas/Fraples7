@@ -25,6 +25,7 @@ IncludeDir["glm"] = "FraplesSeven/vendor/glm"
 IncludeDir["stb_image"] = "FraplesSeven/vendor/stb_image"
 IncludeDir["entt"] = "FraplesSeven/vendor/entt/single_include/entt"
 IncludeDir["yaml_cpp"] = "FraplesSeven/vendor/yaml-cpp/include" 
+IncludeDir["ImGuizmo"] = "FraplesSeven/vendor/ImGuizmo" 
 
 group "Dependencies"
 	include "FraplesSeven/vendor/GLFW"
@@ -39,6 +40,7 @@ project "FraplesSeven"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
+	characterset ("MBCS")
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -53,9 +55,10 @@ project "FraplesSeven"
 		"%{prj.name}/vendor/stb_image/**.h",
 		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/glm/glm/**.inl", 
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h"
 	}
-
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS",
@@ -73,7 +76,8 @@ project "FraplesSeven"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yaml_cpp}"
+		"%{IncludeDir.yaml_cpp}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links 
@@ -84,6 +88,9 @@ project "FraplesSeven"
 		"yaml-cpp",
 		"opengl32.lib"
 	}
+
+	filter "files:%{prj.name}/vendor/ImGuizmo/**.cpp"
+		flags{"NoPCH"}
 
 	filter "system:windows"
 		systemversion "latest"

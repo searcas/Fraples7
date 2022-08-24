@@ -3,13 +3,15 @@
 #include "Texture.h"
 #include "SubTexture2D.h"
 #include "Camera.h"
+#include "EngineCamera.h"
 namespace Fraples{
 	
 	class Renderer2D {
 public:
 	static void Init();
-	static void BeginScene(const Fraples::OrthographicCamera& orthoCam);
 	static void BeginScene(Camera& camera, const glm::mat4& transform);
+	static void BeginScene(const Fraples::EngineCamera& orthoCam);
+	static void BeginScene(const Fraples::OrthographicCamera& orthoCam);
 	static void EndScene();
 	static void Flush();
 
@@ -33,9 +35,10 @@ public:
 	{
 		uint32_t DrawCalls = 0;
 		uint32_t QuadCounts = 0;
-
+		glm::vec3 Position = { 0.0f, 0.0f, 0.0f };
 		uint32_t GetTotalVertexCount() { return QuadCounts * 4; };
 		uint32_t GetTotalIndexCount() { return QuadCounts * 6; };
+		glm::vec3 GetPosition() { return Position; }
 	};
 	static Statistics GetStats();
 	static void ResetStats();

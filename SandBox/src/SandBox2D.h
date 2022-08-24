@@ -2,6 +2,7 @@
 
 #include "Fraples.h"
 #include "../Panels/SceneHierarchyPanel.h"
+
 using namespace Fraples;
 
 class SandBox2D : public Fraples::Layer
@@ -47,5 +48,7 @@ private:
 
 	std::string _mSceneSaved = "";
 
+	EngineCamera _mEngineCamera;
 	SceneHierarchyPanel _mSceneHierarchyPanel;
+	int _mGuizmoType = -1;
 };

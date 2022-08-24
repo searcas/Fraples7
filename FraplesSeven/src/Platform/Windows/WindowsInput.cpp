@@ -6,14 +6,14 @@
 
 namespace Fraples
 {
-	bool Input::IsKeyPressed(int keyCoede)
+	bool Input::IsKeyPressed(unsigned int keyCoede)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keyCoede);
 
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
-	bool Input::IsMouseButtonPressed(int button)
+	bool Input::IsMouseButtonPressed(unsigned int button)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApp().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window,button);

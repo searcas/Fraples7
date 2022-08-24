@@ -1,8 +1,7 @@
 #include "FplPCH.h"
 #include "OrthographicCameraController.h"
 #include "FraplesSeven/Core/Input.h"
-#include "FraplesSeven/Core/KeyCode.h"
-#include "FraplesSeven/Core/MouseButtonCodes.h"
+#include "FraplesSeven/Core/InputKeys.h"
 #include "FraplesSeven/Core/Core.h"
 
 
@@ -19,23 +18,23 @@ namespace Fraples
 	{
 		FPL_PROFILE_FUNCTION();
 		//FPL_CLIENT_INFO("Delta Time:({0}s, {1}ms)", ts, ts.GetMilliSeconds());
-		if (Input::IsKeyPressed(KEY_A))
+		if (Input::IsKeyPressed(Key::A))
 			_mCameraPosition.x -= _mCameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(KEY_D))
+		else if (Input::IsKeyPressed(Key::D))
 			_mCameraPosition.x += _mCameraTranslationSpeed * ts;
 	
-		if (Input::IsKeyPressed(KEY_W))
+		if (Input::IsKeyPressed(Key::W))
 			_mCameraPosition.y += _mCameraTranslationSpeed * ts;
-		else if (Input::IsKeyPressed(KEY_S))
+		else if (Input::IsKeyPressed(Key::S))
 			_mCameraPosition.y -= _mCameraTranslationSpeed * ts;
 	
 	
 	
 		if (_mRotation)
 		{
-			if (Input::IsKeyPressed(KEY_R))
+			if (Input::IsKeyPressed(Key::R))
 				_mCameraRotation += _mCameraRotationSpeed * ts;
-			else if (Input::IsKeyPressed(KEY_Q))
+			else if (Input::IsKeyPressed(Key::Q))
 				_mCameraRotation -= _mCameraRotationSpeed * ts;
 			_mOrthoCam.SetRotation(_mCameraRotation);
 		}

@@ -8,7 +8,19 @@ namespace Fraples
 	Scene::~Scene()
 	{
 	}
-	void Scene::OnUpdate(TimeSteps ts)
+
+	void Scene::OnUpdateEngine(TimeSteps ts, EngineCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+		auto group = _mRegistry.group<TransformComponent, SpriteRendererComponent>();
+		for (auto& entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+		}
+		Renderer2D::EndScene();
+	}
+	void Scene::OnUpdateRuntime(TimeSteps ts)
 	{
 		//Update Script
 		{
@@ -80,6 +92,19 @@ namespace Fraples
 			tag.tag = "Entity";
 		else tag.tag = name;
 		return entity;
+	}
+	Entity Scene::GetMainCameraEntity()
+	{
+		auto view = _mRegistry.view<CameraComponent>();
+		for (auto& entity : view)
+		{
+			const auto& camera = view.get<CameraComponent>(entity);
+			if (camera.mainCamera)
+			{
+				return Entity{ entity, this };
+			}
+			return { };
+		}
 	}
 	template <typename T>
 	void Scene::OnComponentAdded(Entity entity, T& comopent)

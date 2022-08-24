@@ -133,6 +133,16 @@ namespace Fraples
 		_sData.QuadVertexBufferPtr = _sData.QuadVertexBufferBase;
 		_sData.TextureSlotIndex = 1;
 	}
+	void Renderer2D::BeginScene(const Fraples::EngineCamera& engineCam)
+	{
+		glm::mat4 viewProj = engineCam.GetViewProjection();
+		_sData.TextureShader->Bind();
+		_sData.TextureShader->SetUniformMat4("_uViewProjectionMatrix", viewProj);
+
+		_sData.QuadIndexCount = 0;
+		_sData.QuadVertexBufferPtr = _sData.QuadVertexBufferBase;
+		_sData.TextureSlotIndex = 1;
+	}
 	void Renderer2D::EndScene()
 	{
 		FPL_PROFILE_FUNCTION();
@@ -167,13 +177,14 @@ namespace Fraples
 	}
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		DrawQuad({ position.x,position.y, 0.0f }, size, color);
+		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		FPL_PROFILE_FUNCTION();
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f});
 		DrawQuad(transform, color);
 	}
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
@@ -187,6 +198,7 @@ namespace Fraples
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		_sData.stats.Position = position;
 		DrawQuad(transform, size, texture, tiling, tintColor);
 	}
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
@@ -201,7 +213,7 @@ namespace Fraples
 		{
 			FlushAndReset();
 		}
-
+	
 		for (size_t i = 0; i < quadVertexCount; i++)
 		{
 			_sData.QuadVertexBufferPtr->Position = transform * _sData.QuadVertexPositions[i];
@@ -211,6 +223,7 @@ namespace Fraples
 			_sData.QuadVertexBufferPtr->Tilling = tiling;
 			_sData.QuadVertexBufferPtr++;
 		}
+
 
 		_sData.QuadIndexCount += 6;
 
@@ -281,7 +294,7 @@ namespace Fraples
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
-			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f }) * 
+			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f,0.0f,1.0f}) *
 			glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });
 
 		for (size_t i = 0; i < quadVertexCount; i++)
@@ -294,6 +307,8 @@ namespace Fraples
 			_sData.QuadVertexBufferPtr++;
 		}
 
+
+		_sData.stats.Position = position;
 
 
 		_sData.QuadIndexCount += 6;
@@ -338,7 +353,7 @@ namespace Fraples
 			_sData.TextureSlotIndex++;
 		}
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
-			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f,1.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f,1.0f })
 				* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		for (size_t i = 0; i < quadVertexCount; i++)
@@ -351,7 +366,7 @@ namespace Fraples
 			_sData.QuadVertexBufferPtr++;
 		}
 
-
+		_sData.stats.Position = position;
 		
 		_sData.QuadIndexCount += 6;
 

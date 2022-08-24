@@ -49,6 +49,6 @@ namespace Fraples
 
 		float _mAspectRatio = 0.0f;
 
-		ProjectionType _mProjectionType = ProjectionType::Orthographic;
+		ProjectionType _mProjectionType = ProjectionType::Perspective;
 	};
 } 

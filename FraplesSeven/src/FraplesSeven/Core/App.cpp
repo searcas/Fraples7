@@ -85,7 +85,7 @@ namespace Fraples{
 
 				FPL_PROFILE_SCOPE("LayerStack OnImGuiRender");
 				for (Layer* layer : _mLayerStack)
-				layer->OnImGuiRender();
+					layer->OnImGuiRender();
 			}
 			_mImguiLayer->End();
 			//auto[x, y] = Input::GetMousePosition();

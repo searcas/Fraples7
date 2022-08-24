@@ -7,8 +7,7 @@
 #include "FraplesSeven/Core/Log.h"
 #include "FraplesSeven/ImGui/imGuiLayer.h"
 #include "FraplesSeven/Core/Input.h"
-#include "FraplesSeven/Core/MouseButtonCodes.h"
-#include "FraplesSeven/Core/KeyCode.h"	 
+#include "FraplesSeven/Core/InputKeys.h"	 
 #include "FraplesSeven/Core/TimeSteps.h"
 #include "glm/gtc/matrix_transform.hpp"
 //------------Renderer---------------//
@@ -23,8 +22,8 @@
 #include "FraplesSeven/Renderer/VertexArray.h"
 #include "FraplesSeven/Renderer/OrthographicCamera.h"
 #include "FraplesSeven/Renderer/OrthographicCameraController.h"
+#include "FraplesSeven/Renderer/EngineCamera.h"
 #include "FraplesSeven/Scene/Component.h"
 #include "FraplesSeven/Scene/Scene.h"
 #include "FraplesSeven/Scene/Entity.h"
 #include "FraplesSeven/Scene/ScriptableEntity.h"
-

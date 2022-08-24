@@ -10,7 +10,7 @@ namespace Fraples
 		Camera(const glm::mat4& projection) :_mProjection(projection)
 		{ }
 		virtual ~Camera() = default;
-		const glm::mat4& GetProjection() { return _mProjection; }
+		const glm::mat4& GetProjection() const  { return _mProjection; }
 	protected:
 		glm::mat4 _mProjection{1.0f};
 	};
