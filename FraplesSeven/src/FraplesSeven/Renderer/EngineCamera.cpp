@@ -22,23 +22,7 @@ namespace Fraples
 	
 		glm::quat orientation = GetOrientation();
 		_mViewMatrix = glm::translate(glm::mat4(1.0f), _mPosition) * glm::mat4(orientation);
-		if (Input::IsKeyPressed(Key::W))
-		{
-			_mViewMatrix[3].y += 30;
-		}
-		else if (Input::IsKeyPressed(Key::S))
-		{
-			_mViewMatrix[3].y -= 30;
-		}
-		if (Input::IsKeyPressed(Key::A))
-		{
-			_mViewMatrix[3].x -= 30;
-
-		}
-		else if (Input::IsKeyPressed(Key::D))
-		{
-			_mViewMatrix[3].x += 30;
-		}
+	
 		_mViewMatrix = glm::inverse(_mViewMatrix);
 	}
 	std::pair<float, float>EngineCamera::PanSpeed() const

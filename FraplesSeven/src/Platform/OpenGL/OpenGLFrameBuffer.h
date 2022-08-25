@@ -11,15 +11,19 @@ namespace Fraples
 		virtual void Bind() override;
 		virtual void Unbind() override; 
 		virtual const FrameBufferSpec& GetFrameBufferSpec() override { return _mFrameBufferSpec; }
-		virtual uint32_t GetColorAttachmentRendererID() const { return _mColorAttach; }
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const { 
+			FPL_CORE_ASSERT("Index should be less than ColorAttachmentSize", index < _mColorAttachments.size()); return _mColorAttachments[index]; }
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
 		void Validate();
 	private:
 		FrameBufferSpec _mFrameBufferSpec;
 		uint32_t _mRendererID = 0;
-		uint32_t _mColorAttach = 0;
-		uint32_t _mDepthAttach = 0;
+
+		std::vector<FrameBufferTextureSpecification>_mColorAttachmentSpecification;
+		FrameBufferTextureSpecification _mDepthAttachmentSpecification = FrameBufferTextureFormat::None;
+		std::vector<uint32_t>_mColorAttachments;
+		uint32_t _mDepthAttachment = 0;
 	};
 
 }
