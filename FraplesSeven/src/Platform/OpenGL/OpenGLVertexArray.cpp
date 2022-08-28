@@ -76,6 +76,16 @@ namespace Fraples
 			case ShaderDataType::Float2:
 			case ShaderDataType::Float3:
 			case ShaderDataType::Float4:
+			{
+				glEnableVertexAttribArray(_mVertexBufferIndex);
+				glVertexAttribPointer(_mVertexBufferIndex, element.GetComponentCount(), 
+					ShaderDataTypeToOpenGLBaseType(element.SDataType),
+					element.Normalized ? GL_TRUE : GL_FALSE, 
+					layout.GetStride(),
+					(const void*)element.Offset);
+				_mVertexBufferIndex++;
+				break;
+			}
 			case ShaderDataType::Int:
 			case ShaderDataType::Int2:
 			case ShaderDataType::Int3:
@@ -83,9 +93,8 @@ namespace Fraples
 			case ShaderDataType::Boolean:
 			{
 				glEnableVertexAttribArray(_mVertexBufferIndex);
-				glVertexAttribPointer(_mVertexBufferIndex, element.GetComponentCount(), 
+				glVertexAttribIPointer(_mVertexBufferIndex, element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.SDataType),
-					element.Normalized ? GL_TRUE : GL_FALSE, 
 					layout.GetStride(),
 					(const void*)element.Offset);
 				_mVertexBufferIndex++;

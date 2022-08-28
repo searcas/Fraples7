@@ -14,7 +14,8 @@ namespace Fraples
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const { 
 			FPL_CORE_ASSERT("Index should be less than ColorAttachmentSize", index < _mColorAttachments.size()); return _mColorAttachments[index]; }
 		virtual void Resize(uint32_t width, uint32_t height) override;
-
+		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
 		void Validate();
 	private:
 		FrameBufferSpec _mFrameBufferSpec;

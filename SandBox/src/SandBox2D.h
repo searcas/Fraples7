@@ -39,7 +39,7 @@ private:
 
 	glm::vec4 _mSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f};
 	glm::vec2 _mViewPortSize = {0, 0};
-
+	glm::vec2 _mViewPortBounds[2];
 	uint32_t m_MapWidth, m_MapHeight;
 	std::unordered_map<char, std::shared_ptr<Fraples::SubTexture2D>>_sTextureMap;
 	bool _mViewportFocused = false;
@@ -51,4 +51,5 @@ private:
 	EngineCamera _mEngineCamera;
 	SceneHierarchyPanel _mSceneHierarchyPanel;
 	int _mGuizmoType = -1;
+	Entity _mHoveredEntity;
 };

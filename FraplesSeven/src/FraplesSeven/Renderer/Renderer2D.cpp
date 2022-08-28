@@ -4,7 +4,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommands.h"
-
+#include "../Scene/Component.h"
 #include "glm/gtc/matrix_transform.hpp"
 
 
@@ -25,6 +25,8 @@ namespace Fraples
 
 		float TexIndex;
 		float Tilling;
+		
+		int EntityID; 
 	};
 	struct Renderer2DData
 	{
@@ -63,15 +65,17 @@ namespace Fraples
 
 		_sData.QuadVertexBuffer->SetLayout({
 
-			{ Fraples::ShaderDataType::Float3, "_aPosition"},
+			{ Fraples::ShaderDataType::Float3, "_aPosition"	},
 		
-			{ Fraples::ShaderDataType::Float4, "_aColor"},
+			{ Fraples::ShaderDataType::Float4, "_aColor"	},
 
-			{ Fraples::ShaderDataType::Float2, "_aTexCoord"},
+			{ Fraples::ShaderDataType::Float2, "_aTexCoord"	},
 
-			{ Fraples::ShaderDataType::Float, "_aTexIndex"},
+			{ Fraples::ShaderDataType::Float,  "_aTexIndex"	},
 		
-			{ Fraples::ShaderDataType::Float, "_aTiling"}
+			{ Fraples::ShaderDataType::Float,  "_aTiling"	},
+
+			{ Fraples::ShaderDataType::Int,	   "_aEntityID"	}
 
 		});
 		_sData.QuadVertexArray->AddVertexBuffer(_sData.QuadVertexBuffer);
@@ -199,9 +203,9 @@ namespace Fraples
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		_sData.stats.Position = position;
-		DrawQuad(transform, size, texture, tiling, tintColor);
+		DrawQuad(transform,  texture, tiling, tintColor);
 	}
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
 		FPL_PROFILE_FUNCTION();
 
@@ -221,6 +225,7 @@ namespace Fraples
 			_sData.QuadVertexBufferPtr->TexCoord = coords[i];
 			_sData.QuadVertexBufferPtr->TexIndex = texIndex;
 			_sData.QuadVertexBufferPtr->Tilling = tiling;
+			_sData.QuadVertexBufferPtr->EntityID = entityID;
 			_sData.QuadVertexBufferPtr++;
 		}
 
@@ -229,7 +234,7 @@ namespace Fraples
 
 		_sData.stats.QuadCounts++;
 	}
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, float tiling, const glm::vec4& tintColor, int entityID)
 	{
 		FPL_PROFILE_FUNCTION();
 
@@ -268,6 +273,7 @@ namespace Fraples
 			_sData.QuadVertexBufferPtr->TexCoord = coords[i];
 			_sData.QuadVertexBufferPtr->TexIndex = textureIndex;
 			_sData.QuadVertexBufferPtr->Tilling = tiling;
+			_sData.QuadVertexBufferPtr->EntityID = entityID;
 			_sData.QuadVertexBufferPtr++;
 		}
 
@@ -371,6 +377,11 @@ namespace Fraples
 		_sData.QuadIndexCount += 6;
 
 		_sData.stats.QuadCounts++;
+	}
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& sprite, int entityID)
+	{
+		DrawQuad(transform, sprite.color, entityID);
 	}
 	
 	Renderer2D::Statistics Renderer2D::GetStats()

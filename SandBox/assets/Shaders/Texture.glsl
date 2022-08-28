@@ -6,6 +6,7 @@
 	layout(location = 2) in vec2 _aTexCoord;
 	layout(location = 3) in float _aTexIndex;
 	layout(location = 4) in float _aTiling;
+	layout(location = 5) in int _aEntityID ;
 	
 	uniform mat4 _uViewProjectionMatrix;			
 
@@ -13,6 +14,7 @@
 	out vec4 _vColor;
 	out float _vTexIndex;
 	out float _vTiling;
+	out flat int _vEntityID;
 
 	void main()
 	{
@@ -20,6 +22,7 @@
 		_vTexCoord = _aTexCoord;
 		_vTexIndex = _aTexIndex;
 		_vTiling = _aTiling;
+		_vEntityID = _aEntityID; 
 		gl_Position = _uViewProjectionMatrix * vec4(_aPosition, 1.0);
 	}
 
@@ -27,11 +30,13 @@
 #version 330 core
 
 	layout(location = 0) out vec4 color;
+	layout(location = 1) out int redInt;
 	
 	in vec4 _vColor;
 	in vec2 _vTexCoord;
 	in float _vTexIndex;
 	in float _vTiling;
+	in flat int _vEntityID;
 	
 	uniform sampler2D _uTextures[32];
 
@@ -76,4 +81,5 @@
 			case 31: texColor *= texture(_uTextures[31], _vTexCoord * _vTiling); break;
 		}
 		color = texColor;
+		redInt = _vEntityID;
 	}

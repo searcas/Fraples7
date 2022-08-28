@@ -16,6 +16,7 @@ void SandBox2D::OnAttach()
 	FPL_PROFILE_FUNCTION();
 	_mCheckBoardTex = Fraples::Texture2D::Create("../Checkerboard.png");
 	Fraples::FrameBufferSpec spec;
+	spec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::Depth };
 	spec.width = 1280;
 	spec.height = 720;
 	_mFrameBuffer = Fraples::FrameBuffer::Create(spec);
@@ -108,9 +109,32 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		_mFrameBuffer->Bind();
 		Fraples::RenderCommands::SetClearColor({ 0.081f, 0.082f, 0.082f, 1.0f });
 		Fraples::RenderCommands::Clear();
+		_mFrameBuffer->ClearAttachment(1, -1);
 		_mActiveScene->OnUpdateEngine(ts, _mEngineCamera);
-		_mFrameBuffer->Unbind();
 		
+		auto [mx, my] = ImGui::GetMousePos();
+
+		mx -= _mViewPortBounds[0].x;
+		my -= _mViewPortBounds[0].y;
+		
+		glm::vec2 viewportSize = _mViewPortBounds[1] - _mViewPortBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int entityID = _mFrameBuffer->ReadPixel(1, mouseX, mouseY);
+			if (entityID == -1)
+			{
+				_mHoveredEntity = {};
+			}
+			else
+			{
+				_mHoveredEntity = { (entt::entity)entityID, _mActiveScene.get() };
+			}
+
+		}
+		_mFrameBuffer->Unbind();
 	}
 }
 
@@ -205,8 +229,14 @@ void SandBox2D::OnImGuiRender()
 	}
 	_mSceneHierarchyPanel.OnImGuiRender();
 	ImGui::Begin("Stats");
+	std::string name = "None";
+	if (_mHoveredEntity)
+	{
+		name = _mHoveredEntity.GetComponent<TagComponent>().tag;
+	}
 	auto stats = Fraples::Renderer2D::GetStats();
 	ImGui::Text("Renderer2D Stats: ");
+	ImGui::Text("HoveredEntity:%s ",name.c_str());
 	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
 	ImGui::Text("Quads: %d", stats.QuadCounts);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
@@ -216,6 +246,8 @@ void SandBox2D::OnImGuiRender()
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 	ImGui::Begin("Viewport");
+	auto viewPortOffset = ImGui::GetCursorPos();
+
 	_mViewportFocused = ImGui::IsWindowFocused();
 	_mViewportHovered = ImGui::IsWindowHovered();
 	Fraples::Application::GetApp().GetImGuiLayer()->SetBlockEvents(!_mViewportFocused && !_mViewportHovered);
@@ -224,6 +256,18 @@ void SandBox2D::OnImGuiRender()
 	_mViewPortSize = { viewPortSize.x, viewPortSize.y };
 	uint32_t textureId = _mFrameBuffer->GetColorAttachmentRendererID();
 	ImGui::Image((void*)textureId, ImVec2{ _mViewPortSize.x, _mViewPortSize.y });
+
+
+	auto windowSize = ImGui::GetWindowSize();
+	ImVec2 minBound  = ImGui::GetWindowPos();
+	minBound.x += viewPortOffset.x;
+	minBound.y += viewPortOffset.y;
+
+	ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+	_mViewPortBounds[0] = { minBound.x, minBound.y };
+	_mViewPortBounds[1] = { maxBound.x, maxBound.y };
+
+
 
 	Entity selectedEntity = _mSceneHierarchyPanel.GetSelectedEntity();
 	if (selectedEntity && _mGuizmoType != -1)

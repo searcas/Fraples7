@@ -16,7 +16,7 @@ namespace Fraples
 		for (auto& entity : group)
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 		}
 		Renderer2D::EndScene();
 	}
@@ -58,7 +58,7 @@ namespace Fraples
 			for (auto& entity : group)
 			{
 				auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-  				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
 			Renderer2D::EndScene();
 		}
