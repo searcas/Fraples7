@@ -1,13 +1,22 @@
-[submodule "FraplesSeven/Vendor/glfw"]
-	path = FraplesSeven/Vendor/glfw
+[submodule "FraplesSeven/vendor/glfw"]
+	path = FraplesSeven/vendor/glfw
 	url = https://github.com/searcas/glfw
-[submodule "FraplesSeven/Vendor/imgui"]
-	path = FraplesSeven/Vendor/imgui
+[submodule "FraplesSeven/vendor/imgui"]
+	path = FraplesSeven/vendor/imgui
 	url = https://github.com/searcas/imgui
 
-[submodule "FraplesSeven/Vendor/glm"]
-	path = FraplesSeven/Vendor/glm
+[submodule "FraplesSeven/vendor/glm"]
+	path = FraplesSeven/vendor/glm
 	url = https://github.com/g-truc/glm
-[submodule "yaml-cpp"]
-	path = yaml-cpp
+
+[submodule "FraplesSeven/vendor/yaml-cpp"]
+	path = FraplesSeven/vendor/yaml-cpp
 	url = https://github.com/searcas/yaml-cpp
+
+[submodule "FraplesSeven/vendor/ImGuizmo"]
+	path = FraplesSeven/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo
+	
+[submodule "FraplesSeven/vendor/entt"]
+	path = FraplesSeven/vendor/entt
+	url = https://github.com/searcas/entt
