@@ -4,19 +4,15 @@
 [submodule "FraplesSeven/Vendor/imgui"]
 	path = FraplesSeven/Vendor/imgui
 	url = https://github.com/searcas/imgui
-
 [submodule "FraplesSeven/Vendor/glm"]
 	path = FraplesSeven/Vendor/glm
 	url = https://github.com/g-truc/glm
-
-[submodule "FraplesSeven/Vendor/yaml-cpp"]
-	path = FraplesSeven/Vendor/yaml-cpp
-	url = https://github.com/searcas/yaml-cpp
-
 [submodule "FraplesSeven/Vendor/ImGuizmo"]
 	path = FraplesSeven/Vendor/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo
-	
 [submodule "FraplesSeven/Vendor/entt"]
 	path = FraplesSeven/Vendor/entt
 	url = https://github.com/searcas/entt
+[submodule "FraplesSeven/Vendor/yaml-cpp"]
+	path = FraplesSeven/Vendor/yaml-cpp
+	url = https://github.com/searcas/yaml-cpp
