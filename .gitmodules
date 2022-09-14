@@ -13,6 +13,4 @@
 [submodule "FraplesSeven/Vendor/entt"]
 	path = FraplesSeven/Vendor/entt
 	url = https://github.com/searcas/entt
-[submodule "FraplesSeven/Vendor/yaml-cpp"]
-	path = FraplesSeven/Vendor/yaml-cpp
-	url = https://github.com/searcas/yaml-cpp
+
