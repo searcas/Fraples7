@@ -13,3 +13,6 @@
 [submodule "FraplesSeven/Vendor/yaml-cpp"]
 	path = FraplesSeven/Vendor/yaml-cpp
 	url = https://github.com/searcas/yaml-cpp
+[submodule "FraplesSeven/Vendor/ImGuizmo"]
+	path = FraplesSeven/Vendor/ImGuizmo
+	url = https://github.com/searcas/ImGuizmo
