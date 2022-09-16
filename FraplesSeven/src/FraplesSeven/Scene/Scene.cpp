@@ -42,7 +42,7 @@ namespace Fraples
 			auto view = _mRegistry.view<TransformComponent, CameraComponent>();
 			for (auto& entity : view)
 			{
-				auto[transfrom, camera] = view.get< TransformComponent, CameraComponent>(entity);
+				auto[transfrom, camera] = view.get<TransformComponent, CameraComponent>(entity);
 				if (camera.mainCamera)
 				{
 					camTransform = transfrom.GetTransform();

@@ -6,6 +6,7 @@
 #include "FraplesSeven/Utils/PlatformUtils.h"
 #include "ImGuizmo/ImGuizmo.h"
 #include "FraplesSeven/Math/Math.h"
+
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"), _mCameraCtrl(1280.0f / 720.0f), _mSquareColor({ 0.2f,0.3f,0.8f,1.0f })
 {
@@ -124,7 +125,9 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
 			int entityID = _mFrameBuffer->ReadPixel(1, mouseX, mouseY);
-			if (entityID == -1)
+			int debug = _mHoveredEntity.GetSize();
+	
+			if (entityID == -1 || (_mHoveredEntity.GetSize() < entityID))
 			{
 				_mHoveredEntity = {};
 			}
@@ -132,7 +135,6 @@ void SandBox2D::OnUpdate(Fraples::TimeSteps ts)
 			{
 				_mHoveredEntity = { (entt::entity)entityID, _mActiveScene.get() };
 			}
-
 		}
 		_mFrameBuffer->Unbind();
 	}
@@ -171,7 +173,9 @@ void SandBox2D::OnImGuiRender()
 		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 	}
 
-	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, 
+	//DockSpace() will render our background and handle the pass-thru hole, 
+	//so we ask Begin() to not render a background.
 	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
@@ -233,6 +237,7 @@ void SandBox2D::OnImGuiRender()
 	if (_mHoveredEntity)
 	{
 		name = _mHoveredEntity.GetComponent<TagComponent>().tag;
+		
 	}
 	auto stats = Fraples::Renderer2D::GetStats();
 	ImGui::Text("Renderer2D Stats: ");
@@ -266,8 +271,6 @@ void SandBox2D::OnImGuiRender()
 	ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
 	_mViewPortBounds[0] = { minBound.x, minBound.y };
 	_mViewPortBounds[1] = { maxBound.x, maxBound.y };
-
-
 
 	Entity selectedEntity = _mSceneHierarchyPanel.GetSelectedEntity();
 	if (selectedEntity && _mGuizmoType != -1)
@@ -321,39 +324,7 @@ void SandBox2D::OnImGuiRender()
 	ImGui::End();
 	ImGui::End();
 }
-//
 
-/*
-// Handle imguizmo
-			if (app->scn.selected_ != nullptr)
-			{
-				glm::mat4 mat;
-				auto& selected = *app->scn.selected_;
-
-				// Convert to degrees, imguizmo uses degrees
-				selected.angle = glm::degrees(selected.angle);
-
-				ImGuizmo::RecomposeMatrixFromComponents(glm::value_ptr(selected.origin), glm::value_ptr(selected.angle), glm::value_ptr(selected.scale),
-					glm::value_ptr(mat));
-
-				auto view = cam.view();
-				auto perspective = cam.perspective();
-
-				auto vp = perspective * view;
-
-				ImGuizmo::Manipulate(
-					glm::value_ptr(view), glm::value_ptr(perspective),
-					app->ui.get_ui_element<transform_mode>()->mode(),
-					ImGuizmo::WORLD, glm::value_ptr(mat));
-
-				ImGuizmo::DecomposeMatrixToComponents(glm::value_ptr(mat), glm::value_ptr(selected.origin), glm::value_ptr(selected.angle), glm::value_ptr(selected.scale));
-
-				// Convert to radians, we use radians
-				selected.angle = glm::radians(selected.angle);
-			}
-
-*/
-//
 void SandBox2D::OnEvent(Fraples::Event& e)
 {
 	_mCameraCtrl.OnEvent(e);

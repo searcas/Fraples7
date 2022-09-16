@@ -8,7 +8,6 @@ extern Fraples::Application* CreateApplication();
 
 void main(int argc, char** argv)
 {
-	
 
 	Fraples::Log::initialize();
 	FPL_PROFILE_BEGIN_SESSION("Startup", "FraplesProfile-Startup.json");

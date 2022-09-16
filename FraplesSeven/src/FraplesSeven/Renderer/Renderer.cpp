@@ -32,7 +32,6 @@ namespace Fraples
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_uViewProjectionMatrix", _sSceneData->viewProjectionMatrix);
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_uTransform", transform);
 		
-		VA->Bind();
 		RenderCommands::DrawIndexed(VA);
 	}
 }

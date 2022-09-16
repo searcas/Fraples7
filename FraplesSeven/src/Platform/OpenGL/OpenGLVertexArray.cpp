@@ -78,7 +78,8 @@ namespace Fraples
 			case ShaderDataType::Float4:
 			{
 				glEnableVertexAttribArray(_mVertexBufferIndex);
-				glVertexAttribPointer(_mVertexBufferIndex, element.GetComponentCount(), 
+				glVertexAttribPointer(_mVertexBufferIndex, 
+					element.GetComponentCount(), 
 					ShaderDataTypeToOpenGLBaseType(element.SDataType),
 					element.Normalized ? GL_TRUE : GL_FALSE, 
 					layout.GetStride(),

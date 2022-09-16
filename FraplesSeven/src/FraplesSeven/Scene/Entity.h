@@ -10,6 +10,10 @@ namespace Fraples
 		Entity() = default;
 		Entity(entt::entity handle, Scene* scene);
 		Entity(const Entity&) = default;
+		bool IsEmpty()
+		{
+			return _mEntityHandle == entt::null;
+		}
 		template<typename T>
 		bool HasComponent()
 		{
@@ -21,6 +25,7 @@ namespace Fraples
 			FPL_ASSERT("Component already exist.", !HasComponent<T>());
 			T& component = _mScene->_mRegistry.emplace<T>(_mEntityHandle, std::forward<Args>(args)...);
 			_mScene->OnComponentAdded<T>(*this, component);
+			++totalSize;
 			return component;
 		}
 		template<typename T>
@@ -41,8 +46,10 @@ namespace Fraples
 		operator uint32_t()const { return (uint32_t)_mEntityHandle; }
 		bool operator ==(const Entity& rhs)const { return _mEntityHandle == rhs._mEntityHandle && _mScene == rhs._mScene; }
 		bool operator !=(const Entity& rhs)const { return !operator==(rhs); }
+		const uint32_t GetSize() const { return totalSize; }
 	private:
 		entt::entity _mEntityHandle = entt::null;
 		Scene* _mScene = nullptr;
+		inline static uint32_t totalSize = 1;
 	};
 }

@@ -20,7 +20,7 @@ namespace Fraples
 		virtual void SetData(const void* data, uint32_t size) override;
 
 	private:
-		uint32_t _mRendererID;
+		uint32_t _mRendererID = 0;
 		BufferLayout _mLayout;
 	};
 	class OpenGLIndexBuffer : public IndexBuffer
